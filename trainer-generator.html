@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trainer Generator — Iron House</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #0a0a0a; --white: #f5f2ed; --orange: #e8500a; --orange-dark: #b83d06;
+    --gray: #1a1a1a; --gray-mid: #242424; --gray-light: #2e2e2e; --gray-text: #777;
+    --border: rgba(255,255,255,0.08); --green: #4ade80;
+    --font-display: 'Bebas Neue', sans-serif; --font-body: 'Barlow', sans-serif;
+  }
+  body { background: var(--black); color: var(--white); font-family: var(--font-body); min-height: 100vh; }
+
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: var(--font-display); font-size: 22px; letter-spacing: 2px; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--orange); }
+  .nav-tag { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-text); padding: 4px 10px; border: 1px solid var(--border); border-radius: 99px; }
+
+  .page { max-width: 760px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+  .page-title { font-family: var(--font-display); font-size: 48px; letter-spacing: 1px; line-height: 1; margin-bottom: 0.4rem; }
+  .page-title span { color: var(--orange); }
+  .page-sub { font-size: 14px; color: var(--gray-text); margin-bottom: 2.5rem; line-height: 1.6; }
+
+  .config-banner { background: rgba(232,80,10,0.08); border: 1px solid rgba(232,80,10,0.25); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+  .config-banner h3 { font-family: var(--font-display); font-size: 18px; letter-spacing: 1px; color: var(--orange); margin-bottom: 0.75rem; }
+  .config-banner p { font-size: 13px; color: var(--gray-text); line-height: 1.6; margin-bottom: 1rem; }
+  .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .config-saved { display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--green); margin-top: 10px; }
+  .config-saved.show { display: flex; }
+
+  .section { background: var(--gray); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .section-title { font-family: var(--font-display); font-size: 18px; letter-spacing: 1px; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
+  .section-title .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+
+  .row { display: grid; gap: 12px; margin-bottom: 12px; }
+  .row.two { grid-template-columns: 1fr 1fr; }
+  .row.three { grid-template-columns: 1fr 1fr 1fr; }
+  .row:last-child { margin-bottom: 0; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-text); }
+  .field input, .field select, .field textarea {
+    background: var(--gray-mid); border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 12px; color: var(--white); font-family: var(--font-body); font-size: 14px;
+    outline: none; transition: border-color 0.2s; width: 100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--orange); }
+  .field input::placeholder, .field textarea::placeholder { color: var(--gray-text); }
+  .field select option { background: var(--gray-mid); }
+  .field textarea { resize: vertical; min-height: 80px; line-height: 1.55; }
+  .field .hint { font-size: 11px; color: var(--gray-text); line-height: 1.4; }
+
+  .pill-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .pill { padding: 6px 14px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--gray-text); font-family: var(--font-body); font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .pill:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+  .pill.on { background: var(--orange); border-color: var(--orange); color: var(--white); }
+
+  .testi-block { background: var(--gray-mid); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 10px; }
+  .testi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .testi-num { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--gray-text); }
+  .remove-btn { font-size: 12px; color: #f87171; background: none; border: none; cursor: pointer; font-family: var(--font-body); }
+  .add-testi-btn { width: 100%; padding: 10px; background: transparent; border: 1px dashed rgba(255,255,255,0.12); border-radius: 8px; color: var(--gray-text); font-family: var(--font-body); font-size: 13px; cursor: pointer; margin-top: 4px; transition: all 0.15s; }
+  .add-testi-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+
+  .submit-btn { width: 100%; padding: 16px; background: var(--orange); color: var(--white); border: none; border-radius: 8px; font-family: var(--font-display); font-size: 24px; letter-spacing: 2px; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
+  .submit-btn:hover { background: var(--orange-dark); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .status-box { display: none; border-radius: 10px; padding: 1.25rem 1.5rem; margin-top: 1rem; font-size: 14px; line-height: 1.6; }
+  .status-box.success { display: block; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.25); color: var(--green); }
+  .status-box.error { display: block; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #f87171; }
+  .status-box h4 { font-family: var(--font-display); font-size: 20px; letter-spacing: 1px; margin-bottom: 0.4rem; }
+
+  .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+  @media (max-width: 600px) {
+    .page { padding: 1.5rem 1.25rem 4rem; }
+    .row.two, .row.three, .config-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">IRON<span>HOUSE</span></span>
+  <span class="nav-tag">Trainer Generator</span>
+</nav>
+
+<div class="page">
+  <h1 class="page-title">Add a<br><span>trainer.</span></h1>
+  <p class="page-sub">Fill out the form and click Submit. The trainer will appear on the website within 60 seconds — no copying, no pasting, no JSON editing.</p>
+
+  <!-- CONFIG -->
+  <div class="config-banner">
+    <h3>One-time setup</h3>
+    <p>Enter your GitHub details once. They'll be saved in your browser so you never have to enter them again. Your token is stored only on this device — it never goes anywhere else.</p>
+    <div class="config-row">
+      <div class="field">
+        <label>GitHub username</label>
+        <input type="text" id="cfg-user" placeholder="CaydenHrl">
+      </div>
+      <div class="field">
+        <label>Repository name</label>
+        <input type="text" id="cfg-repo" placeholder="Iron-House">
+      </div>
+    </div>
+    <div class="field" style="margin-top:10px;">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="cfg-token" placeholder="ghp_••••••••••••••••••••••••••••••••••••">
+      <span class="hint">Stored only in your browser. Never shared or transmitted anywhere except GitHub's API.</span>
+    </div>
+    <button onclick="saveConfig()" style="margin-top:10px; padding:8px 20px; background:var(--orange); color:var(--white); border:none; border-radius:6px; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;">Save settings</button>
+    <div class="config-saved" id="config-saved">✓ Settings saved</div>
+  </div>
+
+  <!-- BASIC INFO -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Basic info</div>
+    <div class="row two">
+      <div class="field"><label>First & last name</label><input type="text" id="g-name" placeholder="Sarah Johnson"></div>
+      <div class="field"><label>Age</label><input type="number" id="g-age" placeholder="31" min="18" max="80"></div>
+    </div>
+    <div class="row two">
+      <div class="field"><label>City & State</label><input type="text" id="g-location" placeholder="Austin, TX"></div>
+      <div class="field"><label>Email (your records only — not shown on site)</label><input type="email" id="g-email" placeholder="sarah@email.com"></div>
+    </div>
+  </div>
+
+  <!-- CREDENTIALS -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Credentials</div>
+    <div class="row three">
+      <div class="field"><label>Monthly price ($)</label><input type="number" id="g-price" placeholder="149"></div>
+      <div class="field"><label>Experience</label><input type="text" id="g-exp" placeholder="4 yrs"></div>
+      <div class="field"><label>Certifications</label><input type="text" id="g-certs" placeholder="NASM"></div>
+    </div>
+    <div class="row two">
+      <div class="field">
+        <label>Star rating</label>
+        <select id="g-rating">
+          <option value="5.0">5.0 ★★★★★ — New, no reviews yet</option>
+          <option value="4.9">4.9 ★★★★★</option>
+          <option value="4.8">4.8 ★★★★★</option>
+          <option value="4.7">4.7 ★★★★½</option>
+          <option value="4.6">4.6 ★★★★½</option>
+          <option value="4.5">4.5 ★★★★½</option>
+          <option value="4.4">4.4 ★★★★</option>
+          <option value="4.3">4.3 ★★★★</option>
+          <option value="4.0">4.0 ★★★★</option>
+        </select>
+      </div>
+      <div class="field"><label>Number of reviews (0 if new)</label><input type="number" id="g-reviews" placeholder="0" value="0"></div>
+    </div>
+    <div class="field" style="margin-top:12px;">
+      <label>Founding trainer?</label>
+      <div class="pill-group" id="g-founding">
+        <button class="pill on" onclick="solo(this,'g-founding')">Yes — founding trainer</button>
+        <button class="pill" onclick="solo(this,'g-founding')">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHOTOS -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Photos</div>
+    <p style="font-size:13px; color:var(--gray-text); line-height:1.6; margin-bottom:1rem;">Upload photos to the <strong style="color:var(--white);">images/</strong> folder in GitHub first, then type just the filename here.</p>
+    <div class="row three">
+      <div class="field">
+        <label>Main profile photo</label>
+        <input type="text" id="g-photo1" placeholder="sarah-main.jpg">
+        <span class="hint">Clear headshot, face visible</span>
+      </div>
+      <div class="field">
+        <label>Physique / gym photo</label>
+        <input type="text" id="g-photo2" placeholder="sarah-gym.jpg">
+        <span class="hint">Lifting, coaching, or physique</span>
+      </div>
+      <div class="field">
+        <label>Lifestyle photo</label>
+        <input type="text" id="g-photo3" placeholder="sarah-life.jpg">
+        <span class="hint">Outdoors, hobby, pet — optional</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAINING STYLE -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Training style</div>
+    <div class="field" style="margin-bottom:1rem;">
+      <label>Specialties — tap all that apply</label>
+      <div class="pill-group" id="g-specialties">
+        <button class="pill" onclick="toggle(this)">Hypertrophy</button>
+        <button class="pill" onclick="toggle(this)">Strength</button>
+        <button class="pill" onclick="toggle(this)">Calisthenics</button>
+        <button class="pill" onclick="toggle(this)">CrossFit</button>
+        <button class="pill" onclick="toggle(this)">Weight Loss</button>
+        <button class="pill" onclick="toggle(this)">Cardio & Endurance</button>
+        <button class="pill" onclick="toggle(this)">Functional Fitness</button>
+        <button class="pill" onclick="toggle(this)">Flexibility & Mobility</button>
+        <button class="pill" onclick="toggle(this)">Sport-Specific</button>
+        <button class="pill" onclick="toggle(this)">Body Recomposition</button>
+      </div>
+    </div>
+    <div class="row two">
+      <div class="field">
+        <label>Coaching vibe — pick one</label>
+        <div class="pill-group" id="g-vibe">
+          <button class="pill" onclick="solo(this,'g-vibe')">Laid-back</button>
+          <button class="pill" onclick="solo(this,'g-vibe')">Encouraging</button>
+          <button class="pill" onclick="solo(this,'g-vibe')">High-energy</button>
+          <button class="pill" onclick="solo(this,'g-vibe')">Structured</button>
+          <button class="pill" onclick="solo(this,'g-vibe')">Motivating</button>
+          <button class="pill" onclick="solo(this,'g-vibe')">No-nonsense</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Diet philosophy — pick one</label>
+        <div class="pill-group" id="g-diet">
+          <button class="pill" onclick="solo(this,'g-diet')">Carnivore</button>
+          <button class="pill" onclick="solo(this,'g-diet')">Plant-based</button>
+          <button class="pill" onclick="solo(this,'g-diet')">Keto</button>
+          <button class="pill" onclick="solo(this,'g-diet')">Whole foods</button>
+          <button class="pill" onclick="solo(this,'g-diet')">Flexible</button>
+          <button class="pill" onclick="solo(this,'g-diet')">High protein</button>
+          <button class="pill" onclick="solo(this,'g-diet')">Vegan</button>
+          <button class="pill" onclick="solo(this,'g-diet')">Fasting</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERESTS -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Personal interests</div>
+    <div class="field">
+      <label>3 to 5 interests, separated by commas</label>
+      <input type="text" id="g-interests" placeholder="Hiking, cooking, dogs, fantasy football">
+    </div>
+  </div>
+
+  <!-- COPY -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Profile copy</div>
+    <div class="field" style="margin-bottom:12px;">
+      <label>Short bio — shows on card (2–3 sentences)</label>
+      <textarea id="g-bio" placeholder="Write their short bio here in first person. Keep it to 2–3 sentences."></textarea>
+    </div>
+    <div class="field">
+      <label>Full story — shows when someone opens their full profile</label>
+      <textarea id="g-story" style="min-height:110px;" placeholder="Why they became a coach, what they believe in, what a client can expect working with them..."></textarea>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="section">
+    <div class="section-title"><div class="dot"></div>Client testimonials</div>
+    <p style="font-size:13px; color:var(--gray-text); line-height:1.6; margin-bottom:1rem;">Leave this empty if none yet — the section simply won't appear on their profile.</p>
+    <div id="testi-list"></div>
+    <button class="add-testi-btn" onclick="addTesti()">+ Add a testimonial</button>
+  </div>
+
+  <button class="submit-btn" id="submit-btn" onclick="submitTrainer()">ADD TO WEBSITE</button>
+
+  <div class="status-box" id="status-box"></div>
+
+</div>
+
+<script>
+  let testiCount = 0;
+
+  // Load saved config
+  window.addEventListener('load', () => {
+    const saved = JSON.parse(localStorage.getItem('ih-config') || '{}');
+    if (saved.user) document.getElementById('cfg-user').value = saved.user;
+    if (saved.repo) document.getElementById('cfg-repo').value = saved.repo;
+    if (saved.token) document.getElementById('cfg-token').value = saved.token;
+    if (saved.user && saved.token) document.getElementById('config-saved').classList.add('show');
+  });
+
+  function saveConfig() {
+    const config = {
+      user: document.getElementById('cfg-user').value.trim(),
+      repo: document.getElementById('cfg-repo').value.trim(),
+      token: document.getElementById('cfg-token').value.trim()
+    };
+    localStorage.setItem('ih-config', JSON.stringify(config));
+    document.getElementById('config-saved').classList.add('show');
+  }
+
+  function getConfig() {
+    return JSON.parse(localStorage.getItem('ih-config') || '{}');
+  }
+
+  function toggle(btn) { btn.classList.toggle('on'); }
+
+  function solo(btn, groupId) {
+    document.querySelectorAll('#' + groupId + ' .pill').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+  }
+
+  function getSelected(groupId) {
+    return [...document.querySelectorAll('#' + groupId + ' .pill.on')].map(b => b.textContent.trim());
+  }
+
+  function addTesti() {
+    const id = ++testiCount;
+    const div = document.createElement('div');
+    div.className = 'testi-block';
+    div.id = 'testi-' + id;
+    div.innerHTML = `
+      <div class="testi-header">
+        <span class="testi-num">Testimonial ${id}</span>
+        <button class="remove-btn" onclick="document.getElementById('testi-${id}').remove()">Remove</button>
+      </div>
+      <div class="row two" style="margin-bottom:10px;">
+        <div class="field"><label>Client name</label><input type="text" id="t${id}-name" placeholder="Jamie T."></div>
+        <div class="field"><label>Initials</label><input type="text" id="t${id}-init" placeholder="JT" maxlength="2"></div>
+      </div>
+      <div class="field" style="margin-bottom:10px;">
+        <label>Result</label>
+        <input type="text" id="t${id}-result" placeholder="Lost 22 lbs in 14 weeks">
+      </div>
+      <div class="field" style="margin-bottom:10px;">
+        <label>Their quote</label>
+        <textarea id="t${id}-quote" placeholder="Write what the client said..."></textarea>
+      </div>
+      <div class="row two">
+        <div class="field">
+          <label>Before photo (optional)</label>
+          <input type="text" id="t${id}-before" placeholder="jamie-before.jpg">
+          <span class="hint">Upload to images/ folder first. Only include with client permission.</span>
+        </div>
+        <div class="field">
+          <label>After photo (optional)</label>
+          <input type="text" id="t${id}-after" placeholder="jamie-after.jpg">
+        </div>
+      </div>`;
+    document.getElementById('testi-list').appendChild(div);
+  }
+
+  function getTestimonials() {
+    return [...document.querySelectorAll('.testi-block')].map(b => {
+      const id = b.id.replace('testi-', '');
+      const before = (document.getElementById('t'+id+'-before')?.value.trim() || '');
+      const after = (document.getElementById('t'+id+'-after')?.value.trim() || '');
+      return {
+        name:     document.getElementById('t'+id+'-name')?.value.trim() || '',
+        initials: document.getElementById('t'+id+'-init')?.value.trim() || '',
+        result:   document.getElementById('t'+id+'-result')?.value.trim() || '',
+        quote:    document.getElementById('t'+id+'-quote')?.value.trim() || '',
+        before:   before ? 'images/' + before : '',
+        after:    after  ? 'images/' + after  : ''
+      };
+    }).filter(t => t.name || t.quote);
+  }
+
+  function buildTrainerObject() {
+    const p1 = document.getElementById('g-photo1').value.trim();
+    const p2 = document.getElementById('g-photo2').value.trim();
+    const p3 = document.getElementById('g-photo3').value.trim();
+    return {
+      name:        document.getElementById('g-name').value.trim(),
+      age:         parseInt(document.getElementById('g-age').value) || 0,
+      location:    document.getElementById('g-location').value.trim(),
+      email:       document.getElementById('g-email').value.trim(),
+      price:       parseInt(document.getElementById('g-price').value) || 0,
+      experience:  document.getElementById('g-exp').value.trim(),
+      certs:       document.getElementById('g-certs').value.trim(),
+      rating:      parseFloat(document.getElementById('g-rating').value),
+      reviews:     parseInt(document.getElementById('g-reviews').value) || 0,
+      founding:    getSelected('g-founding')[0]?.includes('Yes') ?? true,
+      photo_main:      p1 ? 'images/' + p1 : '',
+      photo_physique:  p2 ? 'images/' + p2 : '',
+      photo_lifestyle: p3 ? 'images/' + p3 : '',
+      specialties: getSelected('g-specialties'),
+      vibe:        getSelected('g-vibe')[0] || '',
+      diet:        getSelected('g-diet')[0] || '',
+      interests:   document.getElementById('g-interests').value.split(',').map(s => s.trim()).filter(Boolean),
+      bio:         document.getElementById('g-bio').value.trim(),
+      story:       document.getElementById('g-story').value.trim(),
+      testimonials: getTestimonials()
+    };
+  }
+
+  function showStatus(type, title, msg) {
+    const box = document.getElementById('status-box');
+    box.className = 'status-box ' + type;
+    box.innerHTML = `<h4>${title}</h4>${msg}`;
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  async function submitTrainer() {
+    const cfg = getConfig();
+    if (!cfg.token || !cfg.user || !cfg.repo) {
+      showStatus('error', 'Setup needed', 'Please fill in and save your GitHub username, repo name, and token at the top of the page first.');
+      return;
+    }
+
+    const trainer = buildTrainerObject();
+    if (!trainer.name) {
+      showStatus('error', 'Missing name', 'Please enter the trainer\'s name before submitting.');
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'ADDING TO WEBSITE...';
+    showStatus('', '', '');
+    document.getElementById('status-box').className = 'status-box';
+
+    const apiBase = `https://api.github.com/repos/${cfg.user}/${cfg.repo}`;
+    const headers = {
+      'Authorization': 'token ' + cfg.token,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    };
+
+    try {
+      // Step 1: get current trainers.json
+      const fileRes = await fetch(`${apiBase}/contents/trainers.json`, { headers });
+      if (!fileRes.ok) {
+        const err = await fileRes.json();
+        throw new Error('Could not read trainers.json: ' + (err.message || fileRes.status));
+      }
+      const fileData = await fileRes.json();
+      const currentContent = atob(fileData.content.replace(/\n/g, ''));
+      const currentTrainers = JSON.parse(currentContent);
+
+      // Step 2: add new trainer
+      currentTrainers.push(trainer);
+      const newContent = JSON.stringify(currentTrainers, null, 2);
+      const encoded = btoa(unescape(encodeURIComponent(newContent)));
+
+      // Step 3: commit back to GitHub
+      const updateRes = await fetch(`${apiBase}/contents/trainers.json`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          message: `Add trainer: ${trainer.name}`,
+          content: encoded,
+          sha: fileData.sha
+        })
+      });
+
+      if (!updateRes.ok) {
+        const err = await updateRes.json();
+        throw new Error('GitHub write failed: ' + (err.message || updateRes.status));
+      }
+
+      // Success
+      btn.textContent = 'ADD TO WEBSITE';
+      btn.disabled = false;
+      showStatus('success', `${trainer.name} added!`,
+        `Their profile is live on the website. It may take up to 60 seconds for GitHub Pages to update.<br><br>
+        <strong>Don't forget:</strong> If you listed photo filenames, make sure those photos are uploaded to the <strong>images/</strong> folder in GitHub.`
+      );
+
+      // Reset form
+      resetForm();
+
+    } catch (err) {
+      btn.textContent = 'ADD TO WEBSITE';
+      btn.disabled = false;
+      showStatus('error', 'Something went wrong', err.message + '<br><br>Check that your token is valid and has repo access, and that the trainers.json file exists in your repository.');
+    }
+  }
+
+  function resetForm() {
+    ['g-name','g-age','g-location','g-email','g-price','g-exp','g-certs',
+     'g-reviews','g-photo1','g-photo2','g-photo3','g-interests','g-bio','g-story']
+      .forEach(id => { const el = document.getElementById(id); if (el) el.value = el.type === 'number' ? '0' : ''; });
+    document.getElementById('g-rating').value = '5.0';
+    document.querySelectorAll('.pill.on').forEach(p => p.classList.remove('on'));
+    document.querySelector('#g-founding .pill').classList.add('on');
+    document.getElementById('testi-list').innerHTML = '';
+    testiCount = 0;
+  }
+</script>
+</body>
+</html>
