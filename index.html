@@ -15,15 +15,21 @@
   }
   body { background: var(--black); color: var(--white); font-family: var(--font-body); min-height: 100vh; }
 
-  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(12px); }
   .nav-logo { font-family: var(--font-display); font-size: 22px; letter-spacing: 2px; color: var(--white); }
   .nav-logo span { color: var(--orange); }
   .nav-tag { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-text); padding: 4px 10px; border: 1px solid var(--border); border-radius: 99px; }
 
-  .page { max-width: 760px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
-  .page-title { font-family: var(--font-display); font-size: 48px; letter-spacing: 1px; line-height: 1; margin-bottom: 0.4rem; }
+  /* SPLIT LAYOUT */
+  .split-layout { display: grid; grid-template-columns: 1fr 400px; gap: 0; min-height: calc(100vh - 57px); align-items: start; }
+  .form-col { padding: 2.5rem 2rem 5rem; border-right: 1px solid var(--border); overflow-y: auto; }
+  .preview-col { position: sticky; top: 57px; height: calc(100vh - 57px); overflow-y: auto; padding: 2rem 1.5rem; background: #111; display: flex; flex-direction: column; }
+  .preview-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-text); margin-bottom: 1rem; }
+  .preview-hint { font-size: 12px; color: var(--gray-text); margin-top: 1rem; line-height: 1.5; text-align: center; opacity: 0.6; }
+
+  .page-title { font-family: var(--font-display); font-size: 42px; letter-spacing: 1px; line-height: 1; margin-bottom: 0.4rem; }
   .page-title span { color: var(--orange); }
-  .page-sub { font-size: 14px; color: var(--gray-text); margin-bottom: 2.5rem; line-height: 1.6; }
+  .page-sub { font-size: 13px; color: var(--gray-text); margin-bottom: 2rem; line-height: 1.6; }
 
   .config-banner { background: rgba(232,80,10,0.08); border: 1px solid rgba(232,80,10,0.25); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
   .config-banner h3 { font-family: var(--font-display); font-size: 18px; letter-spacing: 1px; color: var(--orange); margin-bottom: 0.75rem; }
@@ -55,7 +61,6 @@
   .pill:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
   .pill.on { background: var(--orange); border-color: var(--orange); color: var(--white); }
 
-  /* STAT SLIDERS */
   .stat-slider-block { margin-bottom: 1rem; }
   .stat-slider-block:last-child { margin-bottom: 0; }
   .stat-slider-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
@@ -82,11 +87,61 @@
   .status-box.success { display: block; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.25); color: var(--green); }
   .status-box.error { display: block; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #f87171; }
   .status-box h4 { font-family: var(--font-display); font-size: 20px; letter-spacing: 1px; margin-bottom: 0.4rem; }
-
   .divider { height: 1px; background: var(--border); margin: 1rem 0; }
 
+  /* ── LIVE CARD PREVIEW ── */
+  .trainer-card { background: var(--gray); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+  .card-header { padding: 1rem 1.1rem 0.6rem; display: flex; justify-content: space-between; align-items: flex-start; }
+  .trainer-name { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.5px; line-height: 1; }
+  .trainer-meta { font-size: 11px; color: var(--gray-text); margin-top: 2px; }
+  .card-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .star-icons { display: flex; gap: 1px; }
+  .star { width: 10px; height: 10px; clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); background: #c07a18; }
+  .review-count { font-size: 10px; color: var(--gray-text); }
+  .founding-badge { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 99px; background: rgba(232,80,10,0.12); border: 1px solid rgba(232,80,10,0.3); color: var(--orange); }
+
+  .card-images { display: flex; gap: 6px; padding: 0 1.1rem 0.875rem; height: 180px; }
+  .img-main { flex: 1.5; border-radius: 8px; background: var(--gray-mid); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+  .img-side { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .img-secondary { flex: 1; border-radius: 8px; background: var(--gray-mid); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .card-images img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .card-stats { display: flex; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .card-stat { flex: 1; padding: 0.6rem 0; text-align: center; border-right: 1px solid var(--border); }
+  .card-stat:last-child { border-right: none; }
+  .card-stat-val { font-family: var(--font-display); font-size: 15px; letter-spacing: 0.5px; }
+  .card-stat-label { font-size: 9px; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 1px; }
+
+  .card-middle { display: flex; border-bottom: 1px solid var(--border); }
+  .card-tags-col { flex: 0 0 38%; padding: 0.75rem 0.875rem 0.75rem 1.1rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--border); color: var(--gray-text); white-space: nowrap; display: inline-block; }
+  .tag.style { background: rgba(50,120,20,0.1); color: #7cba4a; border-color: rgba(80,160,30,0.2); }
+  .tag.diet { background: rgba(200,120,20,0.08); color: #e0a84a; border-color: rgba(200,140,30,0.2); }
+  .tag.niche { background: rgba(100,80,200,0.1); color: #a89aea; border-color: rgba(120,100,220,0.2); }
+
+  .card-statbars-col { flex: 1; padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+  .stat-bar-row { display: flex; align-items: center; gap: 6px; }
+  .stat-bar-label { font-size: 8px; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; width: 52px; flex-shrink: 0; }
+  .stat-bar-track { flex: 1; height: 3px; background: var(--gray-light); border-radius: 99px; overflow: hidden; }
+  .stat-bar-fill { height: 100%; border-radius: 99px; background: var(--orange); transition: width 0.3s ease; }
+
+  .card-interests { padding: 0.6rem 1.1rem 0; }
+  .interests-label { font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-text); margin-bottom: 4px; }
+  .interests-row { display: flex; flex-wrap: wrap; gap: 4px; }
+  .interest-chip { font-size: 10px; padding: 2px 8px; border-radius: 99px; background: var(--gray-mid); border: 1px solid var(--border); color: rgba(245,242,237,0.6); }
+
+  .card-bio { padding: 0.6rem 1.1rem 0.875rem; font-size: 12px; color: var(--gray-text); line-height: 1.6; border-top: 1px solid var(--border); margin-top: 0.6rem; }
+  .card-footer { padding: 0.75rem 1.1rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
+  .card-price { font-size: 12px; color: var(--gray-text); }
+  .card-price strong { font-family: var(--font-display); font-size: 20px; color: var(--white); }
+  .btn-view { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; padding: 6px 14px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: var(--white); font-family: var(--font-body); }
+
+  @media (max-width: 1100px) {
+    .split-layout { grid-template-columns: 1fr; }
+    .preview-col { position: relative; top: 0; height: auto; border-right: none; border-top: 1px solid var(--border); }
+  }
   @media (max-width: 600px) {
-    .page { padding: 1.5rem 1.25rem 4rem; }
+    .form-col { padding: 1.5rem 1.25rem 4rem; }
     .row.two, .row.three, .config-row { grid-template-columns: 1fr; }
   }
 </style>
@@ -98,200 +153,273 @@
   <span class="nav-tag">Trainer Generator</span>
 </nav>
 
-<div class="page">
-  <h1 class="page-title">Add a<br><span>trainer.</span></h1>
-  <p class="page-sub">Fill out the form and click Submit. The trainer will appear on the website within 60 seconds — no copying, no pasting, no JSON editing.</p>
+<div class="split-layout">
 
-  <!-- CONFIG -->
-  <div class="config-banner">
-    <h3>One-time setup</h3>
-    <p>Enter your GitHub details once. They'll be saved in your browser so you never have to enter them again.</p>
-    <div class="config-row">
-      <div class="field"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="CaydenHrl"></div>
-      <div class="field"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="Iron-House"></div>
-    </div>
-    <div class="field" style="margin-top:10px;">
-      <label>GitHub Personal Access Token</label>
-      <input type="password" id="cfg-token" placeholder="ghp_••••••••••••••••••••••••••••••••••••">
-      <span class="hint">Stored only in your browser. Never shared or transmitted anywhere except GitHub's API.</span>
-    </div>
-    <button onclick="saveConfig()" style="margin-top:10px;padding:8px 20px;background:var(--orange);color:var(--white);border:none;border-radius:6px;font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;">Save settings</button>
-    <div class="config-saved" id="config-saved">✓ Settings saved</div>
-  </div>
+  <!-- ── LEFT: FORM ── -->
+  <div class="form-col">
+    <h1 class="page-title">Add a<br><span>trainer.</span></h1>
+    <p class="page-sub">Fill out the form and click Submit. The trainer will appear on the website within 60 seconds. The card preview updates live as you type.</p>
 
-  <!-- BASIC INFO -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Basic info</div>
-    <div class="row two">
-      <div class="field"><label>First & last name</label><input type="text" id="g-name" placeholder="Sarah Johnson"></div>
-      <div class="field"><label>Age</label><input type="number" id="g-age" placeholder="31" min="18" max="80"></div>
-    </div>
-    <div class="row two">
-      <div class="field"><label>City & State</label><input type="text" id="g-location" placeholder="Austin, TX"></div>
-      <div class="field"><label>Email (your records only)</label><input type="email" id="g-email" placeholder="sarah@email.com"></div>
-    </div>
-  </div>
-
-  <!-- CREDENTIALS -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Credentials</div>
-    <div class="row three">
-      <div class="field"><label>Monthly price ($)</label><input type="number" id="g-price" placeholder="149"></div>
-      <div class="field"><label>Experience</label><input type="text" id="g-exp" placeholder="4 yrs"></div>
-      <div class="field"><label>Certifications</label><input type="text" id="g-certs" placeholder="NASM"></div>
-    </div>
-    <div class="row two">
-      <div class="field">
-        <label>Star rating</label>
-        <select id="g-rating">
-          <option value="5.0">5.0 ★★★★★ — New, no reviews yet</option>
-          <option value="4.9">4.9 ★★★★★</option>
-          <option value="4.8">4.8 ★★★★★</option>
-          <option value="4.7">4.7 ★★★★½</option>
-          <option value="4.6">4.6 ★★★★½</option>
-          <option value="4.5">4.5 ★★★★½</option>
-          <option value="4.4">4.4 ★★★★</option>
-          <option value="4.3">4.3 ★★★★</option>
-          <option value="4.0">4.0 ★★★★</option>
-        </select>
+    <!-- CONFIG -->
+    <div class="config-banner">
+      <h3>One-time setup</h3>
+      <p>Enter your GitHub details once. They'll be saved in your browser so you never have to enter them again.</p>
+      <div class="config-row">
+        <div class="field"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="CaydenHrl"></div>
+        <div class="field"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="Iron-House"></div>
       </div>
-      <div class="field"><label>Number of reviews (0 if new)</label><input type="number" id="g-reviews" placeholder="0" value="0"></div>
+      <div class="field" style="margin-top:10px;">
+        <label>GitHub Personal Access Token</label>
+        <input type="password" id="cfg-token" placeholder="ghp_••••••••••••••••••••••••••••••••••••">
+        <span class="hint">Stored only in your browser. Never shared elsewhere.</span>
+      </div>
+      <button onclick="saveConfig()" style="margin-top:10px;padding:8px 20px;background:var(--orange);color:var(--white);border:none;border-radius:6px;font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;">Save settings</button>
+      <div class="config-saved" id="config-saved">✓ Settings saved</div>
     </div>
-    <div class="field" style="margin-top:6px;">
-      <label>Founding trainer?</label>
-      <div class="pill-group" id="g-founding">
-        <button class="pill on" onclick="solo(this,'g-founding')">Yes — founding trainer</button>
-        <button class="pill" onclick="solo(this,'g-founding')">No</button>
+
+    <!-- BASIC INFO -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Basic info</div>
+      <div class="row two">
+        <div class="field"><label>First & last name</label><input type="text" id="g-name" placeholder="Sarah Johnson" oninput="updatePreview()"></div>
+        <div class="field"><label>Age</label><input type="number" id="g-age" placeholder="31" min="18" max="80" oninput="updatePreview()"></div>
+      </div>
+      <div class="row two">
+        <div class="field"><label>City & State</label><input type="text" id="g-location" placeholder="Austin, TX" oninput="updatePreview()"></div>
+        <div class="field"><label>Email (your records only)</label><input type="email" id="g-email" placeholder="sarah@email.com"></div>
       </div>
     </div>
-  </div>
 
-  <!-- PHOTOS -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Photos</div>
-    <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1rem;">Upload photos to the <strong style="color:var(--white);">images/</strong> folder in GitHub first, then type just the filename here.</p>
-    <div class="row three">
-      <div class="field"><label>Main profile photo</label><input type="text" id="g-photo1" placeholder="sarah-main.jpg"><span class="hint">Clear headshot, face visible</span></div>
-      <div class="field"><label>Physique / gym photo</label><input type="text" id="g-photo2" placeholder="sarah-gym.jpg"></div>
-      <div class="field"><label>Lifestyle photo</label><input type="text" id="g-photo3" placeholder="sarah-life.jpg"><span class="hint">Optional</span></div>
-    </div>
-  </div>
-
-  <!-- TRAINING STYLE -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Training style</div>
-    <div class="field" style="margin-bottom:1rem;">
-      <label>Specialties — tap all that apply</label>
-      <div class="pill-group" id="g-specialties">
-        <button class="pill" onclick="toggle(this)">Hypertrophy</button>
-        <button class="pill" onclick="toggle(this)">Strength</button>
-        <button class="pill" onclick="toggle(this)">Calisthenics</button>
-        <button class="pill" onclick="toggle(this)">CrossFit</button>
-        <button class="pill" onclick="toggle(this)">Weight Loss</button>
-        <button class="pill" onclick="toggle(this)">Cardio & Endurance</button>
-        <button class="pill" onclick="toggle(this)">Functional Fitness</button>
-        <button class="pill" onclick="toggle(this)">Flexibility & Mobility</button>
-        <button class="pill" onclick="toggle(this)">Sport-Specific</button>
-        <button class="pill" onclick="toggle(this)">Body Recomposition</button>
+    <!-- CREDENTIALS -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Credentials</div>
+      <div class="row three">
+        <div class="field"><label>Monthly price ($)</label><input type="number" id="g-price" placeholder="149" oninput="updatePreview()"></div>
+        <div class="field"><label>Experience</label><input type="text" id="g-exp" placeholder="4 yrs" oninput="updatePreview()"></div>
+        <div class="field"><label>Certifications</label><input type="text" id="g-certs" placeholder="NASM" oninput="updatePreview()"></div>
       </div>
-    </div>
-    <div class="row two">
-      <div class="field">
-        <label>Diet philosophy — pick one</label>
-        <div class="pill-group" id="g-diet">
-          <button class="pill" onclick="solo(this,'g-diet')">Carnivore</button>
-          <button class="pill" onclick="solo(this,'g-diet')">Plant-based</button>
-          <button class="pill" onclick="solo(this,'g-diet')">Keto</button>
-          <button class="pill" onclick="solo(this,'g-diet')">Whole foods</button>
-          <button class="pill" onclick="solo(this,'g-diet')">Flexible</button>
-          <button class="pill" onclick="solo(this,'g-diet')">High protein</button>
-          <button class="pill" onclick="solo(this,'g-diet')">Vegan</button>
-          <button class="pill" onclick="solo(this,'g-diet')">Fasting</button>
+      <div class="row two">
+        <div class="field">
+          <label>Star rating</label>
+          <select id="g-rating" onchange="updatePreview()">
+            <option value="5.0">5.0 ★★★★★ — New</option>
+            <option value="4.9">4.9 ★★★★★</option>
+            <option value="4.8">4.8 ★★★★★</option>
+            <option value="4.7">4.7 ★★★★½</option>
+            <option value="4.6">4.6 ★★★★½</option>
+            <option value="4.5">4.5 ★★★★½</option>
+            <option value="4.4">4.4 ★★★★</option>
+            <option value="4.3">4.3 ★★★★</option>
+            <option value="4.0">4.0 ★★★★</option>
+          </select>
         </div>
+        <div class="field"><label>Number of reviews</label><input type="number" id="g-reviews" placeholder="0" value="0" oninput="updatePreview()"></div>
       </div>
-      <div class="field">
-        <label>Client niches — pick all that apply</label>
-        <div class="pill-group" id="g-niches">
-          <button class="pill" onclick="toggle(this)">Seniors / 60+</button>
-          <button class="pill" onclick="toggle(this)">Postpartum women</button>
-          <button class="pill" onclick="toggle(this)">Teens / youth</button>
-          <button class="pill" onclick="toggle(this)">Athletes</button>
-          <button class="pill" onclick="toggle(this)">Beginners</button>
-          <button class="pill" onclick="toggle(this)">Post-injury/rehab</button>
-          <button class="pill" onclick="toggle(this)">Women only</button>
-          <button class="pill" onclick="toggle(this)">Men only</button>
-          <button class="pill" onclick="toggle(this)">Plus-size</button>
-          <button class="pill" onclick="toggle(this)">Weight loss focused</button>
-          <button class="pill" onclick="toggle(this)">Muscle building focused</button>
-          <button class="pill" onclick="toggle(this)">General population</button>
+      <div class="field" style="margin-top:6px;">
+        <label>Founding trainer?</label>
+        <div class="pill-group" id="g-founding">
+          <button class="pill on" onclick="solo(this,'g-founding');updatePreview()">Yes — founding trainer</button>
+          <button class="pill" onclick="solo(this,'g-founding');updatePreview()">No</button>
         </div>
       </div>
     </div>
+
+    <!-- PHOTOS -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Photos</div>
+      <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1rem;">Upload photos to the <strong style="color:var(--white);">images/</strong> folder in GitHub first, then type the filename here.</p>
+      <div class="row three">
+        <div class="field"><label>Main profile photo</label><input type="text" id="g-photo1" placeholder="sarah-main.jpg" oninput="updatePreview()"><span class="hint">Clear headshot</span></div>
+        <div class="field"><label>Physique / gym photo</label><input type="text" id="g-photo2" placeholder="sarah-gym.jpg" oninput="updatePreview()"></div>
+        <div class="field"><label>Lifestyle photo</label><input type="text" id="g-photo3" placeholder="sarah-life.jpg" oninput="updatePreview()"><span class="hint">Optional</span></div>
+      </div>
+    </div>
+
+    <!-- TRAINING STYLE -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Training style</div>
+      <div class="field" style="margin-bottom:1rem;">
+        <label>Specialties — tap all that apply</label>
+        <div class="pill-group" id="g-specialties">
+          <button class="pill" onclick="toggle(this);updatePreview()">Hypertrophy</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Strength</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Calisthenics</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">CrossFit</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Weight Loss</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Cardio & Endurance</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Functional Fitness</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Flexibility & Mobility</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Sport-Specific</button>
+          <button class="pill" onclick="toggle(this);updatePreview()">Body Recomposition</button>
+        </div>
+      </div>
+      <div class="row two">
+        <div class="field">
+          <label>Diet philosophy — pick one</label>
+          <div class="pill-group" id="g-diet">
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Carnivore</button>
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Plant-based</button>
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Keto</button>
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Whole foods</button>
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Flexible</button>
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">High protein</button>
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Vegan</button>
+            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Fasting</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Client niches — pick all that apply</label>
+          <div class="pill-group" id="g-niches">
+            <button class="pill" onclick="toggle(this);updatePreview()">Seniors / 60+</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Postpartum women</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Teens / youth</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Athletes</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Beginners</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Post-injury/rehab</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Women only</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Men only</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Plus-size</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Weight loss focused</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">Muscle building focused</button>
+            <button class="pill" onclick="toggle(this);updatePreview()">General population</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAT BARS -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Coaching stats</div>
+      <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1.25rem;">These power the stat bars on the trainer card. Watch the preview update live.</p>
+
+      <div class="stat-slider-block">
+        <div class="stat-slider-label"><span>Intensity</span><span class="stat-val" id="sv-intensity">Balanced</span></div>
+        <input type="range" min="0" max="4" value="2" id="gs-intensity" oninput="updateStat('gs-intensity','sv-intensity',['Easy & light','Moderate','Balanced','Hard-working','Max effort']);updatePreview()">
+        <div class="stat-ends"><span>Easy</span><span>Max effort</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat-slider-block">
+        <div class="stat-slider-label"><span>Structure</span><span class="stat-val" id="sv-structure">Balanced</span></div>
+        <input type="range" min="0" max="4" value="2" id="gs-structure" oninput="updateStat('gs-structure','sv-structure',['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid']);updatePreview()">
+        <div class="stat-ends"><span>Flexible</span><span>Rigid</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat-slider-block">
+        <div class="stat-slider-label"><span>Check-ins</span><span class="stat-val" id="sv-checkins">Balanced</span></div>
+        <input type="range" min="0" max="4" value="2" id="gs-checkins" oninput="updateStat('gs-checkins','sv-checkins',['As needed','Weekly','Few times/week','Every other day','Daily']);updatePreview()">
+        <div class="stat-ends"><span>As needed</span><span>Daily</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat-slider-block">
+        <div class="stat-slider-label"><span>Energy</span><span class="stat-val" id="sv-energy">Balanced</span></div>
+        <input type="range" min="0" max="4" value="2" id="gs-energy" oninput="updateStat('gs-energy','sv-energy',['Very calm','Mostly relaxed','Balanced','Energetic','High energy']);updatePreview()">
+        <div class="stat-ends"><span>Calm</span><span>Hype</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat-slider-block">
+        <div class="stat-slider-label"><span>Diet strictness</span><span class="stat-val" id="sv-diet">Balanced</span></div>
+        <input type="range" min="0" max="4" value="2" id="gs-diet" oninput="updateStat('gs-diet','sv-diet',['Very flexible','Mostly flexible','Balanced','Pretty strict','Very strict']);updatePreview()">
+        <div class="stat-ends"><span>Flexible</span><span>Strict</span></div>
+      </div>
+    </div>
+
+    <!-- INTERESTS -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Personal interests</div>
+      <div class="field"><label>3 to 5 interests, separated by commas</label><input type="text" id="g-interests" placeholder="Hiking, cooking, dogs, fantasy football" oninput="updatePreview()"></div>
+    </div>
+
+    <!-- COPY -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Profile copy</div>
+      <div class="field" style="margin-bottom:12px;"><label>Short bio — shows on card</label><textarea id="g-bio" placeholder="Write their short bio here in first person." oninput="updatePreview()"></textarea></div>
+      <div class="field"><label>Full story — shows when someone opens their profile</label><textarea id="g-story" style="min-height:110px;" placeholder="Why they became a coach, what they believe in..."></textarea></div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="section">
+      <div class="section-title"><div class="dot"></div>Client testimonials</div>
+      <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1rem;">Leave empty if none yet.</p>
+      <div id="testi-list"></div>
+      <button class="add-testi-btn" onclick="addTesti()">+ Add a testimonial</button>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitTrainer()">ADD TO WEBSITE</button>
+    <div class="status-box" id="status-box"></div>
   </div>
 
-  <!-- STAT BARS -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Coaching stats</div>
-    <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1.25rem;">These power the stat bars on the trainer card. Drag each one to where this trainer actually lands.</p>
+  <!-- ── RIGHT: LIVE PREVIEW ── -->
+  <div class="preview-col">
+    <div class="preview-label">Live card preview</div>
+    <div class="trainer-card" id="preview-card">
 
-    <div class="stat-slider-block">
-      <div class="stat-slider-label"><span>Intensity</span><span class="stat-val" id="sv-intensity">Balanced</span></div>
-      <input type="range" min="0" max="4" value="2" id="gs-intensity" oninput="updateStat('gs-intensity','sv-intensity',['Easy & light','Moderate','Balanced','Hard-working','Max effort'])">
-      <div class="stat-ends"><span>Easy</span><span>Max effort</span></div>
+      <div class="card-header">
+        <div>
+          <div class="trainer-name" id="prev-name">Sarah Johnson</div>
+          <div class="trainer-meta" id="prev-meta">31 · Austin, TX</div>
+        </div>
+        <div class="card-header-right">
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div class="star-icons" id="prev-stars"></div>
+            <span class="review-count" id="prev-reviews">5.0 (0)</span>
+          </div>
+          <span class="founding-badge" id="prev-badge">✦ Founding</span>
+        </div>
+      </div>
+
+      <div class="card-images">
+        <div class="img-main" id="prev-img1">💪</div>
+        <div class="img-side">
+          <div class="img-secondary" id="prev-img2">🏋️</div>
+          <div class="img-secondary" id="prev-img3">🌄</div>
+        </div>
+      </div>
+
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val" id="prev-exp">—</div><div class="card-stat-label">Experience</div></div>
+        <div class="card-stat"><div class="card-stat-val" id="prev-certs">—</div><div class="card-stat-label">Certified</div></div>
+        <div class="card-stat"><div class="card-stat-val" id="prev-price">$—</div><div class="card-stat-label">Per month</div></div>
+      </div>
+
+      <div class="card-middle">
+        <div class="card-tags-col" id="prev-tags">
+          <span class="tag style" style="opacity:0.3">Specialty</span>
+          <span class="tag diet" style="opacity:0.3">Diet</span>
+          <span class="tag niche" style="opacity:0.3">Niche</span>
+        </div>
+        <div class="card-statbars-col" id="prev-statbars"></div>
+      </div>
+
+      <div class="card-interests">
+        <div class="interests-label">Interests</div>
+        <div class="interests-row" id="prev-interests">
+          <span class="interest-chip" style="opacity:0.3">Interests</span>
+        </div>
+      </div>
+
+      <div class="card-bio" id="prev-bio" style="opacity:0.3">Bio will appear here...</div>
+
+      <div class="card-footer">
+        <div class="card-price"><strong id="prev-price-footer">$—</strong><span> / mo</span></div>
+        <button class="btn-view">View profile</button>
+      </div>
+
     </div>
-    <div class="divider"></div>
-    <div class="stat-slider-block">
-      <div class="stat-slider-label"><span>Structure</span><span class="stat-val" id="sv-structure">Balanced</span></div>
-      <input type="range" min="0" max="4" value="2" id="gs-structure" oninput="updateStat('gs-structure','sv-structure',['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid'])">
-      <div class="stat-ends"><span>Flexible</span><span>Rigid</span></div>
-    </div>
-    <div class="divider"></div>
-    <div class="stat-slider-block">
-      <div class="stat-slider-label"><span>Check-ins</span><span class="stat-val" id="sv-checkins">Balanced</span></div>
-      <input type="range" min="0" max="4" value="2" id="gs-checkins" oninput="updateStat('gs-checkins','sv-checkins',['As needed','Weekly','Few times/week','Every other day','Daily'])">
-      <div class="stat-ends"><span>As needed</span><span>Daily</span></div>
-    </div>
-    <div class="divider"></div>
-    <div class="stat-slider-block">
-      <div class="stat-slider-label"><span>Energy</span><span class="stat-val" id="sv-energy">Balanced</span></div>
-      <input type="range" min="0" max="4" value="2" id="gs-energy" oninput="updateStat('gs-energy','sv-energy',['Very calm','Mostly relaxed','Balanced','Energetic','High energy'])">
-      <div class="stat-ends"><span>Calm</span><span>Hype</span></div>
-    </div>
-    <div class="divider"></div>
-    <div class="stat-slider-block">
-      <div class="stat-slider-label"><span>Diet strictness</span><span class="stat-val" id="sv-diet">Balanced</span></div>
-      <input type="range" min="0" max="4" value="2" id="gs-diet" oninput="updateStat('gs-diet','sv-diet',['Very flexible','Mostly flexible','Balanced','Pretty strict','Very strict'])">
-      <div class="stat-ends"><span>Flexible</span><span>Strict</span></div>
-    </div>
+    <p class="preview-hint">Updates automatically as you fill out the form</p>
   </div>
 
-  <!-- INTERESTS -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Personal interests</div>
-    <div class="field"><label>3 to 5 interests, separated by commas</label><input type="text" id="g-interests" placeholder="Hiking, cooking, dogs, fantasy football"></div>
-  </div>
-
-  <!-- COPY -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Profile copy</div>
-    <div class="field" style="margin-bottom:12px;"><label>Short bio — shows on card (2–3 sentences)</label><textarea id="g-bio" placeholder="Write their short bio here in first person. Keep it to 2–3 sentences."></textarea></div>
-    <div class="field"><label>Full story — shows when someone opens their profile</label><textarea id="g-story" style="min-height:110px;" placeholder="Why they became a coach, what they believe in, what a client can expect..."></textarea></div>
-  </div>
-
-  <!-- TESTIMONIALS -->
-  <div class="section">
-    <div class="section-title"><div class="dot"></div>Client testimonials</div>
-    <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1rem;">Leave empty if none yet — the section won't appear on their profile.</p>
-    <div id="testi-list"></div>
-    <button class="add-testi-btn" onclick="addTesti()">+ Add a testimonial</button>
-  </div>
-
-  <button class="submit-btn" id="submit-btn" onclick="submitTrainer()">ADD TO WEBSITE</button>
-  <div class="status-box" id="status-box"></div>
 </div>
 
 <script>
   let testiCount = 0;
+
+  const STAT_DEFS = [
+    { key: 'gs-intensity',  label: 'Intensity' },
+    { key: 'gs-structure',  label: 'Structure'  },
+    { key: 'gs-checkins',   label: 'Check-ins'  },
+    { key: 'gs-energy',     label: 'Energy'     },
+    { key: 'gs-diet',       label: 'Diet'       },
+  ];
 
   window.addEventListener('load', () => {
     const saved = JSON.parse(localStorage.getItem('ih-config') || '{}');
@@ -299,6 +427,7 @@
     if (saved.repo) document.getElementById('cfg-repo').value = saved.repo;
     if (saved.token) document.getElementById('cfg-token').value = saved.token;
     if (saved.user && saved.token) document.getElementById('config-saved').classList.add('show');
+    updatePreview();
   });
 
   function saveConfig() {
@@ -320,9 +449,84 @@
   function getSelected(groupId) {
     return [...document.querySelectorAll('#' + groupId + ' .pill.on')].map(b => b.textContent.trim());
   }
+  function updateStat(id, displayId, labels) {
+    document.getElementById(displayId).textContent = labels[document.getElementById(id).value];
+  }
 
-  function updateStat(sliderId, displayId, labels) {
-    document.getElementById(displayId).textContent = labels[document.getElementById(sliderId).value];
+  function renderStars(rating) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+      const pct = Math.round(rating);
+      if (rating >= i) html += '<div class="star"></div>';
+      else if (rating >= i - 0.5) html += '<div class="star" style="background:linear-gradient(90deg,#c07a18 50%,var(--gray-mid) 50%)"></div>';
+      else html += '<div class="star" style="background:var(--gray-light)"></div>';
+    }
+    return html;
+  }
+
+  function updatePreview() {
+    const name    = document.getElementById('g-name').value.trim() || 'Trainer Name';
+    const age     = document.getElementById('g-age').value || '—';
+    const loc     = document.getElementById('g-location').value.trim() || 'City, ST';
+    const price   = document.getElementById('g-price').value || '—';
+    const exp     = document.getElementById('g-exp').value.trim() || '—';
+    const certs   = document.getElementById('g-certs').value.trim() || '—';
+    const rating  = parseFloat(document.getElementById('g-rating').value) || 5.0;
+    const reviews = document.getElementById('g-reviews').value || '0';
+    const founding = getSelected('g-founding')[0]?.includes('Yes') ?? true;
+    const p1 = document.getElementById('g-photo1').value.trim();
+    const p2 = document.getElementById('g-photo2').value.trim();
+    const p3 = document.getElementById('g-photo3').value.trim();
+    const bio = document.getElementById('g-bio').value.trim() || 'Bio will appear here...';
+    const specialties = getSelected('g-specialties');
+    const diet = getSelected('g-diet')[0] || '';
+    const niches = getSelected('g-niches');
+    const interests = document.getElementById('g-interests').value
+      .split(',').map(s => s.trim()).filter(Boolean);
+
+    document.getElementById('prev-name').textContent = name;
+    document.getElementById('prev-meta').textContent = age + ' · ' + loc;
+    document.getElementById('prev-stars').innerHTML = renderStars(rating);
+    document.getElementById('prev-reviews').textContent = rating + ' (' + reviews + ')';
+    document.getElementById('prev-badge').style.display = founding ? '' : 'none';
+    document.getElementById('prev-exp').textContent = exp;
+    document.getElementById('prev-certs').textContent = certs;
+    document.getElementById('prev-price').textContent = price ? '$' + price : '$—';
+    document.getElementById('prev-price-footer').textContent = price ? '$' + price : '$—';
+    document.getElementById('prev-bio').textContent = bio;
+    document.getElementById('prev-bio').style.opacity = document.getElementById('g-bio').value.trim() ? '1' : '0.3';
+
+    // Images
+    const img1 = document.getElementById('prev-img1');
+    img1.innerHTML = p1 ? `<img src="images/${p1}" alt="" onerror="this.parentElement.innerHTML='💪'">` : '💪';
+    const img2 = document.getElementById('prev-img2');
+    img2.innerHTML = p2 ? `<img src="images/${p2}" alt="" onerror="this.parentElement.innerHTML='🏋️'">` : '🏋️';
+    const img3 = document.getElementById('prev-img3');
+    img3.innerHTML = p3 ? `<img src="images/${p3}" alt="" onerror="this.parentElement.innerHTML='🌄'">` : '🌄';
+
+    // Tags
+    let tagsHTML = specialties.map(s => `<span class="tag style">${s}</span>`).join('');
+    if (diet) tagsHTML += `<span class="tag diet">${diet}</span>`;
+    if (niches.length) tagsHTML += `<span class="tag niche">${niches[0]}</span>`;
+    document.getElementById('prev-tags').innerHTML = tagsHTML ||
+      `<span class="tag style" style="opacity:0.3">Specialty</span>
+       <span class="tag diet" style="opacity:0.3">Diet</span>
+       <span class="tag niche" style="opacity:0.3">Niche</span>`;
+
+    // Stat bars
+    document.getElementById('prev-statbars').innerHTML = STAT_DEFS.map(d => {
+      const val = parseInt(document.getElementById(d.key).value) || 2;
+      const pct = Math.round((val / 4) * 100);
+      return `<div class="stat-bar-row">
+        <span class="stat-bar-label">${d.label}</span>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+
+    // Interests
+    document.getElementById('prev-interests').innerHTML = interests.length
+      ? interests.map(i => `<span class="interest-chip">${i}</span>`).join('')
+      : `<span class="interest-chip" style="opacity:0.3">Interests</span>`;
   }
 
   function addTesti() {
@@ -341,7 +545,7 @@
       <div class="field" style="margin-bottom:10px;"><label>Result</label><input type="text" id="t${id}-result" placeholder="Lost 22 lbs in 14 weeks"></div>
       <div class="field" style="margin-bottom:10px;"><label>Their quote</label><textarea id="t${id}-quote" placeholder="Write what the client said..."></textarea></div>
       <div class="row two">
-        <div class="field"><label>Before photo (optional)</label><input type="text" id="t${id}-before" placeholder="jamie-before.jpg"><span class="hint">Upload to images/ first. Client must consent.</span></div>
+        <div class="field"><label>Before photo (optional)</label><input type="text" id="t${id}-before" placeholder="jamie-before.jpg"></div>
         <div class="field"><label>After photo (optional)</label><input type="text" id="t${id}-after" placeholder="jamie-after.jpg"></div>
       </div>`;
     document.getElementById('testi-list').appendChild(div);
@@ -351,12 +555,12 @@
     return [...document.querySelectorAll('.testi-block')].map(b => {
       const id = b.id.replace('testi-', '');
       const before = document.getElementById('t'+id+'-before')?.value.trim() || '';
-      const after = document.getElementById('t'+id+'-after')?.value.trim() || '';
+      const after  = document.getElementById('t'+id+'-after')?.value.trim()  || '';
       return {
-        name:     document.getElementById('t'+id+'-name')?.value.trim() || '',
-        initials: document.getElementById('t'+id+'-init')?.value.trim() || '',
+        name:     document.getElementById('t'+id+'-name')?.value.trim()   || '',
+        initials: document.getElementById('t'+id+'-init')?.value.trim()   || '',
         result:   document.getElementById('t'+id+'-result')?.value.trim() || '',
-        quote:    document.getElementById('t'+id+'-quote')?.value.trim() || '',
+        quote:    document.getElementById('t'+id+'-quote')?.value.trim()  || '',
         before:   before ? 'images/' + before : '',
         after:    after  ? 'images/' + after  : ''
       };
@@ -414,7 +618,6 @@
       showStatus('error', 'Missing name', 'Please enter the trainer\'s name before submitting.');
       return;
     }
-
     const btn = document.getElementById('submit-btn');
     btn.disabled = true; btn.textContent = 'ADDING TO WEBSITE...';
     document.getElementById('status-box').className = 'status-box';
@@ -434,7 +637,6 @@
         body: JSON.stringify({ message: `Add trainer: ${trainer.name}`, content: encoded, sha: fileData.sha })
       });
       if (!updateRes.ok) { const e = await updateRes.json(); throw new Error('GitHub write failed: ' + (e.message || updateRes.status)); }
-
       btn.textContent = 'ADD TO WEBSITE'; btn.disabled = false;
       showStatus('success', `${trainer.name} added!`,
         `Their profile is live. It may take up to 60 seconds for GitHub Pages to update.<br><br>
@@ -463,6 +665,7 @@
     document.getElementById('sv-diet').textContent = 'Balanced';
     document.getElementById('testi-list').innerHTML = '';
     testiCount = 0;
+    updatePreview();
   }
 </script>
 </body>
