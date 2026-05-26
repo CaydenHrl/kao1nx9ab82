@@ -10,80 +10,101 @@
 :root{
   --black:#0a0a0a;--white:#f5f2ed;--orange:#e8500a;--orange-dark:#b83d06;
   --gray:#1a1a1a;--gray-mid:#242424;--gray-light:#2e2e2e;--gray-text:#777;
-  --border:rgba(255,255,255,0.08);--green:#4ade80;--red:#f87171;
+  --border:rgba(255,255,255,0.08);--green:#4ade80;--red:#f87171;--blue:#60a5fa;
   --font-display:'Bebas Neue',sans-serif;--font-body:'Barlow',sans-serif;
 }
-html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
+html,body{height:100%;background:var(--black);color:var(--white);font-family:var(--font-body);overflow-x:hidden;}
 
 /* NAV */
-.topnav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.9rem 2rem;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
-.topnav-logo{font-family:var(--font-display);font-size:22px;letter-spacing:2px;color:var(--white);}
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 2rem;background:rgba(10,10,10,0.97);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.topnav-logo{font-family:var(--font-display);font-size:22px;letter-spacing:2px;}
 .topnav-logo span{color:var(--orange);}
-.topnav-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-text);padding:3px 10px;border:1px solid var(--border);border-radius:99px;}
+.topnav-right{display:flex;align-items:center;gap:12px;}
+.tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-text);padding:3px 10px;border:1px solid var(--border);border-radius:99px;}
+.cfg-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0;}
+.cfg-dot.ok{background:var(--green);}
 
 /* TABS */
-.tabs-bar{display:flex;border-bottom:1px solid var(--border);background:#111;padding:0 2rem;}
-.tab-btn{padding:1rem 1.5rem;font-family:var(--font-body);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--gray-text);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+.tabs-bar{display:flex;border-bottom:1px solid var(--border);background:#111;padding:0 2rem;overflow-x:auto;}
+.tab-btn{padding:0.9rem 1.25rem;font-family:var(--font-body);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-text);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all 0.2s;}
 .tab-btn:hover{color:var(--white);}
 .tab-btn.active{color:var(--orange);border-bottom-color:var(--orange);}
-.tab-pane{display:none;}
+.tab-pane{display:none;animation:fadeIn 0.2s ease;}
 .tab-pane.active{display:block;}
 
-/* SHARED */
-.section-card{background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;}
-.section-title{font-family:var(--font-display);font-size:18px;letter-spacing:1px;margin-bottom:1.1rem;display:flex;align-items:center;gap:8px;}
+/* SHARED FORM ELEMENTS */
+.page-pad{padding:2rem;}
+.page-title{font-family:var(--font-display);font-size:36px;letter-spacing:1px;margin-bottom:0.25rem;}
+.page-sub{font-size:13px;color:var(--gray-text);margin-bottom:2rem;line-height:1.6;}
+.card{background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;}
+.card-title{font-family:var(--font-display);font-size:18px;letter-spacing:1px;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;}
-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);}
-input[type=text],input[type=number],input[type=email],textarea,select{width:100%;background:var(--gray-mid);border:1px solid var(--border);border-radius:7px;color:var(--white);font-family:var(--font-body);font-size:13px;padding:9px 12px;outline:none;transition:border-color 0.15s;}
-input[type=text]:focus,input[type=number]:focus,input[type=email]:focus,textarea:focus,select:focus{border-color:rgba(232,80,10,0.5);}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.field:last-child{margin-bottom:0;}
+.field label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);}
+.field label span{font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,0.35);font-size:11px;}
+input[type=text],input[type=number],input[type=email],textarea,select{
+  width:100%;background:var(--gray-mid);border:1px solid var(--border);border-radius:7px;
+  color:var(--white);font-family:var(--font-body);font-size:13px;padding:9px 12px;outline:none;transition:border-color 0.15s;
+}
+input:focus,textarea:focus,select:focus{border-color:rgba(232,80,10,0.5);}
 textarea{resize:vertical;line-height:1.6;}
 select option{background:#1a1a1a;}
-input[type=range]{width:100%;height:4px;-webkit-appearance:none;appearance:none;background:var(--gray-light);border-radius:99px;outline:none;cursor:pointer;margin:6px 0;}
+input[type=range]{width:100%;height:4px;-webkit-appearance:none;appearance:none;background:var(--gray-light);border-radius:99px;outline:none;cursor:pointer;margin:4px 0;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--orange);border:2px solid #111;cursor:grab;}
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
-.field:last-child{margin-bottom:0;}
-.row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.hint{font-size:11px;color:var(--gray-text);line-height:1.5;}
-.pill-group{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
-.pill{padding:5px 13px;border-radius:99px;border:1px solid var(--border);background:var(--gray-mid);color:var(--gray-text);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all 0.15s;}
-.pill:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
-.pill.on{background:rgba(232,80,10,0.15);border-color:rgba(232,80,10,0.4);color:var(--orange);}
-.btn{padding:10px 22px;border-radius:7px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border:none;transition:all 0.15s;}
-.btn-orange{background:var(--orange);color:var(--white);}
-.btn-orange:hover{background:var(--orange-dark);}
-.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border);}
-.btn-outline:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);}
-.btn-red{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
-.btn-red:hover{background:rgba(248,113,113,0.2);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 .slider-row{display:flex;align-items:center;gap:10px;}
-.slider-val{font-family:var(--font-display);font-size:15px;letter-spacing:0.5px;color:var(--orange);min-width:120px;text-align:right;}
+.slider-val{font-family:var(--font-display);font-size:14px;color:var(--orange);min-width:130px;text-align:right;}
 .slider-ends{display:flex;justify-content:space-between;margin-top:2px;}
 .slider-ends span{font-size:10px;color:var(--gray-text);}
-.status-bar{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--white);display:none;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
-.status-bar.show{display:flex;}
-.status-bar.success{border-color:rgba(74,222,128,0.3);background:rgba(74,222,128,0.08);}
-.status-bar.error{border-color:rgba(248,113,113,0.3);background:rgba(248,113,113,0.08);}
+
+/* PILLS */
+.pill-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.pill{padding:5px 13px;border-radius:99px;border:1px solid var(--border);background:var(--gray-mid);color:var(--gray-text);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.pill:hover{color:var(--white);}
+.pill.on{background:rgba(232,80,10,0.15);border-color:rgba(232,80,10,0.4);color:var(--orange);}
 
 /* NICHE RANK */
-.niche-rank-wrap{margin-top:10px;display:none;}
+.niche-rank{margin-top:10px;display:none;}
 .niche-rank-item{display:flex;align-items:center;gap:8px;background:var(--gray-mid);border:1px solid var(--border);border-radius:7px;padding:8px 12px;margin-bottom:5px;cursor:grab;user-select:none;}
-.niche-rank-item.drag-over{border-color:var(--orange);}
-.niche-rank-num{font-family:var(--font-display);font-size:15px;color:var(--orange);width:16px;flex-shrink:0;}
-.niche-rank-label{font-size:13px;flex:1;}
-.niche-rank-badge{font-size:9px;color:var(--gray-text);background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:99px;}
-.niche-rank-remove{background:none;border:none;color:var(--gray-text);cursor:pointer;font-size:15px;padding:0;line-height:1;}
-.niche-rank-remove:hover{color:var(--red);}
+.niche-rank-item.drag-over{border-color:var(--orange);background:rgba(232,80,10,0.06);}
+.niche-num{font-family:var(--font-display);font-size:15px;color:var(--orange);width:16px;flex-shrink:0;}
+.niche-lbl{font-size:13px;flex:1;}
+.niche-badge{font-size:9px;color:var(--gray-text);background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:99px;}
+.niche-rm{background:none;border:none;color:var(--gray-text);cursor:pointer;font-size:15px;padding:0;}
+.niche-rm:hover{color:var(--red);}
 
-/* TAB 1 — PREVIEW */
-.preview-pane{padding:2rem;}
-.preview-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
-.preview-toolbar h2{font-family:var(--font-display);font-size:28px;letter-spacing:1px;}
-.preview-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;max-width:1200px;}
+/* BUTTONS */
+.btn{padding:10px 22px;border-radius:7px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border:none;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:var(--orange);color:var(--white);}
+.btn-primary:hover{background:var(--orange-dark);}
+.btn-ghost{background:transparent;color:var(--white);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);}
+.btn-danger{background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
+.btn-danger:hover{background:rgba(248,113,113,0.2);}
+.btn-blue{background:rgba(96,165,250,0.1);color:var(--blue);border:1px solid rgba(96,165,250,0.2);}
+.btn-blue:hover{background:rgba(96,165,250,0.2);}
+.btn-sm{padding:6px 14px;font-size:11px;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
 
-/* CARD (identical to trainers.html) */
-.trainer-card{background:var(--gray);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s;display:flex;flex-direction:column;animation:fadeUp 0.4s ease both;}
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;display:none;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,0.5);max-width:380px;}
+.toast.show{display:flex;}
+.toast.ok{border-color:rgba(74,222,128,0.3);background:rgba(74,222,128,0.08);color:var(--green);}
+.toast.err{border-color:rgba(248,113,113,0.3);background:rgba(248,113,113,0.08);color:var(--red);}
+.toast.info{border-color:rgba(96,165,250,0.3);background:rgba(96,165,250,0.08);color:var(--blue);}
+.toast-close{background:none;border:none;color:inherit;cursor:pointer;font-size:16px;padding:0;opacity:0.6;margin-left:auto;}
+
+/* SPLIT LAYOUT */
+.split{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 110px);}
+.split-form{padding:2rem;border-right:1px solid var(--border);overflow-y:auto;}
+.split-preview{position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto;padding:1.5rem;background:#111;display:flex;flex-direction:column;gap:12px;}
+.preview-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray-text);}
+.preview-card-wrap{width:340px;}
+
+/* TRAINER CARD — exact match to trainers.html */
+.trainer-card{background:var(--gray);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s;display:flex;flex-direction:column;}
 .trainer-card:hover{border-color:rgba(232,80,10,0.4);transform:translateY(-3px);}
 .card-header{padding:1.1rem 1.25rem 0.75rem;display:flex;justify-content:space-between;align-items:flex-start;}
 .trainer-name{font-family:var(--font-display);font-size:22px;letter-spacing:0.5px;line-height:1;}
@@ -107,19 +128,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .card-stat-label{font-size:10px;color:var(--gray-text);text-transform:uppercase;letter-spacing:0.5px;margin-top:1px;}
 .card-middle{display:flex;border-bottom:1px solid var(--border);}
 .card-tags-col{flex:0 0 38%;padding:0.875rem 1rem 0.875rem 1.25rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:5px;justify-content:center;}
-.tag{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--border);color:var(--gray-text);white-space:nowrap;display:inline-block;}
-.tag.style{background:rgba(50,120,20,0.1);color:#7cba4a;border-color:rgba(80,160,30,0.2);}
-.tag.diet{background:rgba(200,120,20,0.08);color:#e0a84a;border-color:rgba(200,140,30,0.2);}
-.tag.niche{background:rgba(100,80,200,0.1);color:#a89aea;border-color:rgba(120,100,220,0.2);}
-.card-statbars-col{flex:1;padding:0.875rem 1.25rem;display:flex;flex-direction:column;gap:6px;justify-content:center;}
-.stat-bar-row{display:flex;align-items:center;gap:7px;}
-.stat-bar-icon{flex-shrink:0;width:14px;height:14px;display:flex;align-items:center;justify-content:center;}
-.stat-bar-track{flex:1;height:4px;background:var(--gray-light);border-radius:99px;overflow:hidden;}
-.stat-bar-fill{height:100%;border-radius:99px;background:var(--orange);transition:width 0.4s ease;}
+.tc{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--border);white-space:nowrap;display:inline-block;}
+.tc.style{background:rgba(50,120,20,0.1);color:#7cba4a;border-color:rgba(80,160,30,0.2);}
+.tc.diet{background:rgba(200,120,20,0.08);color:#e0a84a;border-color:rgba(200,140,30,0.2);}
+.tc.niche{background:rgba(100,80,200,0.1);color:#a89aea;border-color:rgba(120,100,220,0.2);}
+.card-bars-col{flex:1;padding:0.875rem 1.25rem;display:flex;flex-direction:column;gap:6px;justify-content:center;}
+.bar-row{display:flex;align-items:center;gap:7px;}
+.bar-icon{flex-shrink:0;width:14px;height:14px;}
+.bar-track{flex:1;height:4px;background:var(--gray-light);border-radius:99px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;background:var(--orange);}
 .card-interests{padding:0.75rem 1.25rem 0;}
 .interests-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-text);margin-bottom:5px;}
 .interests-row{display:flex;flex-wrap:wrap;gap:5px;}
-.interest-chip{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--gray-mid);border:1px solid var(--border);color:rgba(245,242,237,0.6);}
+.chip{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--gray-mid);border:1px solid var(--border);color:rgba(245,242,237,0.6);}
 .card-bio{padding:0.75rem 1.25rem 1rem;font-size:13px;color:var(--gray-text);line-height:1.65;border-top:1px solid var(--border);margin-top:0.75rem;}
 .card-footer{padding:0.875rem 1.25rem;display:flex;justify-content:space-between;align-items:center;margin-top:auto;border-top:1px solid var(--border);}
 .card-price{font-size:13px;color:var(--gray-text);}
@@ -127,99 +148,96 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .btn-view{font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;padding:8px 18px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--white);cursor:pointer;font-family:var(--font-body);transition:all 0.15s;}
 .btn-view:hover{background:var(--orange);border-color:var(--orange);}
 
+/* PREVIEW GRID */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;}
+
+/* MANAGE ROW */
+.manage-row{display:flex;align-items:center;gap:12px;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:0.875rem 1.25rem;margin-bottom:6px;cursor:grab;transition:border-color 0.15s;}
+.manage-row:active{cursor:grabbing;}
+.manage-row.drag-over{border-color:var(--orange);background:rgba(232,80,10,0.04);}
+.manage-row.staging{border-color:rgba(96,165,250,0.4);background:rgba(96,165,250,0.04);}
+.handle{color:var(--gray-text);font-size:18px;cursor:grab;flex-shrink:0;}
+.row-img{width:44px;height:44px;border-radius:8px;background:var(--gray-mid);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.row-img img{width:100%;height:100%;object-fit:cover;}
+.row-info{flex:1;min-width:0;}
+.row-name{font-family:var(--font-display);font-size:18px;letter-spacing:0.5px;}
+.row-meta{font-size:12px;color:var(--gray-text);}
+.row-actions{display:flex;gap:6px;flex-shrink:0;}
+.staging-banner{background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:13px;color:var(--blue);line-height:1.6;}
+.staging-banner strong{color:var(--white);}
+
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
-.modal-overlay.open{display:flex;animation:fadeIn 0.2s ease;}
-.modal{background:var(--gray);border:1px solid rgba(255,255,255,0.1);border-radius:16px;width:100%;max-width:680px;overflow:hidden;margin:auto;position:relative;}
-.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,0.5);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;}
-.modal-close:hover{background:var(--orange);}
-.modal-photo-carousel{position:relative;background:var(--gray-mid);overflow:hidden;}
-.modal-photo-track{display:flex;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
-.modal-photo-slide{min-width:100%;display:flex;align-items:center;justify-content:center;font-size:64px;background:var(--gray-mid);}
-.modal-photo-slide img{width:100%;height:auto;display:block;max-height:70vh;object-fit:contain;}
-.modal-photo-prev,.modal-photo-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.55);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:background 0.15s;}
-.modal-photo-prev{left:10px;}
-.modal-photo-next{right:10px;}
-.modal-photo-prev:hover,.modal-photo-next:hover{background:var(--orange);}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+.modal-bg.open{display:flex;}
+.modal-box{background:var(--gray);border:1px solid rgba(255,255,255,0.1);border-radius:16px;width:100%;max-width:680px;overflow:hidden;margin:auto;position:relative;}
+.modal-x{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,0.5);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;}
+.modal-x:hover{background:var(--orange);}
+.modal-carousel{position:relative;background:var(--gray-mid);overflow:hidden;}
+.modal-track{display:flex;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
+.modal-slide{min-width:100%;display:flex;align-items:center;justify-content:center;font-size:64px;background:var(--gray-mid);}
+.modal-slide img{width:100%;height:auto;display:block;max-height:70vh;object-fit:contain;}
+.modal-arr{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.55);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;}
+.modal-arr:hover{background:var(--orange);}
+.modal-arr.prev{left:10px;}
+.modal-arr.next{right:10px;}
 .modal-photo-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
-.modal-photo-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;cursor:pointer;padding:0;transition:background 0.2s,transform 0.2s;}
+.modal-photo-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;cursor:pointer;padding:0;transition:all 0.2s;}
 .modal-photo-dot.active{background:var(--white);transform:scale(1.3);}
 .modal-body{padding:1.5rem;}
-.modal-top-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;}
+.modal-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;}
 .modal-name{font-family:var(--font-display);font-size:32px;letter-spacing:1px;}
-.modal-meta{font-size:13px;color:var(--gray-text);margin-top:3px;}
+.modal-meta-text{font-size:13px;color:var(--gray-text);margin-top:3px;}
 .modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:1.25rem;}
 .modal-stat{background:var(--gray-mid);padding:0.875rem;text-align:center;}
 .modal-stat-val{font-family:var(--font-display);font-size:20px;}
-.modal-stat-label{font-size:10px;color:var(--gray-text);text-transform:uppercase;letter-spacing:0.5px;}
-.modal-section-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:0.75rem;margin-top:1.25rem;}
-.modal-statbars{display:flex;flex-direction:column;gap:8px;}
-.modal-bar-row{display:flex;align-items:center;gap:8px;}
-.modal-bar-icon{flex-shrink:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;}
-.modal-bar-label{font-size:12px;color:var(--gray-text);width:70px;flex-shrink:0;}
-.modal-bar-track{flex:1;height:6px;background:var(--gray-light);border-radius:99px;overflow:hidden;}
-.modal-bar-fill{height:100%;border-radius:99px;background:var(--orange);}
-.modal-bar-ends{display:flex;justify-content:space-between;margin-top:2px;}
-.modal-bar-end{font-size:10px;color:rgba(255,255,255,0.25);}
+.modal-stat-lbl{font-size:10px;color:var(--gray-text);text-transform:uppercase;letter-spacing:0.5px;}
+.modal-sec-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:0.75rem;margin-top:1.25rem;}
+.modal-bars{display:flex;flex-direction:column;gap:8px;}
+.mbar-row{display:flex;align-items:center;gap:8px;}
+.mbar-icon{flex-shrink:0;width:16px;height:16px;}
+.mbar-lbl{font-size:12px;color:var(--gray-text);width:70px;flex-shrink:0;}
+.mbar-track{flex:1;height:6px;background:var(--gray-light);border-radius:99px;overflow:hidden;}
+.mbar-fill{height:100%;border-radius:99px;background:var(--orange);}
+.mbar-ends{display:flex;justify-content:space-between;margin-top:2px;}
+.mbar-end{font-size:10px;color:rgba(255,255,255,0.25);}
 .modal-tags{display:flex;flex-wrap:wrap;gap:6px;}
 .modal-story{font-size:14px;color:rgba(245,242,237,0.75);line-height:1.75;}
-.testimonials-wrap{display:flex;flex-direction:column;gap:12px;}
-.testi-text{background:var(--gray-mid);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;}
-.testi-quote{font-size:14px;color:rgba(245,242,237,0.75);line-height:1.7;font-style:italic;position:relative;padding-left:1.25rem;}
-.testi-quote::before{content:'\201C';font-family:var(--font-display);font-size:40px;color:var(--orange);position:absolute;left:-4px;top:-8px;line-height:1;}
+.modal-interests{display:flex;flex-wrap:wrap;gap:5px;}
+.testi-block{background:var(--gray-mid);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:10px;}
+.testi-q{font-size:14px;color:rgba(245,242,237,0.75);line-height:1.7;font-style:italic;position:relative;padding-left:1.25rem;}
+.testi-q::before{content:'\201C';font-family:var(--font-display);font-size:40px;color:var(--orange);position:absolute;left:-4px;top:-8px;line-height:1;}
 .testi-author{margin-top:0.75rem;display:flex;align-items:center;gap:8px;}
-.testi-avatar{width:28px;height:28px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--font-display);color:var(--white);flex-shrink:0;}
+.testi-av{width:28px;height:28px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--font-display);color:var(--white);flex-shrink:0;}
 .testi-name{font-size:13px;font-weight:600;}
 .testi-result{font-size:11px;color:#7cba4a;margin-top:1px;}
-.modal-cta{width:100%;padding:14px;background:var(--orange);color:var(--white);border:none;border-radius:8px;font-family:var(--font-display);font-size:22px;letter-spacing:2px;cursor:pointer;margin-top:1.5rem;}
-.modal-cta:hover{background:var(--orange-dark);}
+.modal-cta-btn{width:100%;padding:14px;background:var(--orange);color:var(--white);border:none;border-radius:8px;font-family:var(--font-display);font-size:22px;letter-spacing:2px;cursor:pointer;margin-top:1.5rem;}
+.modal-cta-btn:hover{background:var(--orange-dark);}
 
-/* TAB 2 — ADD TRAINER */
-.add-pane{display:grid;grid-template-columns:1fr 380px;gap:0;min-height:calc(100vh - 110px);}
-.add-form-col{padding:2rem 2rem 5rem;border-right:1px solid var(--border);overflow-y:auto;}
-.add-preview-col{position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto;padding:1.5rem;background:#111;display:flex;flex-direction:column;gap:0.75rem;width:380px;min-width:380px;}
-.preview-col-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray-text);margin-bottom:0.5rem;}
+/* CONFIG */
+.cfg-section{max-width:640px;}
+.cfg-status-row{display:flex;align-items:center;gap:8px;font-size:12px;margin-top:8px;}
+.sync-log{font-size:12px;color:var(--gray-text);margin-top:8px;line-height:1.6;font-family:monospace;}
 
-/* TAB 3 — MANAGE */
-.manage-pane{padding:2rem;}
-.trainer-row{display:flex;align-items:center;gap:1rem;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:8px;cursor:grab;transition:border-color 0.15s;}
-.trainer-row:active{cursor:grabbing;}
-.trainer-row.drag-over{border-color:var(--orange);background:rgba(232,80,10,0.05);}
-.trainer-row-handle{color:var(--gray-text);font-size:18px;cursor:grab;flex-shrink:0;}
-.trainer-row-img{width:44px;height:44px;border-radius:8px;background:var(--gray-mid);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;}
-.trainer-row-img img{width:100%;height:100%;object-fit:cover;}
-.trainer-row-info{flex:1;min-width:0;}
-.trainer-row-name{font-family:var(--font-display);font-size:18px;letter-spacing:0.5px;}
-.trainer-row-meta{font-size:12px;color:var(--gray-text);}
-.trainer-row-actions{display:flex;gap:8px;flex-shrink:0;}
-
-/* TAB 4 — EDIT TRAINER */
-.edit-pane{padding:2rem;}
-.edit-select-bar{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;}
-.edit-select-bar select{flex:1;}
-.edit-form-grid{display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:start;}
-.edit-form-col{display:flex;flex-direction:column;gap:0;}
-
-/* TAB 5 — TESTIMONIALS */
-.testi-pane{padding:2rem;}
-.testi-builder{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
-.testi-list{display:flex;flex-direction:column;gap:10px;}
-.testi-item{background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;}
-.testi-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+/* TESTI */
+.testi-item{background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:8px;cursor:grab;}
+.testi-item.drag-over{border-color:var(--orange);}
+.testi-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
 .testi-item-name{font-weight:600;font-size:14px;}
-.testi-item-quote{font-size:13px;color:var(--gray-text);line-height:1.6;font-style:italic;}
+.testi-item-q{font-size:13px;color:var(--gray-text);font-style:italic;line-height:1.5;}
+.testi-item-result{font-size:11px;color:#7cba4a;margin-top:3px;}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 
 @media(max-width:1100px){
-  .add-pane{grid-template-columns:1fr;}
-  .add-preview-col{position:relative;top:0;height:auto;}
-  .edit-form-grid{grid-template-columns:1fr;}
+  .split{grid-template-columns:1fr;}
+  .split-preview{position:relative;top:0;height:auto;}
 }
-@media(max-width:768px){
-  .preview-cards-grid{grid-template-columns:1fr;}
-  .testi-builder{grid-template-columns:1fr;}
+@media(max-width:640px){
+  .tabs-bar{padding:0 1rem;}
+  .page-pad{padding:1.25rem;}
+  .g2,.g3{grid-template-columns:1fr;}
+  .cards-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -227,891 +245,1201 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 
 <div class="topnav">
   <div class="topnav-logo">IRON<span>HOUSE</span></div>
-  <span class="topnav-tag">Dev Dashboard</span>
+  <div class="topnav-right">
+    <div class="cfg-dot" id="cfg-dot" title="GitHub not configured"></div>
+    <span class="tag">Dev Dashboard</span>
+  </div>
 </div>
 
 <div class="tabs-bar">
-  <button class="tab-btn active" onclick="switchTab('preview',this)">👁 Preview</button>
-  <button class="tab-btn" onclick="switchTab('add',this)">➕ Add Trainer</button>
-  <button class="tab-btn" onclick="switchTab('manage',this)">⠿ Manage Order</button>
-  <button class="tab-btn" onclick="switchTab('edit',this)">✏️ Edit Trainer</button>
-  <button class="tab-btn" onclick="switchTab('testimonials',this)">💬 Testimonials</button>
-  <button class="tab-btn" onclick="switchTab('config',this)">⚙️ Config</button>
+  <button class="tab-btn active" id="tb-preview"    onclick="showTab('preview',this)">👁 Preview</button>
+  <button class="tab-btn"        id="tb-staging"    onclick="showTab('staging',this)">📥 Staging</button>
+  <button class="tab-btn"        id="tb-add"        onclick="showTab('add',this)">➕ Add Trainer</button>
+  <button class="tab-btn"        id="tb-manage"     onclick="showTab('manage',this)">⠿ Manage</button>
+  <button class="tab-btn"        id="tb-edit"       onclick="showTab('edit',this)">✏️ Edit</button>
+  <button class="tab-btn"        id="tb-testi"      onclick="showTab('testi',this)">💬 Testimonials</button>
+  <button class="tab-btn"        id="tb-config"     onclick="showTab('config',this)">⚙️ Config</button>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     TAB 1 — PREVIEW
-══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     PREVIEW
+═══════════════════════════════════════ -->
 <div class="tab-pane active" id="tab-preview">
-  <div class="preview-pane">
-    <div class="preview-toolbar">
-      <h2>Live Trainer Preview</h2>
-      <div style="display:flex;gap:10px;">
-        <button class="btn btn-outline" onclick="loadTrainers()">↺ Reload</button>
+  <div class="page-pad">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <div class="page-title">Live Preview</div>
+        <div style="font-size:13px;color:var(--gray-text);">Showing published trainers from trainers.json</div>
       </div>
+      <button class="btn btn-ghost" onclick="loadAll()">↺ Reload</button>
     </div>
-    <div class="preview-cards-grid" id="preview-grid"></div>
+    <div class="cards-grid" id="preview-grid"></div>
     <div id="preview-empty" style="display:none;padding:4rem;text-align:center;color:var(--gray-text);">
       <p style="font-size:18px;margin-bottom:8px;">No trainers loaded</p>
-      <p style="font-size:13px;">Make sure trainers.json is in the same folder as this file.</p>
+      <p style="font-size:13px;">Check that trainers.json is in the same folder, or go to Config and sync.</p>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     TAB 2 — ADD TRAINER
-══════════════════════════════════════════════ -->
-<div class="tab-pane" id="tab-add">
-  <div class="add-pane">
-    <div class="add-form-col">
-      <div style="margin-bottom:2rem;">
-        <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:0.25rem;">Add New Trainer</div>
-        <div style="font-size:13px;color:var(--gray-text);">Fill out the form and click Save to Trainers.json</div>
-      </div>
+<!-- ═══════════════════════════════════════
+     STAGING
+═══════════════════════════════════════ -->
+<div class="tab-pane" id="tab-staging">
+  <div class="page-pad">
+    <div class="page-title">Staging Queue</div>
+    <div class="page-sub">Trainers waiting for review before going live. These come from trainerspreview.json — auto-populated when a trainer submits an application.</div>
+    <div class="staging-banner">
+      <strong>How it works:</strong> When a trainer submits their application, their data is written to <code>trainerspreview.json</code> on the main repo. It appears here for you to review, edit, and publish. Publishing moves them to <code>trainers.json</code> and removes them from the staging queue.
+    </div>
+    <div id="staging-list"></div>
+    <div id="staging-empty" style="display:none;padding:3rem;text-align:center;color:var(--gray-text);">
+      <p style="font-size:18px;margin-bottom:8px;">Queue is empty</p>
+      <p style="font-size:13px;">No trainers pending review.</p>
+    </div>
+  </div>
+</div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Basic info</div>
-        <div class="row-3">
-          <div class="field"><label>First name</label><input type="text" id="a-first" placeholder="Sarah" oninput="updateAddPreview()"></div>
-          <div class="field"><label>Last name</label><input type="text" id="a-last" placeholder="Johnson" oninput="updateAddPreview()"></div>
-          <div class="field"><label>Age</label><input type="number" id="a-age" placeholder="28" min="18" max="80" oninput="updateAddPreview()"></div>
+<!-- ═══════════════════════════════════════
+     ADD TRAINER
+═══════════════════════════════════════ -->
+<div class="tab-pane" id="tab-add">
+  <div class="split">
+    <div class="split-form">
+      <div class="page-title">Add Trainer</div>
+      <div class="page-sub">Fill out the form. Card preview updates live on the right.</div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Basic info</div>
+        <div class="g3">
+          <div class="field"><label>First name</label><input type="text" id="a-first" placeholder="Sarah" oninput="refreshAddPreview()"></div>
+          <div class="field"><label>Last name</label><input type="text" id="a-last" placeholder="Johnson" oninput="refreshAddPreview()"></div>
+          <div class="field"><label>Age</label><input type="number" id="a-age" placeholder="28" oninput="refreshAddPreview()"></div>
         </div>
-        <div class="row-2">
-          <div class="field"><label>City & State</label><input type="text" id="a-location" placeholder="Austin, TX" oninput="updateAddPreview()"></div>
+        <div class="g2">
+          <div class="field"><label>City & State</label><input type="text" id="a-loc" placeholder="Austin, TX" oninput="refreshAddPreview()"></div>
           <div class="field"><label>Email</label><input type="email" id="a-email" placeholder="sarah@email.com"></div>
         </div>
       </div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Credentials</div>
-        <div class="row-3">
-          <div class="field"><label>Experience</label><input type="text" id="a-exp" placeholder="4 yrs" oninput="updateAddPreview()"></div>
-          <div class="field"><label>Certifications</label><input type="text" id="a-certs" placeholder="NASM-CPT" oninput="updateAddPreview()"></div>
-          <div class="field"><label>Monthly price ($)</label><input type="number" id="a-price" placeholder="149" oninput="updateAddPreview()"></div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Credentials</div>
+        <div class="g3">
+          <div class="field"><label>Experience</label><input type="text" id="a-exp" placeholder="4 yrs" oninput="refreshAddPreview()"></div>
+          <div class="field"><label>Certifications</label><input type="text" id="a-certs" placeholder="NASM-CPT" oninput="refreshAddPreview()"></div>
+          <div class="field"><label>Monthly price ($)</label><input type="number" id="a-price" placeholder="149" oninput="refreshAddPreview()"></div>
         </div>
-        <div class="row-3">
-          <div class="field"><label>Rating (0–5)</label>
-            <select id="a-rating" onchange="updateAddPreview()">
-              <option value="5.0">5.0 ★★★★★</option><option value="4.9">4.9</option><option value="4.8">4.8</option><option value="4.7">4.7</option><option value="4.6">4.6</option><option value="4.5">4.5</option><option value="4.0">4.0</option><option value="3.5">3.5</option>
+        <div class="g3">
+          <div class="field"><label>Rating</label>
+            <select id="a-rating" onchange="refreshAddPreview()">
+              <option value="5.0">5.0</option><option value="4.9">4.9</option><option value="4.8">4.8</option>
+              <option value="4.7">4.7</option><option value="4.5">4.5</option><option value="4.0">4.0</option>
             </select>
           </div>
-          <div class="field"><label>Reviews (#)</label><input type="number" id="a-reviews" placeholder="0" value="0" oninput="updateAddPreview()"></div>
-          <div class="field"><label>Founding trainer?</label>
-            <div class="pill-group" id="a-founding" style="margin-top:2px;">
-              <button class="pill on" onclick="solo(this,'a-founding');updateAddPreview()">Yes</button>
-              <button class="pill" onclick="solo(this,'a-founding');updateAddPreview()">No</button>
+          <div class="field"><label>Reviews</label><input type="number" id="a-reviews" value="0" oninput="refreshAddPreview()"></div>
+          <div class="field"><label>Founding?</label>
+            <div class="pill-group" id="a-founding">
+              <button class="pill on" onclick="soloBtn(this,'a-founding');refreshAddPreview()">Yes</button>
+              <button class="pill"    onclick="soloBtn(this,'a-founding');refreshAddPreview()">No</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Photos <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— filenames in the images/ folder</span></div>
-        <div class="row-3">
-          <div class="field"><label>Profile (1:1)</label><input type="text" id="a-p1" placeholder="sarah-main.jpg" oninput="updateAddPreview()"><span class="hint">Square headshot</span></div>
-          <div class="field"><label>Physique (4:3)</label><input type="text" id="a-p2" placeholder="sarah-gym.jpg" oninput="updateAddPreview()"></div>
-          <div class="field"><label>Lifestyle (4:3)</label><input type="text" id="a-p3" placeholder="sarah-life.jpg" oninput="updateAddPreview()"></div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Photos <span style="font-family:var(--font-body);font-size:12px;color:var(--gray-text);letter-spacing:0;font-weight:400;text-transform:none;">filenames in images/ folder</span></div>
+        <div class="g3">
+          <div class="field"><label>Profile 1:1</label><input type="text" id="a-p1" placeholder="sarah-main.jpg" oninput="refreshAddPreview()"></div>
+          <div class="field"><label>Physique 4:3</label><input type="text" id="a-p2" placeholder="sarah-gym.jpg" oninput="refreshAddPreview()"></div>
+          <div class="field"><label>Lifestyle 4:3</label><input type="text" id="a-p3" placeholder="sarah-life.jpg" oninput="refreshAddPreview()"></div>
         </div>
       </div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Training specialties <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— pick all that apply</span></div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Specialties</div>
         <div class="pill-group" id="a-specs">
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Hypertrophy</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Strength & powerlifting</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Calisthenics</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">CrossFit</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Weight loss</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Cardio & endurance</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Functional fitness</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Flexibility & mobility</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Sport-specific</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Body recomposition</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Hypertrophy</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Strength &amp; powerlifting</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Calisthenics</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">CrossFit</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Weight loss</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Cardio &amp; endurance</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Functional fitness</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Flexibility &amp; mobility</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Sport-specific</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Body recomposition</button>
         </div>
       </div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Niches <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— pick up to 3, drag to reorder (#1 shows on card)</span></div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Niches <span style="font-family:var(--font-body);font-size:12px;color:var(--gray-text);letter-spacing:0;font-weight:400;text-transform:none;">up to 3 · drag to reorder · #1 shows on card</span></div>
         <div class="pill-group" id="a-niches">
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Seniors / 60+</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Postpartum women</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Teens / youth</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Competitive athletes</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Complete beginners</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Post-injury / rehab</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Women only</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Men only</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Plus-size / body positive</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Weight loss focused</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Muscle building focused</button>
-          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">General population</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Seniors / 60+</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Postpartum women</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Teens / youth</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Competitive athletes</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Complete beginners</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Post-injury / rehab</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Women only</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Men only</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Plus-size / body positive</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Weight loss focused</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">Muscle building focused</button>
+          <button class="pill" onclick="nicheToggle(this,'a-nr')">General population</button>
         </div>
-        <div class="niche-rank-wrap" id="a-niche-ranked">
-          <div style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);margin-bottom:6px;">Priority order — drag to reorder</div>
-          <div id="a-niche-ranked-items"></div>
-        </div>
+        <div class="niche-rank" id="a-nr"><div style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);margin-bottom:6px;">Priority order — drag to reorder</div><div id="a-nr-items"></div></div>
       </div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Diet philosophies <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— pick all that apply</span></div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Diet philosophies</div>
         <div class="pill-group" id="a-diet">
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Flexible / IIFYM</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">High protein</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Carnivore</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Keto</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Plant-based</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Vegan</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Whole foods</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Intermittent fasting</button>
-          <button class="pill" onclick="toggle(this);updateAddPreview()">Whatever works for the client</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Flexible / IIFYM</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">High protein</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Carnivore</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Keto</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Plant-based</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Vegan</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Whole foods</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Intermittent fasting</button>
+          <button class="pill" onclick="toggleBtn(this);refreshAddPreview()">Whatever works for client</button>
         </div>
       </div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Coaching stats</div>
-        <div class="field"><label>Intensity</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-si" oninput="updateSv('a-si','a-sv-si',['Easy & light','Moderate','Balanced','Hard-working','Max effort always']);updateAddPreview()"><span class="slider-val" id="a-sv-si">Balanced</span></div><div class="slider-ends"><span>Easy</span><span>Max effort</span></div></div>
-        <div class="field"><label>Structure</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-ss" oninput="updateSv('a-ss','a-sv-ss',['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid']);updateAddPreview()"><span class="slider-val" id="a-sv-ss">Balanced</span></div><div class="slider-ends"><span>Flexible</span><span>Rigid</span></div></div>
-        <div class="field"><label>Check-ins</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-sc" oninput="updateSv('a-sc','a-sv-sc',['As needed','Weekly','Few times/week','Every other day','Daily']);updateAddPreview()"><span class="slider-val" id="a-sv-sc">Few times/week</span></div><div class="slider-ends"><span>As needed</span><span>Daily</span></div></div>
-        <div class="field"><label>Energy</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-se" oninput="updateSv('a-se','a-sv-se',['Very calm','Mostly relaxed','Balanced','Energetic','High energy always']);updateAddPreview()"><span class="slider-val" id="a-sv-se">Balanced</span></div><div class="slider-ends"><span>Calm</span><span>Hype</span></div></div>
-        <div class="field"><label>Diet strictness</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-sd" oninput="updateSv('a-sd','a-sv-sd',['Very flexible','Mostly flexible','Balanced','Pretty strict','Very regimented']);updateAddPreview()"><span class="slider-val" id="a-sv-sd">Balanced</span></div><div class="slider-ends"><span>Flexible</span><span>Strict</span></div></div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Coaching stats</div>
+        <div class="field"><label>Intensity</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-si" oninput="sv('a-si','a-svi',SL.intensity);refreshAddPreview()"><span class="slider-val" id="a-svi">Balanced</span></div><div class="slider-ends"><span>Easy</span><span>Max effort</span></div></div>
+        <div class="field"><label>Structure</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-ss" oninput="sv('a-ss','a-svs',SL.structure);refreshAddPreview()"><span class="slider-val" id="a-svs">Balanced</span></div><div class="slider-ends"><span>Flexible</span><span>Rigid</span></div></div>
+        <div class="field"><label>Check-ins</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-sc" oninput="sv('a-sc','a-svc',SL.checkins);refreshAddPreview()"><span class="slider-val" id="a-svc">Few times/week</span></div><div class="slider-ends"><span>As needed</span><span>Daily</span></div></div>
+        <div class="field"><label>Energy</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-se" oninput="sv('a-se','a-sve',SL.energy);refreshAddPreview()"><span class="slider-val" id="a-sve">Balanced</span></div><div class="slider-ends"><span>Calm</span><span>Hype</span></div></div>
+        <div class="field"><label>Diet strictness</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-sd" oninput="sv('a-sd','a-svd',SL.diet);refreshAddPreview()"><span class="slider-val" id="a-svd">Balanced</span></div><div class="slider-ends"><span>Flexible</span><span>Strict</span></div></div>
       </div>
 
-      <div class="section-card">
-        <div class="section-title"><div class="dot"></div>Profile copy</div>
-        <div class="field"><label>Interests <span style="font-weight:400;text-transform:none;letter-spacing:0;">(comma separated)</span></label><input type="text" id="a-interests" placeholder="Hiking, cooking, chess" oninput="updateAddPreview()"></div>
-        <div class="field"><label>Short bio</label><textarea id="a-bio" rows="3" placeholder="One or two punchy sentences." oninput="updateAddPreview()"></textarea></div>
-        <div class="field"><label>Full story</label><textarea id="a-story" rows="5" placeholder="Their background and coaching philosophy..." oninput="updateAddPreview()"></textarea></div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Profile copy</div>
+        <div class="field"><label>Interests <span>(comma separated)</span></label><input type="text" id="a-int" placeholder="Hiking, cooking, chess" oninput="refreshAddPreview()"></div>
+        <div class="field"><label>Short bio</label><textarea id="a-bio" rows="3" placeholder="One or two punchy sentences." oninput="refreshAddPreview()"></textarea></div>
+        <div class="field"><label>Full story</label><textarea id="a-story" rows="5" placeholder="Background and coaching philosophy..." oninput="refreshAddPreview()"></textarea></div>
       </div>
 
-      <div style="display:flex;gap:12px;margin-top:1rem;">
-        <button class="btn btn-orange" onclick="saveNewTrainer()" style="flex:1;padding:14px;">Save to trainers.json</button>
-        <button class="btn btn-outline" onclick="resetAddForm()">Clear</button>
+      <div style="display:flex;gap:10px;margin-top:0.5rem;">
+        <button class="btn btn-primary" style="flex:1;padding:14px;" onclick="saveNewTrainer()">Save to trainers.json</button>
+        <button class="btn btn-ghost" onclick="resetAddForm()">Clear</button>
       </div>
     </div>
 
-    <div class="add-preview-col">
-      <div class="preview-col-label">Live card preview</div>
-      <div id="add-preview-card" style="width:340px;margin:0 auto;"></div>
-      <button class="btn btn-outline" style="margin-top:0.5rem;font-size:12px;" onclick="openPreviewModal(buildAddTrainerObj())">View full profile modal →</button>
+    <div class="split-preview">
+      <div class="preview-label">Card preview</div>
+      <div class="preview-card-wrap" id="add-preview"></div>
+      <button class="btn btn-ghost btn-sm" onclick="openModalFor(ADD_CACHE)">View full profile →</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     TAB 3 — MANAGE ORDER
-══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     MANAGE ORDER
+═══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-manage">
-  <div class="manage-pane">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+  <div class="page-pad">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
       <div>
-        <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;">Trainer Order</div>
-        <div style="font-size:13px;color:var(--gray-text);">Drag rows to reorder. The order here is the order on the live site.</div>
+        <div class="page-title">Manage Order</div>
+        <div style="font-size:13px;color:var(--gray-text);">Drag to reorder. Order here = order on live site.</div>
       </div>
-      <button class="btn btn-orange" onclick="saveOrder()">Save order to trainers.json</button>
+      <button class="btn btn-primary" onclick="saveOrder()">Save order to trainers.json</button>
     </div>
     <div id="manage-list"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     TAB 4 — EDIT TRAINER
-══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     EDIT TRAINER
+═══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-edit">
-  <div class="edit-pane">
-    <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:1.5rem;">Edit Trainer</div>
-    <div class="edit-select-bar">
-      <label style="white-space:nowrap;">Select trainer</label>
-      <select id="edit-select" onchange="loadEditTrainer()"><option value="">— choose —</option></select>
-      <button class="btn btn-red" onclick="deleteTrainer()">Delete</button>
+  <div class="page-pad">
+    <div class="page-title">Edit Trainer</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;">
+      <select id="edit-select" style="flex:1;" onchange="loadEditForm()"><option value="">— choose a trainer —</option></select>
+      <button class="btn btn-danger btn-sm" onclick="deleteTrainer()">Delete</button>
     </div>
-    <div class="edit-form-grid" id="edit-form-wrap" style="display:none;">
-      <div class="edit-form-col" id="edit-form-fields"></div>
-      <div>
-        <div class="preview-col-label" style="margin-bottom:0.75rem;">Preview</div>
-        <div id="edit-preview-card" style="width:340px;margin:0 auto;"></div>
-        <button class="btn btn-outline" style="margin-top:0.75rem;font-size:12px;width:100%;" onclick="openPreviewModal(buildEditTrainerObj())">View full profile modal →</button>
-        <button class="btn btn-orange" style="margin-top:0.75rem;font-size:12px;width:100%;padding:12px;" onclick="saveEditTrainer()">Save changes</button>
+    <div id="edit-body" style="display:none;">
+      <div class="split" style="min-height:auto;">
+        <div class="split-form" id="edit-fields" style="padding:0;border:none;"></div>
+        <div class="split-preview">
+          <div class="preview-label">Preview</div>
+          <div class="preview-card-wrap" id="edit-preview"></div>
+          <button class="btn btn-ghost btn-sm" onclick="openModalFor(EDIT_CACHE)">View full profile →</button>
+          <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="saveEditTrainer()">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     TAB 5 — TESTIMONIALS
-══════════════════════════════════════════════ -->
-<div class="tab-pane" id="tab-testimonials">
-  <div class="testi-pane">
-    <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:0.25rem;">Testimonials</div>
-    <div style="font-size:13px;color:var(--gray-text);margin-bottom:2rem;">Build testimonials.json — these appear in the "Built for both sides" carousel on the landing page.</div>
-    <div class="testi-builder">
+<!-- ═══════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════ -->
+<div class="tab-pane" id="tab-testi">
+  <div class="page-pad">
+    <div class="page-title">Testimonials</div>
+    <div class="page-sub">Build testimonials.json — used in the landing page carousel.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
       <div>
-        <div class="section-card">
-          <div class="section-title"><div class="dot"></div>Add testimonial</div>
-          <div class="row-2">
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Add testimonial</div>
+          <div class="g2">
             <div class="field"><label>Name</label><input type="text" id="t-name" placeholder="Jamie T."></div>
-            <div class="field"><label>Initials</label><input type="text" id="t-initials" placeholder="JT" maxlength="2"></div>
+            <div class="field"><label>Initials</label><input type="text" id="t-init" placeholder="JT" maxlength="2"></div>
           </div>
-          <div class="row-2">
+          <div class="g2">
             <div class="field"><label>Role</label><input type="text" id="t-role" placeholder="Client · Tampa, FL"></div>
-            <div class="field"><label>Result (green text)</label><input type="text" id="t-result" placeholder="Lost 22 lbs in 14 weeks"></div>
+            <div class="field"><label>Result</label><input type="text" id="t-result" placeholder="Lost 22 lbs in 14 weeks"></div>
           </div>
           <div class="field"><label>Quote</label><textarea id="t-quote" rows="4" placeholder="What they said..."></textarea></div>
-          <button class="btn btn-orange" onclick="addTestimonial()" style="margin-top:1rem;width:100%;">Add to list</button>
+          <button class="btn btn-primary" style="margin-top:1rem;width:100%;" onclick="addTesti()">Add to list</button>
         </div>
-        <div class="section-card" style="margin-top:0;">
-          <div class="section-title"><div class="dot"></div>Actions</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="btn btn-outline" onclick="loadTestimonials()">↺ Load testimonials.json</button>
-            <button class="btn btn-orange" onclick="saveTestimonials()">Save testimonials.json</button>
+        <div class="card">
+          <div class="card-title"><div class="dot"></div>Actions</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" onclick="loadTestimonials()">↺ Load from file</button>
+            <button class="btn btn-primary btn-sm" onclick="saveTestimonials()">Save testimonials.json</button>
           </div>
-          <div style="margin-top:1rem;">
-            <label style="display:block;margin-bottom:6px;">Preview JSON</label>
-            <textarea id="t-json-preview" rows="8" style="font-family:monospace;font-size:11px;color:var(--gray-text);" readonly></textarea>
-          </div>
+          <div class="field" style="margin-top:1rem;"><label>JSON preview</label><textarea id="t-json" rows="8" readonly style="font-family:monospace;font-size:11px;color:var(--gray-text);"></textarea></div>
         </div>
       </div>
       <div>
-        <div class="preview-col-label" style="margin-bottom:0.75rem;">Current list (drag to reorder)</div>
+        <div class="preview-label" style="margin-bottom:0.75rem;">List (drag to reorder)</div>
         <div id="testi-list"></div>
-        <div id="testi-empty" style="color:var(--gray-text);font-size:13px;padding:2rem;text-align:center;display:none;">No testimonials yet</div>
+        <div id="testi-empty" style="display:none;color:var(--gray-text);font-size:13px;padding:2rem;text-align:center;">No testimonials yet</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     TAB 6 — CONFIG
-══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     CONFIG
+═══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-config">
-  <div style="padding:2rem;max-width:600px;">
-    <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:0.25rem;">GitHub Config</div>
-    <div style="font-size:13px;color:var(--gray-text);margin-bottom:2rem;">Required to save changes directly to your repo.</div>
-    <div class="section-card">
-      <div class="field"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="CaydenHrl"></div>
-      <div class="field"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="Iron-House"></div>
+  <div class="page-pad cfg-section">
+    <div class="page-title">Config</div>
+    <div class="page-sub">GitHub credentials are stored only in your browser's localStorage and never sent anywhere except the GitHub API.</div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>GitHub</div>
+      <div class="field"><label>Username</label><input type="text" id="cfg-user" placeholder="CaydenHrl"></div>
+      <div class="field"><label>Main site repo <span style="color:var(--orange);text-transform:none;letter-spacing:0;">(saves go here)</span></label><input type="text" id="cfg-repo" placeholder="Iron-House"></div>
+      <div class="field"><label>Dev repo <span>(preview reads from here)</span></label><input type="text" id="cfg-dev" placeholder="Iron-House-Dev"></div>
       <div class="field"><label>Personal access token</label><input type="text" id="cfg-token" placeholder="ghp_..." autocomplete="off"></div>
-      <button class="btn btn-orange" onclick="saveConfig()" style="margin-top:0.5rem;">Save config</button>
-      <div class="config-saved" id="cfg-saved" style="margin-top:10px;">✓ Config saved to localStorage</div>
+      <button class="btn btn-primary" style="margin-top:0.5rem;" onclick="saveCfg()">Save config</button>
+      <div class="cfg-status-row" id="cfg-ok" style="display:none;"><span style="color:var(--green);">✓ Config saved</span></div>
     </div>
-    <div class="section-card" style="margin-top:1.25rem;">
-      <div class="section-title"><div class="dot"></div>How to get a token</div>
-      <p style="font-size:13px;color:var(--gray-text);line-height:1.7;">Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token. Give it <strong style="color:var(--white);">repo</strong> scope. Paste it above. It's stored only in your browser's localStorage.</p>
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Sync</div>
+      <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1rem;">Pull the latest trainers.json and testimonials.json from your main site and write them to your dev repo. Do this to keep the preview in sync.</p>
+      <button class="btn btn-blue" onclick="syncDevRepo()">↺ Sync dev repo from main site</button>
+      <div class="sync-log" id="sync-log"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>How to get a token</div>
+      <p style="font-size:13px;color:var(--gray-text);line-height:1.7;">GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token → give it <strong style="color:var(--white);">repo</strong> scope. Paste above.</p>
     </div>
   </div>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-photo-carousel" id="modal-carousel">
-      <div class="modal-photo-track" id="modal-track"></div>
-      <button class="modal-photo-prev" id="modal-prev" onclick="photoNav(-1)">‹</button>
-      <button class="modal-photo-next" id="modal-next" onclick="photoNav(1)">›</button>
-      <div class="modal-photo-dots" id="modal-dots"></div>
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-carousel" id="m-carousel">
+      <div class="modal-track" id="m-track"></div>
+      <button class="modal-arr prev" onclick="mNav(-1)">‹</button>
+      <button class="modal-arr next" onclick="mNav(1)">›</button>
+      <div class="modal-photo-dots" id="m-dots"></div>
     </div>
     <div class="modal-body">
-      <div class="modal-top-row">
-        <div><div class="modal-name" id="modal-name"></div><div class="modal-meta" id="modal-meta"></div></div>
-        <span class="founding-badge" id="modal-badge" style="display:none;">✦ Founding</span>
+      <div class="modal-top">
+        <div><div class="modal-name" id="m-name"></div><div class="modal-meta-text" id="m-meta"></div></div>
+        <span class="founding-badge" id="m-badge" style="display:none;">✦ Founding</span>
       </div>
       <div class="modal-stats">
-        <div class="modal-stat"><div class="modal-stat-val" id="modal-exp"></div><div class="modal-stat-label">Experience</div></div>
-        <div class="modal-stat"><div class="modal-stat-val" id="modal-certs"></div><div class="modal-stat-label">Certified</div></div>
-        <div class="modal-stat"><div class="modal-stat-val" id="modal-price"></div><div class="modal-stat-label">Per month</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="m-exp"></div><div class="modal-stat-lbl">Experience</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="m-certs"></div><div class="modal-stat-lbl">Certified</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="m-price"></div><div class="modal-stat-lbl">Per month</div></div>
       </div>
-      <div class="modal-section-title">Coaching style</div>
-      <div class="modal-statbars" id="modal-bars"></div>
-      <div class="modal-section-title">Specialties & focus</div>
-      <div class="modal-tags" id="modal-tags"></div>
-      <div class="modal-section-title">About</div>
-      <div class="modal-story" id="modal-story"></div>
-      <div class="modal-section-title">Personal interests</div>
-      <div class="modal-tags" id="modal-interests"></div>
-      <div id="modal-testis"></div>
-      <button class="modal-cta">GET MATCHED WITH THIS COACH</button>
+      <div class="modal-sec-title">Coaching style</div>
+      <div class="modal-bars" id="m-bars"></div>
+      <div class="modal-sec-title">Specialties &amp; focus</div>
+      <div class="modal-tags" id="m-tags"></div>
+      <div class="modal-sec-title">About</div>
+      <div class="modal-story" id="m-story"></div>
+      <div class="modal-sec-title">Interests</div>
+      <div class="modal-interests" id="m-interests"></div>
+      <div id="m-testis"></div>
+      <button class="modal-cta-btn">GET MATCHED WITH THIS COACH</button>
     </div>
   </div>
 </div>
 
-<div class="status-bar" id="status-bar">
-  <span id="status-msg"></span>
-  <button onclick="document.getElementById('status-bar').classList.remove('show','success','error')" style="background:none;border:none;color:var(--gray-text);cursor:pointer;font-size:18px;padding:0;margin-left:8px;">×</button>
+<div class="toast" id="toast">
+  <span id="toast-msg"></span>
+  <button class="toast-close" onclick="closeToast()">×</button>
 </div>
 
 <script>
-let TRAINERS = [];
-let testimonials = [];
-let modalPhotoIdx = 0;
-let modalSlides = [];
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+var TRAINERS = [];
+var STAGING  = [];
+var TESTIS   = [];
+var ADD_CACHE  = null;
+var EDIT_CACHE = null;
 
-const ICONS = {
-  intensity:`<svg width="14" height="14" viewBox="0 0 15 21" fill="none"><path d="M8 0 C6 4 4 7 3 10 C1.5 8.5 1.5 6 2.5 4.5 C0.5 7 0 10 0 12 C0 17 3 21 7.5 21 C12 21 15 17 15 12 C15 7 12 3.5 8 0z" fill="#e8500a"/><path d="M7.5 21 C5 19.5 3.5 17 3.5 14 C3.5 11 5 8.5 6.5 7 C6 9.5 6.5 12 7.5 13.5 C6.5 11 7 8 7.5 6.5 C8 8 8.5 11 7.5 13.5 C8.5 12 9 9.5 8.5 7 C10 8.5 11.5 11 11.5 14 C11.5 17 10 19.5 7.5 21z" fill="#b83d06"/></svg>`,
-  structure:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="#e8500a"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="#e8500a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  checkins:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" fill="#e8500a"/><circle cx="16" cy="8" r="3" fill="#e8500a" opacity="0.6"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#e8500a" stroke-width="2" stroke-linecap="round"/><path d="M16 14c1.7.8 3 2.7 3 5" stroke="#e8500a" stroke-width="2" stroke-linecap="round" opacity="0.6"/></svg>`,
-  energy:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="#e8500a"/></svg>`,
-  diet:`<svg width="14" height="14" viewBox="0 0 16 30" fill="none"><path d="M8 7 C12 7 15 11 15 16 C15 22 12 28 8 30 C4 28 1 22 1 16 C1 11 4 7 8 7z" fill="#e8500a"/><line x1="3" y1="14" x2="13" y2="14" stroke="#b83d06" stroke-width="0.8" opacity="0.5"/><path d="M5 6 C3 4 2 1 3 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/><path d="M8 6 C8 4 8 1 8 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/><path d="M11 6 C13 4 14 1 13 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>`
+var mSlides = [];
+var mIdx    = 0;
+
+var nicheState = {}; // { listId: [name,...] }
+var manageDragIdx = -1;
+var testiDragIdx  = -1;
+
+var SL = {
+  intensity: ['Easy & light','Moderate','Balanced','Hard-working','Max effort always'],
+  structure:  ['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid'],
+  checkins:   ['As needed','Weekly','Few times/week','Every other day','Daily'],
+  energy:     ['Very calm','Mostly relaxed','Balanced','Energetic','High energy always'],
+  diet:       ['Very flexible','Mostly flexible','Balanced','Pretty strict','Very regimented']
 };
-const STAT_DEFS=[
-  {key:'stat_intensity',icon:'intensity',label:'Intensity',lo:'Easy',hi:'Max effort'},
-  {key:'stat_structure',icon:'structure',label:'Structure',lo:'Flexible',hi:'Rigid'},
-  {key:'stat_checkins', icon:'checkins', label:'Check-ins',lo:'As needed',hi:'Daily'},
-  {key:'stat_energy',   icon:'energy',   label:'Energy',   lo:'Calm',   hi:'Hype'},
-  {key:'stat_diet',     icon:'diet',     label:'Diet',     lo:'Flexible',hi:'Strict'},
+
+var STAT_DEFS = [
+  {k:'stat_intensity', icon:'intensity', lbl:'Intensity', lo:'Easy',     hi:'Max effort'},
+  {k:'stat_structure', icon:'structure', lbl:'Structure', lo:'Flexible', hi:'Rigid'},
+  {k:'stat_checkins',  icon:'checkins',  lbl:'Check-ins', lo:'As needed',hi:'Daily'},
+  {k:'stat_energy',    icon:'energy',    lbl:'Energy',    lo:'Calm',     hi:'Hype'},
+  {k:'stat_diet',      icon:'diet',      lbl:'Diet',      lo:'Flexible', hi:'Strict'}
 ];
 
-// ── TABS ──────────────────────────────────────────
-function switchTab(id, btn) {
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+// SVG icons as functions — avoids </svg> inside script
+function icon(name) {
+  if (name==='intensity') return '<svg width="14" height="14" viewBox="0 0 15 21" fill="none"><path d="M8 0 C6 4 4 7 3 10 C1.5 8.5 1.5 6 2.5 4.5 C0.5 7 0 10 0 12 C0 17 3 21 7.5 21 C12 21 15 17 15 12 C15 7 12 3.5 8 0z" fill="#e8500a"/><path d="M7.5 21 C5 19.5 3.5 17 3.5 14 C3.5 11 5 8.5 6.5 7 C6 9.5 6.5 12 7.5 13.5 C6.5 11 7 8 7.5 6.5 C8 8 8.5 11 7.5 13.5 C8.5 12 9 9.5 8.5 7 C10 8.5 11.5 11 11.5 14 C11.5 17 10 19.5 7.5 21z" fill="#b83d06"/>' + iconClose();
+  if (name==='structure')  return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="#e8500a"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="#e8500a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' + iconClose();
+  if (name==='checkins')   return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" fill="#e8500a"/><circle cx="16" cy="8" r="3" fill="#e8500a" opacity="0.6"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#e8500a" stroke-width="2" stroke-linecap="round"/><path d="M16 14c1.7.8 3 2.7 3 5" stroke="#e8500a" stroke-width="2" stroke-linecap="round" opacity="0.6"/>' + iconClose();
+  if (name==='energy')     return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="#e8500a"/>' + iconClose();
+  if (name==='diet')       return '<svg width="14" height="14" viewBox="0 0 16 30" fill="none"><path d="M8 7 C12 7 15 11 15 16 C15 22 12 28 8 30 C4 28 1 22 1 16 C1 11 4 7 8 7z" fill="#e8500a"/><line x1="3" y1="14" x2="13" y2="14" stroke="#b83d06" stroke-width="0.8" opacity="0.5"/><path d="M5 6 C3 4 2 1 3 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/><path d="M8 6 C8 4 8 1 8 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/><path d="M11 6 C13 4 14 1 13 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/>' + iconClose();
+  return '';
+}
+function iconClose() { return '<' + '/svg>'; }
+
+// ─────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='manage') renderManageList();
-  if(id==='edit') populateEditSelect();
+  if (id === 'manage')  renderManageList();
+  if (id === 'edit')    populateEditSelect();
+  if (id === 'staging') renderStagingList();
 }
 
-// ── HELPERS ───────────────────────────────────────
-function toggle(btn){btn.classList.toggle('on');}
-function solo(btn,groupId){
-  document.querySelectorAll('#'+groupId+' .pill').forEach(b=>b.classList.remove('on'));
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+var toastTimer;
+function toast(msg, type) {
+  var el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  el.className = 'toast show ' + (type||'ok');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(closeToast, 4000);
+}
+function closeToast() {
+  document.getElementById('toast').classList.remove('show');
+}
+
+// ─────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────
+function getCfg() { return JSON.parse(localStorage.getItem('ih-cfg') || '{}'); }
+function saveCfg() {
+  var cfg = {
+    user:  document.getElementById('cfg-user').value.trim(),
+    repo:  document.getElementById('cfg-repo').value.trim(),
+    dev:   document.getElementById('cfg-dev').value.trim(),
+    token: document.getElementById('cfg-token').value.trim()
+  };
+  localStorage.setItem('ih-cfg', JSON.stringify(cfg));
+  document.getElementById('cfg-ok').style.display = 'flex';
+  updateCfgDot();
+  toast('Config saved');
+}
+function updateCfgDot() {
+  var cfg = getCfg();
+  var ok = !!(cfg.user && cfg.repo && cfg.token);
+  document.getElementById('cfg-dot').className = 'cfg-dot' + (ok ? ' ok' : '');
+  document.getElementById('cfg-dot').title = ok ? 'GitHub configured' : 'GitHub not configured — go to Config tab';
+}
+
+// ─────────────────────────────────────────────
+// GITHUB API
+// ─────────────────────────────────────────────
+async function ghGet(repo, path) {
+  var cfg = getCfg();
+  var res = await fetch('https://api.github.com/repos/' + cfg.user + '/' + repo + '/contents/' + path, {
+    headers: { 'Authorization': 'token ' + cfg.token, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+async function ghPut(repo, path, dataObj) {
+  var cfg = getCfg();
+  if (!cfg.user || !cfg.token) { toast('Set up GitHub config first', 'err'); return false; }
+  var content = btoa(unescape(encodeURIComponent(JSON.stringify(dataObj, null, 2))));
+  var head = await ghGet(repo, path);
+  var body = { message: 'Update ' + path, content: content, branch: 'main' };
+  if (head && head.sha) body.sha = head.sha;
+  try {
+    var res = await fetch('https://api.github.com/repos/' + cfg.user + '/' + repo + '/contents/' + path, {
+      method: 'PUT',
+      headers: { 'Authorization': 'token ' + cfg.token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) { var e = await res.json(); toast('GitHub: ' + (e.message || res.status), 'err'); return false; }
+    return true;
+  } catch(e) { toast('Network error: ' + e.message, 'err'); return false; }
+}
+
+async function writeBoth(path, dataObj) {
+  var cfg = getCfg();
+  var ok1 = await ghPut(cfg.repo, path, dataObj);
+  if (cfg.dev) await ghPut(cfg.dev, path, dataObj);
+  return ok1;
+}
+
+// ─────────────────────────────────────────────
+// SYNC
+// ─────────────────────────────────────────────
+async function syncDevRepo() {
+  var cfg = getCfg();
+  var log = document.getElementById('sync-log');
+  if (!cfg.user || !cfg.token || !cfg.repo || !cfg.dev) {
+    toast('Fill in all config fields first', 'err'); return;
+  }
+  log.textContent = 'Syncing...';
+  var files = ['trainers.json', 'testimonials.json', 'trainerspreview.json'];
+  var synced = 0;
+  for (var i = 0; i < files.length; i++) {
+    var f = files[i];
+    log.textContent = 'Reading ' + f + ' from main repo...';
+    var src = await ghGet(cfg.repo, f);
+    if (!src) { log.textContent += '\n  (skipped — not found)'; continue; }
+    // decode and re-encode to write to dev
+    var decoded = JSON.parse(decodeURIComponent(escape(atob(src.content.replace(/\n/g, '')))));
+    log.textContent += '\n  Writing to dev repo...';
+    var devHead = await ghGet(cfg.dev, f);
+    var body = { message: 'Sync ' + f, content: src.content.replace(/\n/g, ''), branch: 'main' };
+    if (devHead && devHead.sha) body.sha = devHead.sha;
+    var res = await fetch('https://api.github.com/repos/' + cfg.user + '/' + cfg.dev + '/contents/' + f, {
+      method: 'PUT',
+      headers: { 'Authorization': 'token ' + cfg.token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (res.ok) { log.textContent += '\n✓ ' + f + ' synced'; synced++; }
+    else { var err = await res.json(); log.textContent += '\n✗ ' + f + ': ' + err.message; }
+  }
+  log.textContent += '\n\nDone — ' + synced + ' file(s) synced.';
+  await loadAll();
+  toast('Sync complete', 'ok');
+}
+
+// ─────────────────────────────────────────────
+// LOAD DATA
+// ─────────────────────────────────────────────
+async function loadAll() {
+  try {
+    var r = await fetch('trainers.json?t=' + Date.now());
+    TRAINERS = await r.json();
+  } catch(e) { TRAINERS = []; }
+
+  try {
+    var r2 = await fetch('trainerspreview.json?t=' + Date.now());
+    STAGING = await r2.json();
+  } catch(e) { STAGING = []; }
+
+  try {
+    var r3 = await fetch('testimonials.json?t=' + Date.now());
+    TESTIS = await r3.json();
+  } catch(e) { TESTIS = []; }
+
+  renderPreviewGrid();
+  renderManageList();
+  renderStagingList();
+  populateEditSelect();
+}
+
+async function loadTestimonials() {
+  try {
+    var r = await fetch('testimonials.json?t=' + Date.now());
+    TESTIS = await r.json();
+    renderTestiList();
+    toast('Loaded testimonials.json');
+  } catch(e) { toast('Could not load testimonials.json', 'err'); }
+}
+
+// ─────────────────────────────────────────────
+// STARS
+// ─────────────────────────────────────────────
+function stars(rating) {
+  var h = '<div class="star-icons">';
+  for (var i = 1; i <= 5; i++) {
+    if (rating >= i) h += '<div class="star"></div>';
+    else if (rating >= i - 0.5) h += '<div class="star" style="background:linear-gradient(90deg,#c07a18 50%,var(--gray-light) 50%)"></div>';
+    else h += '<div class="star empty"></div>';
+  }
+  return h + '</div>';
+}
+
+// ─────────────────────────────────────────────
+// BUILD CARD HTML
+// ─────────────────────────────────────────────
+function buildCard(t, clickFn) {
+  var mainImg = t.photo_main     ? '<img src="' + t.photo_main     + '" alt="" onerror="this.parentElement.innerHTML=\'💪\'">' : '💪';
+  var img2    = t.photo_physique ? '<img src="' + t.photo_physique + '" alt="" onerror="this.parentElement.innerHTML=\'🏋️\'">' : '🏋️';
+  var img3    = t.photo_lifestyle? '<img src="' + t.photo_lifestyle+ '" alt="" onerror="this.parentElement.innerHTML=\'🌄\'">' : '🌄';
+
+  var specs = (t.specialties || []).map(function(s){ return '<span class="tc style">'+s+'</span>'; }).join('');
+  var dietTag = t.diet ? '<span class="tc diet">'+t.diet+'</span>' : '';
+  var nicheTag = (t.niches && t.niches.length) ? '<span class="tc niche">'+t.niches[0]+'</span>' : '';
+
+  var barHtml = STAT_DEFS.map(function(d){
+    var pct = Math.round(((t[d.k] != null ? t[d.k] : 2) / 4) * 100);
+    return '<div class="bar-row"><div class="bar-icon">'+icon(d.icon)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%"></div></div></div>';
+  }).join('');
+
+  var chips = (t.interests || []).map(function(i){ return '<span class="chip">'+i+'</span>'; }).join('');
+
+  var clickAttr = clickFn ? ' onclick="'+clickFn+'"' : '';
+
+  return '<div class="trainer-card"'+clickAttr+'>'
+    + '<div class="card-header">'
+    +   '<div><div class="trainer-name">'+t.name+'</div><div class="trainer-meta">'+(t.age||'—')+' · '+(t.location||'—')+'</div></div>'
+    +   '<div class="card-header-right"><div class="stars">'+stars(t.rating||5)+'<span class="review-count">'+(t.rating||5)+' ('+(t.reviews||0)+')</span></div>'+(t.founding?'<span class="founding-badge">✦ Founding</span>':'')+'</div>'
+    + '</div>'
+    + '<div class="card-images"><div class="img-main">'+mainImg+'</div><div class="img-side"><div class="img-secondary">'+img2+'</div><div class="img-secondary">'+img3+'</div></div></div>'
+    + '<div class="card-stats">'
+    +   '<div class="card-stat"><div class="card-stat-val">'+(t.experience||'—')+'</div><div class="card-stat-label">Experience</div></div>'
+    +   '<div class="card-stat"><div class="card-stat-val">'+(t.certs||'—')+'</div><div class="card-stat-label">Certified</div></div>'
+    +   '<div class="card-stat"><div class="card-stat-val">$'+(t.price||'—')+'</div><div class="card-stat-label">Per month</div></div>'
+    + '</div>'
+    + '<div class="card-middle"><div class="card-tags-col">'+specs+dietTag+nicheTag+'</div><div class="card-bars-col">'+barHtml+'</div></div>'
+    + '<div class="card-interests"><div class="interests-label">Interests</div><div class="interests-row">'+chips+'</div></div>'
+    + '<div class="card-bio">'+(t.bio||'')+'</div>'
+    + '<div class="card-footer"><div class="card-price"><strong>$'+(t.price||'—')+'</strong><span> / mo</span></div><button class="btn-view" onclick="event.stopPropagation();openModalFor(TRAINERS['+TRAINERS.indexOf(t)+'])">View profile</button></div>'
+    + '</div>';
+}
+
+// ─────────────────────────────────────────────
+// PREVIEW TAB
+// ─────────────────────────────────────────────
+function renderPreviewGrid() {
+  var grid  = document.getElementById('preview-grid');
+  var empty = document.getElementById('preview-empty');
+  if (!TRAINERS.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = TRAINERS.map(function(t, i){
+    // rebuild with correct index reference
+    var mainImg = t.photo_main     ? '<img src="' + t.photo_main     + '" alt="" onerror="this.parentElement.innerHTML=\'💪\'">' : '💪';
+    var img2    = t.photo_physique ? '<img src="' + t.photo_physique + '" alt="" onerror="this.parentElement.innerHTML=\'🏋️\'">' : '🏋️';
+    var img3    = t.photo_lifestyle? '<img src="' + t.photo_lifestyle+ '" alt="" onerror="this.parentElement.innerHTML=\'🌄\'">' : '🌄';
+    var specs   = (t.specialties||[]).map(function(s){ return '<span class="tc style">'+s+'</span>'; }).join('');
+    var dietTag = t.diet ? '<span class="tc diet">'+t.diet+'</span>' : '';
+    var nicheTag= (t.niches&&t.niches.length)?'<span class="tc niche">'+t.niches[0]+'</span>':'';
+    var barHtml = STAT_DEFS.map(function(d){
+      var pct = Math.round(((t[d.k]!=null?t[d.k]:2)/4)*100);
+      return '<div class="bar-row"><div class="bar-icon">'+icon(d.icon)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%"></div></div></div>';
+    }).join('');
+    var chips = (t.interests||[]).map(function(x){ return '<span class="chip">'+x+'</span>'; }).join('');
+    return '<div class="trainer-card" onclick="openModalIdx('+i+')" style="animation:fadeUp 0.4s '+(i*0.05)+'s ease both;">'
+      +'<div class="card-header"><div><div class="trainer-name">'+t.name+'</div><div class="trainer-meta">'+(t.age||'—')+' · '+(t.location||'—')+'</div></div>'
+      +'<div class="card-header-right"><div class="stars">'+stars(t.rating||5)+'<span class="review-count">'+(t.rating||5)+' ('+(t.reviews||0)+')</span></div>'+(t.founding?'<span class="founding-badge">✦ Founding</span>':'')+'</div></div>'
+      +'<div class="card-images"><div class="img-main">'+mainImg+'</div><div class="img-side"><div class="img-secondary">'+img2+'</div><div class="img-secondary">'+img3+'</div></div></div>'
+      +'<div class="card-stats"><div class="card-stat"><div class="card-stat-val">'+(t.experience||'—')+'</div><div class="card-stat-label">Experience</div></div><div class="card-stat"><div class="card-stat-val">'+(t.certs||'—')+'</div><div class="card-stat-label">Certified</div></div><div class="card-stat"><div class="card-stat-val">$'+(t.price||'—')+'</div><div class="card-stat-label">Per month</div></div></div>'
+      +'<div class="card-middle"><div class="card-tags-col">'+specs+dietTag+nicheTag+'</div><div class="card-bars-col">'+barHtml+'</div></div>'
+      +'<div class="card-interests"><div class="interests-label">Interests</div><div class="interests-row">'+chips+'</div></div>'
+      +'<div class="card-bio">'+(t.bio||'')+'</div>'
+      +'<div class="card-footer"><div class="card-price"><strong>$'+(t.price||'—')+'</strong><span> / mo</span></div><button class="btn-view" onclick="event.stopPropagation();openModalIdx('+i+')">View profile</button></div>'
+      +'</div>';
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
+// MODAL
+// ─────────────────────────────────────────────
+function openModalIdx(i) { openModalFor(TRAINERS[i]); }
+
+function openModalFor(t) {
+  if (!t) return;
+  document.getElementById('m-name').textContent   = t.name || '—';
+  document.getElementById('m-meta').textContent   = (t.age||'—') + ' · ' + (t.location||'—');
+  document.getElementById('m-exp').textContent    = t.experience || '—';
+  document.getElementById('m-certs').textContent  = t.certs || '—';
+  document.getElementById('m-price').textContent  = '$' + (t.price||'—');
+  document.getElementById('m-story').textContent  = t.story || t.bio || 'No story provided.';
+  var badge = document.getElementById('m-badge');
+  badge.style.display = t.founding ? '' : 'none';
+
+  // photos
+  var photos = [t.photo_main, t.photo_physique, t.photo_lifestyle].filter(Boolean);
+  var fb = ['💪','🏋️','🌄'];
+  mSlides = photos.length ? photos.map(function(p,i){
+    return '<div class="modal-slide"><img src="'+p+'" alt="" onerror="this.parentElement.innerHTML=\''+fb[i]+'\'"></div>';
+  }) : ['<div class="modal-slide" style="height:180px;font-size:64px;">💪</div>'];
+  mIdx = 0;
+  document.getElementById('m-track').innerHTML = mSlides.join('');
+  document.getElementById('m-track').style.transform = 'translateX(0)';
+  document.getElementById('m-dots').innerHTML = mSlides.map(function(_,i){
+    return '<button class="modal-photo-dot'+(i===0?' active':'')+'" onclick="mGoto('+i+')"></button>';
+  }).join('');
+  var showArr = mSlides.length > 1;
+  document.querySelector('.modal-arr.prev').style.display = showArr ? '' : 'none';
+  document.querySelector('.modal-arr.next').style.display = showArr ? '' : 'none';
+
+  // touch swipe
+  var car = document.getElementById('m-carousel');
+  var tx = 0;
+  car.ontouchstart = function(e){ tx = e.touches[0].clientX; };
+  car.ontouchend   = function(e){ var d = tx - e.changedTouches[0].clientX; if(Math.abs(d)>40) mNav(d>0?1:-1); };
+
+  // bars
+  document.getElementById('m-bars').innerHTML = STAT_DEFS.map(function(d){
+    var pct = Math.round(((t[d.k]!=null?t[d.k]:2)/4)*100);
+    return '<div class="mbar-row"><div class="mbar-icon">'+icon(d.icon)+'</div><span class="mbar-lbl">'+d.lbl+'</span>'
+      +'<div style="flex:1;"><div class="mbar-track"><div class="mbar-fill" style="width:'+pct+'%"></div></div>'
+      +'<div class="mbar-ends"><span class="mbar-end">'+d.lo+'</span><span class="mbar-end">'+d.hi+'</span></div></div></div>';
+  }).join('');
+
+  // tags
+  document.getElementById('m-tags').innerHTML =
+    (t.specialties||[]).map(function(s){ return '<span class="tc style">'+s+'</span>'; }).join('')
+    + (t.diet ? '<span class="tc diet">'+t.diet+'</span>' : '')
+    + (t.niches||[]).map(function(n){ return '<span class="tc niche">'+n+'</span>'; }).join('');
+
+  // interests
+  document.getElementById('m-interests').innerHTML = (t.interests||[]).map(function(i){ return '<span class="chip">'+i+'</span>'; }).join('');
+
+  // testimonials
+  var ts = document.getElementById('m-testis');
+  if (t.testimonials && t.testimonials.length) {
+    ts.innerHTML = '<div class="modal-sec-title">Client results</div>'
+      + t.testimonials.map(function(q){
+          return '<div class="testi-block"><div class="testi-q">'+q.quote+'</div>'
+            +'<div class="testi-author"><div class="testi-av">'+q.initials+'</div>'
+            +'<div><div class="testi-name">'+q.name+'</div><div class="testi-result">'+q.result+'</div></div></div></div>';
+        }).join('');
+  } else { ts.innerHTML = ''; }
+
+  document.getElementById('modal-bg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function mGoto(n) {
+  mIdx = (n + mSlides.length) % mSlides.length;
+  document.getElementById('m-track').style.transform = 'translateX(-' + (mIdx*100) + '%)';
+  document.querySelectorAll('.modal-photo-dot').forEach(function(d,i){ d.classList.toggle('active', i===mIdx); });
+}
+function mNav(dir) { mGoto(mIdx + dir); }
+function closeModal() { document.getElementById('modal-bg').classList.remove('open'); document.body.style.overflow = ''; }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+// ─────────────────────────────────────────────
+// STAGING
+// ─────────────────────────────────────────────
+function renderStagingList() {
+  var el    = document.getElementById('staging-list');
+  var empty = document.getElementById('staging-empty');
+  if (!STAGING.length) { el.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  el.innerHTML = STAGING.map(function(t, i){
+    var img = t.photo_main ? '<img src="'+t.photo_main+'" alt="" onerror="this.innerHTML=\'💪\'">' : '💪';
+    return '<div class="manage-row staging">'
+      +'<div class="row-img">'+img+'</div>'
+      +'<div class="row-info"><div class="row-name">'+t.name+'</div><div class="row-meta">'+(t.location||'')+(t.price?' · $'+t.price+'/mo':'')+'</div></div>'
+      +'<div class="row-actions">'
+      +'<button class="btn btn-ghost btn-sm" onclick="openModalFor(STAGING['+i+'])">Preview</button>'
+      +'<button class="btn btn-blue btn-sm" onclick="editStaging('+i+')">Edit</button>'
+      +'<button class="btn btn-primary btn-sm" onclick="publishStaging('+i+')">Publish →</button>'
+      +'<button class="btn btn-danger btn-sm" onclick="discardStaging('+i+')">Discard</button>'
+      +'</div></div>';
+  }).join('');
+}
+
+function editStaging(i) {
+  // copy staging trainer into edit form and switch tab
+  var t = STAGING[i];
+  populateEditSelect();
+  // We'll load them into a temp edit — switch to edit tab and prefill
+  showTab('edit', document.getElementById('tb-edit'));
+  // inject into edit as a temp trainer
+  EDIT_STAGING_IDX = i;
+  loadEditFormFromObj(t, true);
+}
+var EDIT_STAGING_IDX = -1;
+
+async function publishStaging(i) {
+  var t = STAGING[i];
+  if (!confirm('Publish ' + t.name + ' to the live site?')) return;
+  TRAINERS.push(t);
+  STAGING.splice(i, 1);
+  var ok1 = await writeBoth('trainers.json', TRAINERS);
+  var ok2 = await writeBoth('trainerspreview.json', STAGING);
+  if (ok1) {
+    toast(t.name + ' published to live site!');
+    renderPreviewGrid();
+    renderStagingList();
+    renderManageList();
+  }
+}
+
+async function discardStaging(i) {
+  var name = STAGING[i].name;
+  if (!confirm('Discard ' + name + ' from staging?')) return;
+  STAGING.splice(i, 1);
+  var ok = await writeBoth('trainerspreview.json', STAGING);
+  if (ok) { toast(name + ' discarded', 'info'); renderStagingList(); }
+}
+
+// ─────────────────────────────────────────────
+// PILL / NICHE HELPERS
+// ─────────────────────────────────────────────
+function toggleBtn(btn) { btn.classList.toggle('on'); }
+function soloBtn(btn, groupId) {
+  document.querySelectorAll('#'+groupId+' .pill').forEach(function(b){ b.classList.remove('on'); });
   btn.classList.add('on');
 }
-function getSelected(groupId){
-  return [...document.querySelectorAll('#'+groupId+' .pill.on')].map(b=>b.textContent.trim());
+function getSelected(groupId) {
+  return Array.from(document.querySelectorAll('#'+groupId+' .pill.on')).map(function(b){ return b.textContent.trim(); });
 }
-function updateSv(sliderId,displayId,labels){
-  document.getElementById(displayId).textContent=labels[document.getElementById(sliderId).value];
-}
-function renderStars(rating){
-  let h='<div class="star-icons">';
-  for(let i=1;i<=5;i++){
-    if(rating>=i) h+='<div class="star"></div>';
-    else if(rating>=i-0.5) h+='<div class="star" style="background:linear-gradient(90deg,#c07a18 50%,var(--gray-light) 50%)"></div>';
-    else h+='<div class="star empty"></div>';
-  }
-  return h+'</div>';
-}
-function showStatus(msg,type='success'){
-  const bar=document.getElementById('status-bar');
-  document.getElementById('status-msg').textContent=msg;
-  bar.className='status-bar show '+type;
-  setTimeout(()=>bar.classList.remove('show',type),4000);
-}
-function getConfig(){return JSON.parse(localStorage.getItem('ih-cfg')||'{}');}
-function saveConfig(){
-  const cfg={user:document.getElementById('cfg-user').value.trim(),repo:document.getElementById('cfg-repo').value.trim(),token:document.getElementById('cfg-token').value.trim()};
-  localStorage.setItem('ih-cfg',JSON.stringify(cfg));
-  document.getElementById('cfg-saved').style.display='flex';
-  showStatus('Config saved');
+function sv(sliderId, displayId, labels) {
+  document.getElementById(displayId).textContent = labels[document.getElementById(sliderId).value];
 }
 
-// ── NICHE RANK SYSTEM ─────────────────────────────
-const nicheRankState={}; // keyed by list id
-
-function toggleNiche(btn, listId){
-  const name=btn.textContent.trim();
-  if(!nicheRankState[listId]) nicheRankState[listId]=[];
-  const arr=nicheRankState[listId];
-  if(btn.classList.contains('on')){
+function nicheToggle(btn, listId) {
+  var name = btn.textContent.trim();
+  if (!nicheState[listId]) nicheState[listId] = [];
+  var arr = nicheState[listId];
+  if (btn.classList.contains('on')) {
     btn.classList.remove('on');
-    const idx=arr.indexOf(name);
-    if(idx>-1) arr.splice(idx,1);
+    var idx = arr.indexOf(name);
+    if (idx > -1) arr.splice(idx, 1);
   } else {
-    if(arr.length>=3){showStatus('Max 3 niches','error');return;}
+    if (arr.length >= 3) { toast('Max 3 niches', 'err'); return; }
     btn.classList.add('on');
     arr.push(name);
   }
   renderNicheRank(listId);
-  updateAddPreview();
+  if (listId === 'a-nr') refreshAddPreview();
+  if (listId === 'e-nr') refreshEditPreview();
 }
 
-function removeNiche(name, listId){
-  if(!nicheRankState[listId]) return;
-  nicheRankState[listId]=nicheRankState[listId].filter(n=>n!==name);
-  const pillGroup=document.getElementById('a-niches')||document.getElementById('e-niches');
-  if(pillGroup) pillGroup.querySelectorAll('.pill').forEach(p=>{if(p.textContent.trim()===name) p.classList.remove('on');});
+function nicheRemove(name, listId) {
+  if (!nicheState[listId]) return;
+  nicheState[listId] = nicheState[listId].filter(function(n){ return n !== name; });
+  // deselect pill
+  var pillGroup = document.querySelector('[id$="-niches"]');
+  if (pillGroup) pillGroup.querySelectorAll('.pill').forEach(function(p){ if(p.textContent.trim()===name) p.classList.remove('on'); });
   renderNicheRank(listId);
-  updateAddPreview();
+  if (listId === 'a-nr') refreshAddPreview();
+  if (listId === 'e-nr') refreshEditPreview();
 }
 
-function renderNicheRank(listId){
-  const arr=nicheRankState[listId]||[];
-  const wrap=document.getElementById(listId);
-  if(!wrap) return;
-  wrap.style.display=arr.length?'block':'none';
-  const itemsEl=wrap.querySelector('[id$="-items"]')||wrap;
-  itemsEl.innerHTML=arr.map((n,i)=>`
-    <div class="niche-rank-item" draggable="true" data-name="${n}" data-list="${listId}" ondragstart="onNicheDragStart(event)" ondragover="onNicheDragOver(event)" ondrop="onNicheDrop(event)">
-      <span class="niche-rank-num">${i+1}</span>
-      <span class="niche-rank-label">${n}</span>
-      ${i===0?'<span class="niche-rank-badge">Shows on card</span>':''}
-      <button class="niche-rank-remove" onclick="removeNiche('${n}','${listId}')">×</button>
-    </div>`).join('');
+function renderNicheRank(listId) {
+  var arr  = nicheState[listId] || [];
+  var wrap = document.getElementById(listId);
+  if (!wrap) return;
+  wrap.style.display = arr.length ? 'block' : 'none';
+  var items = document.getElementById(listId + '-items');
+  if (!items) return;
+  items.innerHTML = arr.map(function(n, i){
+    return '<div class="niche-rank-item" draggable="true" data-name="'+n+'" data-list="'+listId+'"'
+      +' ondragstart="nrDragStart(event)" ondragover="nrDragOver(event)" ondrop="nrDrop(event)" ondragleave="this.classList.remove(\'drag-over\')">'
+      +'<span class="niche-num">'+(i+1)+'</span>'
+      +'<span class="niche-lbl">'+n+'</span>'
+      +(i===0?'<span class="niche-badge">Shows on card</span>':'')
+      +'<button class="niche-rm" onclick="nicheRemove(\''+n.replace(/'/g,"\\'")+"','"+listId+'\')">×</button>'
+      +'</div>';
+  }).join('');
 }
 
-let nicheDragName='',nicheDragList='';
-function onNicheDragStart(e){nicheDragName=e.currentTarget.dataset.name;nicheDragList=e.currentTarget.dataset.list;}
-function onNicheDragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
-function onNicheDrop(e){
+var nrDragName = '', nrDragList = '';
+function nrDragStart(e) { nrDragName = e.currentTarget.dataset.name; nrDragList = e.currentTarget.dataset.list; }
+function nrDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function nrDrop(e) {
   e.preventDefault();
   e.currentTarget.classList.remove('drag-over');
-  const targetName=e.currentTarget.dataset.name;
-  const arr=nicheRankState[nicheDragList];
-  if(!arr||nicheDragName===targetName) return;
-  const from=arr.indexOf(nicheDragName),to=arr.indexOf(targetName);
-  if(from>-1&&to>-1){arr.splice(from,1);arr.splice(to,0,nicheDragName);}
-  renderNicheRank(nicheDragList);
-  updateAddPreview();
+  var to = e.currentTarget.dataset.name;
+  var arr = nicheState[nrDragList];
+  if (!arr || nrDragName === to) return;
+  var fi = arr.indexOf(nrDragName), ti = arr.indexOf(to);
+  if (fi > -1 && ti > -1) { arr.splice(fi, 1); arr.splice(ti, 0, nrDragName); }
+  renderNicheRank(nrDragList);
+  if (nrDragList === 'a-nr') refreshAddPreview();
+  if (nrDragList === 'e-nr') refreshEditPreview();
 }
 
-// ── CARD BUILDER ──────────────────────────────────
-function buildCard(t, idx, clickable=true){
-  const mainImg=t.photo_main?`<img src="${t.photo_main}" alt="${t.name}" onerror="this.parentElement.innerHTML='💪'">` :'💪';
-  const img2=t.photo_physique?`<img src="${t.photo_physique}" alt="" onerror="this.parentElement.innerHTML='🏋️'">` :'🏋️';
-  const img3=t.photo_lifestyle?`<img src="${t.photo_lifestyle}" alt="" onerror="this.parentElement.innerHTML='🌄'">` :'🌄';
-  const specs=(t.specialties||[]).map(s=>`<span class="tag style">${s}</span>`).join('');
-  const dietTag=t.diet?`<span class="tag diet">${t.diet}</span>`:'';
-  const nicheTag=t.niches&&t.niches.length?`<span class="tag niche">${t.niches[0]}</span>`:'';
-  const bars=STAT_DEFS.map(d=>{const pct=Math.round(((t[d.key]??2)/4)*100);return`<div class="stat-bar-row"><div class="stat-bar-icon">${ICONS[d.icon]}</div><div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%"></div></div></div>`;}).join('');
-  const chips=(t.interests||[]).map(i=>`<span class="interest-chip">${i}</span>`).join('');
-  return`<div class="trainer-card" ${clickable?`onclick="openPreviewModal(TRAINERS[${idx}])"`:''} style="animation-delay:${(idx%9)*0.05}s">
-    <div class="card-header">
-      <div><div class="trainer-name">${t.name}</div><div class="trainer-meta">${t.age} · ${t.location}</div></div>
-      <div class="card-header-right">
-        <div class="stars">${renderStars(t.rating)}<span class="review-count">${t.rating} (${t.reviews})</span></div>
-        ${t.founding?'<span class="founding-badge">✦ Founding</span>':''}
-      </div>
-    </div>
-    <div class="card-images"><div class="img-main">${mainImg}</div><div class="img-side"><div class="img-secondary">${img2}</div><div class="img-secondary">${img3}</div></div></div>
-    <div class="card-stats">
-      <div class="card-stat"><div class="card-stat-val">${t.experience||'—'}</div><div class="card-stat-label">Experience</div></div>
-      <div class="card-stat"><div class="card-stat-val">${t.certs||'—'}</div><div class="card-stat-label">Certified</div></div>
-      <div class="card-stat"><div class="card-stat-val">$${t.price||'—'}</div><div class="card-stat-label">Per month</div></div>
-    </div>
-    <div class="card-middle"><div class="card-tags-col">${specs}${dietTag}${nicheTag}</div><div class="card-statbars-col">${bars}</div></div>
-    <div class="card-interests"><div class="interests-label">Interests</div><div class="interests-row">${chips}</div></div>
-    <div class="card-bio">${t.bio||''}</div>
-    <div class="card-footer"><div class="card-price"><strong>$${t.price||'—'}</strong><span> / mo</span></div><button class="btn-view" onclick="event.stopPropagation();openPreviewModal(${clickable?'TRAINERS['+idx+']':JSON.stringify(t).replace(/"/g,'&quot;')})">View profile</button></div>
-  </div>`;
-}
-
-// ── MODAL ─────────────────────────────────────────
-function openPreviewModal(t){
-  if(!t) return;
-  document.getElementById('modal-name').textContent=t.name||'—';
-  document.getElementById('modal-meta').textContent=`${t.age||'—'} · ${t.location||'—'}`;
-  document.getElementById('modal-exp').textContent=t.experience||'—';
-  document.getElementById('modal-certs').textContent=t.certs||'—';
-  document.getElementById('modal-price').textContent=`$${t.price||'—'}`;
-  document.getElementById('modal-story').textContent=t.story||t.bio||'No story provided.';
-  const badge=document.getElementById('modal-badge');
-  badge.style.display=t.founding?'':'none';
-
-  // photos
-  const photos=[t.photo_main,t.photo_physique,t.photo_lifestyle].filter(Boolean);
-  const fallbacks=['💪','🏋️','🌄'];
-  modalSlides=photos.length?photos.map((p,i)=>`<div class="modal-photo-slide"><img src="${p}" alt="" onerror="this.parentElement.innerHTML='${fallbacks[i]||'📷'}'"></div>`):['<div class="modal-photo-slide" style="height:180px;">💪</div>'];
-  modalPhotoIdx=0;
-  const track=document.getElementById('modal-track');
-  track.innerHTML=modalSlides.join('');
-  track.style.transform='translateX(0)';
-  document.getElementById('modal-prev').style.display=modalSlides.length>1?'':'none';
-  document.getElementById('modal-next').style.display=modalSlides.length>1?'':'none';
-  renderPhotoDots();
-
-  // carousel touch
-  const car=document.getElementById('modal-carousel');
-  let tx=0;
-  car.ontouchstart=e=>{tx=e.touches[0].clientX;};
-  car.ontouchend=e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>40)photoNav(d>0?1:-1);};
-
-  // stat bars
-  document.getElementById('modal-bars').innerHTML=STAT_DEFS.map(d=>{
-    const pct=Math.round(((t[d.key]??2)/4)*100);
-    return`<div class="modal-bar-row">
-      <div class="modal-bar-icon">${ICONS[d.icon]}</div>
-      <span class="modal-bar-label">${d.label}</span>
-      <div style="flex:1;"><div class="modal-bar-track"><div class="modal-bar-fill" style="width:${pct}%"></div></div>
-      <div class="modal-bar-ends"><span class="modal-bar-end">${d.lo}</span><span class="modal-bar-end">${d.hi}</span></div></div>
-    </div>`;
-  }).join('');
-
-  // tags
-  document.getElementById('modal-tags').innerHTML=
-    (t.specialties||[]).map(s=>`<span class="tag style">${s}</span>`).join('')+
-    (t.diet?`<span class="tag diet">${t.diet}</span>`:'')+
-    (t.niches||[]).map(n=>`<span class="tag niche">${n}</span>`).join('');
-
-  // interests
-  document.getElementById('modal-interests').innerHTML=(t.interests||[]).map(i=>`<span class="interest-chip">${i}</span>`).join('');
-
-  // testimonials
-  const ts=document.getElementById('modal-testis');
-  if(t.testimonials&&t.testimonials.length){
-    ts.innerHTML=`<div class="modal-section-title">Client results</div><div class="testimonials-wrap">${t.testimonials.map(q=>`<div class="testi-text"><div class="testi-quote">${q.quote}</div><div class="testi-author"><div class="testi-avatar">${q.initials}</div><div><div class="testi-name">${q.name}</div><div class="testi-result">${q.result}</div></div></div></div>`).join('')}</div>`;
-  } else { ts.innerHTML=''; }
-
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');document.body.style.overflow='';}
-function renderPhotoDots(){
-  document.getElementById('modal-dots').innerHTML=modalSlides.map((_,i)=>`<button class="modal-photo-dot${i===modalPhotoIdx?' active':''}" onclick="setModalPhoto(${i})"></button>`).join('');
-}
-function setModalPhoto(n){
-  modalPhotoIdx=(n+modalSlides.length)%modalSlides.length;
-  document.getElementById('modal-track').style.transform=`translateX(-${modalPhotoIdx*100}%)`;
-  renderPhotoDots();
-}
-function photoNav(dir){setModalPhoto(modalPhotoIdx+dir);}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-
-// ── LOAD TRAINERS ─────────────────────────────────
-async function loadTrainers(){
-  try{
-    const r=await fetch('trainers.json?t='+Date.now());
-    TRAINERS=await r.json();
-    renderPreviewGrid();
-    renderManageList();
-    populateEditSelect();
-    return true;
-  }catch(e){
-    document.getElementById('preview-empty').style.display='block';
-    document.getElementById('preview-grid').innerHTML='';
-    return false;
-  }
-}
-function renderPreviewGrid(){
-  const g=document.getElementById('preview-grid');
-  const empty=document.getElementById('preview-empty');
-  if(!TRAINERS.length){empty.style.display='block';g.innerHTML='';return;}
-  empty.style.display='none';
-  g.innerHTML=TRAINERS.map((t,i)=>buildCard(t,i,true)).join('');
-}
-
-// ── ADD TRAINER ───────────────────────────────────
-function buildAddTrainerObj(){
-  const niches=nicheRankState['a-niche-ranked']||[];
-  return{
-    name:(document.getElementById('a-first').value.trim()+' '+document.getElementById('a-last').value.trim()).trim()||'New Trainer',
-    age:parseInt(document.getElementById('a-age').value)||30,
-    location:document.getElementById('a-location').value.trim()||'City, ST',
-    email:document.getElementById('a-email').value.trim(),
-    experience:document.getElementById('a-exp').value.trim()||'—',
-    certs:document.getElementById('a-certs').value.trim()||'—',
-    price:parseInt(document.getElementById('a-price').value)||149,
-    rating:parseFloat(document.getElementById('a-rating').value)||5.0,
-    reviews:parseInt(document.getElementById('a-reviews').value)||0,
-    founding:getSelected('a-founding')[0]==='Yes',
-    photo_main:'images/'+(document.getElementById('a-p1').value.trim()||''),
-    photo_physique:'images/'+(document.getElementById('a-p2').value.trim()||''),
-    photo_lifestyle:'images/'+(document.getElementById('a-p3').value.trim()||''),
-    specialties:getSelected('a-specs'),
-    niches:niches,
-    diet:getSelected('a-diet').join(', '),
-    stat_intensity:parseInt(document.getElementById('a-si').value),
-    stat_structure:parseInt(document.getElementById('a-ss').value),
-    stat_checkins:parseInt(document.getElementById('a-sc').value),
-    stat_energy:parseInt(document.getElementById('a-se').value),
-    stat_diet:parseInt(document.getElementById('a-sd').value),
-    interests:document.getElementById('a-interests').value.split(',').map(s=>s.trim()).filter(Boolean),
-    bio:document.getElementById('a-bio').value.trim(),
-    story:document.getElementById('a-story').value.trim(),
-    testimonials:[]
+// ─────────────────────────────────────────────
+// ADD TRAINER
+// ─────────────────────────────────────────────
+function buildAddObj() {
+  return {
+    name:      (document.getElementById('a-first').value.trim() + ' ' + document.getElementById('a-last').value.trim()).trim() || 'New Trainer',
+    age:       parseInt(document.getElementById('a-age').value) || 30,
+    location:  document.getElementById('a-loc').value.trim() || 'City, ST',
+    email:     document.getElementById('a-email').value.trim(),
+    experience:document.getElementById('a-exp').value.trim() || '—',
+    certs:     document.getElementById('a-certs').value.trim() || '—',
+    price:     parseInt(document.getElementById('a-price').value) || 149,
+    rating:    parseFloat(document.getElementById('a-rating').value) || 5.0,
+    reviews:   parseInt(document.getElementById('a-reviews').value) || 0,
+    founding:  getSelected('a-founding')[0] === 'Yes',
+    photo_main:      'images/' + (document.getElementById('a-p1').value.trim() || ''),
+    photo_physique:  'images/' + (document.getElementById('a-p2').value.trim() || ''),
+    photo_lifestyle: 'images/' + (document.getElementById('a-p3').value.trim() || ''),
+    specialties: getSelected('a-specs'),
+    niches:      nicheState['a-nr'] ? nicheState['a-nr'].slice() : [],
+    diet:        getSelected('a-diet').join(', '),
+    stat_intensity: parseInt(document.getElementById('a-si').value),
+    stat_structure: parseInt(document.getElementById('a-ss').value),
+    stat_checkins:  parseInt(document.getElementById('a-sc').value),
+    stat_energy:    parseInt(document.getElementById('a-se').value),
+    stat_diet:      parseInt(document.getElementById('a-sd').value),
+    interests: document.getElementById('a-int').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    bio:    document.getElementById('a-bio').value.trim(),
+    story:  document.getElementById('a-story').value.trim(),
+    testimonials: []
   };
 }
-function updateAddPreview(){
-  const t=buildAddTrainerObj();
-  document.getElementById('add-preview-card').innerHTML=buildCard(t,0,false);
-}
-function resetAddForm(){
-  document.querySelectorAll('#tab-add input,#tab-add textarea').forEach(el=>el.value='');
-  document.querySelectorAll('#tab-add .pill.on').forEach(p=>p.classList.remove('on'));
-  document.getElementById('tab-add .pill').classList?.add('on');
-  nicheRankState['a-niche-ranked']=[];
-  renderNicheRank('a-niche-ranked');
-  updateAddPreview();
-}
-async function saveNewTrainer(){
-  const t=buildAddTrainerObj();
-  if(!t.name||t.name==='New Trainer'){showStatus('Enter a name first','error');return;}
-  const ok=await writeJson('trainers.json',[...TRAINERS,t]);
-  if(ok){TRAINERS.push(t);showStatus(`${t.name} added to trainers.json`);}
+
+function refreshAddPreview() {
+  ADD_CACHE = buildAddObj();
+  var el = document.getElementById('add-preview');
+  if (!el) return;
+  el.innerHTML = buildCard(ADD_CACHE, null);
 }
 
-// ── MANAGE ORDER ──────────────────────────────────
-let manageDragIdx=-1;
-function renderManageList(){
-  const el=document.getElementById('manage-list');
-  if(!TRAINERS.length){el.innerHTML='<div style="color:var(--gray-text);padding:2rem;text-align:center;">No trainers loaded. Check that trainers.json is in the same folder.</div>';return;}
-  el.innerHTML=TRAINERS.map((t,i)=>`
-    <div class="trainer-row" draggable="true" data-idx="${i}"
-      ondragstart="manageDragStart(${i})"
-      ondragover="manageDragOver(event,this)"
-      ondrop="manageDrop(event,${i})"
-      ondragleave="this.classList.remove('drag-over')">
-      <span class="trainer-row-handle">⠿</span>
-      <div class="trainer-row-img">${t.photo_main?`<img src="${t.photo_main}" alt="" onerror="this.parentElement.innerHTML='💪'">` :'💪'}</div>
-      <div class="trainer-row-info">
-        <div class="trainer-row-name">${t.name}</div>
-        <div class="trainer-row-meta">${t.location} · $${t.price}/mo · ${t.experience}</div>
-      </div>
-      <div class="trainer-row-actions">
-        <button class="btn btn-outline" style="font-size:11px;padding:6px 12px;" onclick="openPreviewModal(TRAINERS[${i}])">Preview</button>
-      </div>
-    </div>`).join('');
+async function saveNewTrainer() {
+  var t = buildAddObj();
+  if (!t.name || t.name === 'New Trainer') { toast('Enter a name first', 'err'); return; }
+  TRAINERS.push(t);
+  var ok = await writeBoth('trainers.json', TRAINERS);
+  if (ok) { toast(t.name + ' added!'); renderPreviewGrid(); renderManageList(); }
 }
-function manageDragStart(idx){manageDragIdx=idx;}
-function manageDragOver(e,el){e.preventDefault();el.classList.add('drag-over');}
-function manageDrop(e,toIdx){
+
+function resetAddForm() {
+  document.querySelectorAll('#tab-add input, #tab-add textarea').forEach(function(el){ el.value = ''; });
+  document.querySelectorAll('#tab-add .pill.on').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelector('#a-founding .pill').classList.add('on');
+  nicheState['a-nr'] = [];
+  renderNicheRank('a-nr');
+  refreshAddPreview();
+}
+
+// ─────────────────────────────────────────────
+// MANAGE ORDER
+// ─────────────────────────────────────────────
+function renderManageList() {
+  var el = document.getElementById('manage-list');
+  if (!TRAINERS.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--gray-text);">No trainers loaded.</div>'; return; }
+  el.innerHTML = TRAINERS.map(function(t, i){
+    var img = t.photo_main ? '<img src="'+t.photo_main+'" alt="" onerror="this.innerHTML=\'💪\'">' : '💪';
+    return '<div class="manage-row" draggable="true" ondragstart="manageDragStart('+i+')" ondragover="manageDragOver(event,this)" ondrop="manageDrop(event,'+i+')" ondragleave="this.classList.remove(\'drag-over\')">'
+      +'<span class="handle">⠿</span>'
+      +'<div class="row-img">'+img+'</div>'
+      +'<div class="row-info"><div class="row-name">'+t.name+'</div><div class="row-meta">'+(t.location||'')+(t.price?' · $'+t.price+'/mo':'')+(t.experience?' · '+t.experience:'')+'</div></div>'
+      +'<div class="row-actions"><button class="btn btn-ghost btn-sm" onclick="openModalIdx('+i+')">Preview</button></div>'
+      +'</div>';
+  }).join('');
+}
+
+function manageDragStart(i) { manageDragIdx = i; }
+function manageDragOver(e, el) { e.preventDefault(); el.classList.add('drag-over'); }
+function manageDrop(e, to) {
   e.preventDefault();
-  document.querySelectorAll('.trainer-row').forEach(r=>r.classList.remove('drag-over'));
-  if(manageDragIdx===toIdx||manageDragIdx<0) return;
-  const moved=TRAINERS.splice(manageDragIdx,1)[0];
-  TRAINERS.splice(toIdx,0,moved);
+  document.querySelectorAll('.manage-row').forEach(function(r){ r.classList.remove('drag-over'); });
+  if (manageDragIdx === to || manageDragIdx < 0) return;
+  var moved = TRAINERS.splice(manageDragIdx, 1)[0];
+  TRAINERS.splice(to, 0, moved);
   renderManageList();
 }
-async function saveOrder(){
-  const ok=await writeJson('trainers.json',TRAINERS);
-  if(ok) showStatus('Order saved to trainers.json');
+async function saveOrder() {
+  var ok = await writeBoth('trainers.json', TRAINERS);
+  if (ok) { toast('Order saved'); renderPreviewGrid(); }
 }
 
-// ── EDIT TRAINER ──────────────────────────────────
-function populateEditSelect(){
-  const sel=document.getElementById('edit-select');
-  const cur=sel.value;
-  sel.innerHTML='<option value="">— choose —</option>'+TRAINERS.map((t,i)=>`<option value="${i}" ${cur==i?'selected':''}>${t.name}</option>`).join('');
-}
-function loadEditTrainer(){
-  const idx=parseInt(document.getElementById('edit-select').value);
-  const wrap=document.getElementById('edit-form-wrap');
-  if(isNaN(idx)){wrap.style.display='none';return;}
-  wrap.style.display='grid';
-  const t=TRAINERS[idx];
-  // set niche state for edit
-  nicheRankState['e-niche-ranked']=t.niches?[...t.niches]:[];
-
-  document.getElementById('edit-form-fields').innerHTML=buildEditFields(t);
-  // restore pill states
-  setTimeout(()=>{
-    const specs=t.specialties||[];
-    document.querySelectorAll('#e-specs .pill').forEach(p=>{if(specs.includes(p.textContent.trim()))p.classList.add('on');});
-    const diets=(t.diet||'').split(',').map(s=>s.trim());
-    document.querySelectorAll('#e-diet .pill').forEach(p=>{if(diets.includes(p.textContent.trim()))p.classList.add('on');});
-    document.querySelectorAll('#e-founding .pill').forEach(p=>{p.classList.toggle('on',p.textContent.trim()===(t.founding?'Yes':'No'));});
-    const niches=t.niches||[];
-    document.querySelectorAll('#e-niches .pill').forEach(p=>{if(niches.includes(p.textContent.trim()))p.classList.add('on');});
-    renderNicheRank('e-niche-ranked');
-    updateEditPreview();
-  },50);
-}
-function buildEditFields(t){
-  return`<div class="section-card">
-    <div class="section-title"><div class="dot"></div>Basic info</div>
-    <div class="row-3">
-      <div class="field"><label>Name</label><input type="text" id="e-name" value="${t.name||''}" oninput="updateEditPreview()"></div>
-      <div class="field"><label>Age</label><input type="number" id="e-age" value="${t.age||''}" oninput="updateEditPreview()"></div>
-      <div class="field"><label>Location</label><input type="text" id="e-loc" value="${t.location||''}" oninput="updateEditPreview()"></div>
-    </div>
-    <div class="row-3">
-      <div class="field"><label>Experience</label><input type="text" id="e-exp" value="${t.experience||''}" oninput="updateEditPreview()"></div>
-      <div class="field"><label>Certifications</label><input type="text" id="e-certs" value="${t.certs||''}" oninput="updateEditPreview()"></div>
-      <div class="field"><label>Price ($)</label><input type="number" id="e-price" value="${t.price||''}" oninput="updateEditPreview()"></div>
-    </div>
-    <div class="row-3">
-      <div class="field"><label>Rating</label><select id="e-rating" onchange="updateEditPreview()">
-        ${[5.0,4.9,4.8,4.7,4.6,4.5,4.0,3.5].map(v=>`<option value="${v}"${t.rating==v?' selected':''}>${v}</option>`).join('')}
-      </select></div>
-      <div class="field"><label>Reviews</label><input type="number" id="e-reviews" value="${t.reviews||0}" oninput="updateEditPreview()"></div>
-      <div class="field"><label>Founding?</label><div class="pill-group" id="e-founding">
-        <button class="pill" onclick="solo(this,'e-founding');updateEditPreview()">Yes</button>
-        <button class="pill" onclick="solo(this,'e-founding');updateEditPreview()">No</button>
-      </div></div>
-    </div>
-  </div>
-  <div class="section-card">
-    <div class="section-title"><div class="dot"></div>Photos</div>
-    <div class="row-3">
-      <div class="field"><label>Profile</label><input type="text" id="e-p1" value="${(t.photo_main||'').replace('images/','')}" oninput="updateEditPreview()"></div>
-      <div class="field"><label>Physique</label><input type="text" id="e-p2" value="${(t.photo_physique||'').replace('images/','')}" oninput="updateEditPreview()"></div>
-      <div class="field"><label>Lifestyle</label><input type="text" id="e-p3" value="${(t.photo_lifestyle||'').replace('images/','')}" oninput="updateEditPreview()"></div>
-    </div>
-  </div>
-  <div class="section-card">
-    <div class="section-title"><div class="dot"></div>Specialties</div>
-    <div class="pill-group" id="e-specs">
-      ${['Hypertrophy','Strength & powerlifting','Calisthenics','CrossFit','Weight loss','Cardio & endurance','Functional fitness','Flexibility & mobility','Sport-specific','Body recomposition'].map(s=>`<button class="pill" onclick="toggle(this);updateEditPreview()">${s}</button>`).join('')}
-    </div>
-  </div>
-  <div class="section-card">
-    <div class="section-title"><div class="dot"></div>Niches <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">(up to 3, drag to reorder)</span></div>
-    <div class="pill-group" id="e-niches">
-      ${['Seniors / 60+','Postpartum women','Teens / youth','Competitive athletes','Complete beginners','Post-injury / rehab','Women only','Men only','Plus-size / body positive','Weight loss focused','Muscle building focused','General population'].map(n=>`<button class="pill" onclick="toggleNiche(this,'e-niche-ranked')">${n}</button>`).join('')}
-    </div>
-    <div class="niche-rank-wrap" id="e-niche-ranked"><div style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);margin-bottom:6px;">Priority order</div><div id="e-niche-ranked-items"></div></div>
-  </div>
-  <div class="section-card">
-    <div class="section-title"><div class="dot"></div>Diet</div>
-    <div class="pill-group" id="e-diet">
-      ${['Flexible / IIFYM','High protein','Carnivore','Keto','Plant-based','Vegan','Whole foods','Intermittent fasting','Whatever works for the client'].map(d=>`<button class="pill" onclick="toggle(this);updateEditPreview()">${d}</button>`).join('')}
-    </div>
-  </div>
-  <div class="section-card">
-    <div class="section-title"><div class="dot"></div>Coaching stats</div>
-    ${[
-      ['Intensity','e-si',t.stat_intensity||2,'Easy','Max effort',['Easy & light','Moderate','Balanced','Hard-working','Max effort always']],
-      ['Structure','e-ss',t.stat_structure||2,'Flexible','Rigid',['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid']],
-      ['Check-ins','e-sc',t.stat_checkins||2,'As needed','Daily',['As needed','Weekly','Few times/week','Every other day','Daily']],
-      ['Energy','e-se',t.stat_energy||2,'Calm','Hype',['Very calm','Mostly relaxed','Balanced','Energetic','High energy always']],
-      ['Diet strictness','e-sd',t.stat_diet||2,'Flexible','Strict',['Very flexible','Mostly flexible','Balanced','Pretty strict','Very regimented']],
-    ].map(([lbl,id,val,lo,hi,labs])=>`<div class="field"><label>${lbl}</label><div class="slider-row"><input type="range" min="0" max="4" value="${val}" id="${id}" oninput="updateSv('${id}','${id}-sv',${JSON.stringify(labs)});updateEditPreview()"><span class="slider-val" id="${id}-sv">${labs[val]}</span></div><div class="slider-ends"><span>${lo}</span><span>${hi}</span></div></div>`).join('')}
-  </div>
-  <div class="section-card">
-    <div class="section-title"><div class="dot"></div>Profile copy</div>
-    <div class="field"><label>Interests</label><input type="text" id="e-int" value="${(t.interests||[]).join(', ')}" oninput="updateEditPreview()"></div>
-    <div class="field"><label>Short bio</label><textarea id="e-bio" rows="3" oninput="updateEditPreview()">${t.bio||''}</textarea></div>
-    <div class="field"><label>Full story</label><textarea id="e-story" rows="5" oninput="updateEditPreview()">${t.story||''}</textarea></div>
-  </div>`;
-}
-function buildEditTrainerObj(){
-  const idx=parseInt(document.getElementById('edit-select').value);
-  if(isNaN(idx)) return null;
-  const orig=TRAINERS[idx];
-  const niches=nicheRankState['e-niche-ranked']||[];
-  return{
-    ...orig,
-    name:document.getElementById('e-name')?.value.trim()||orig.name,
-    age:parseInt(document.getElementById('e-age')?.value)||orig.age,
-    location:document.getElementById('e-loc')?.value.trim()||orig.location,
-    experience:document.getElementById('e-exp')?.value.trim()||orig.experience,
-    certs:document.getElementById('e-certs')?.value.trim()||orig.certs,
-    price:parseInt(document.getElementById('e-price')?.value)||orig.price,
-    rating:parseFloat(document.getElementById('e-rating')?.value)||orig.rating,
-    reviews:parseInt(document.getElementById('e-reviews')?.value)||orig.reviews,
-    founding:getSelected('e-founding')[0]==='Yes',
-    photo_main:'images/'+(document.getElementById('e-p1')?.value.trim()||''),
-    photo_physique:'images/'+(document.getElementById('e-p2')?.value.trim()||''),
-    photo_lifestyle:'images/'+(document.getElementById('e-p3')?.value.trim()||''),
-    specialties:getSelected('e-specs'),
-    niches:niches,
-    diet:getSelected('e-diet').join(', '),
-    stat_intensity:parseInt(document.getElementById('e-si')?.value)||orig.stat_intensity,
-    stat_structure:parseInt(document.getElementById('e-ss')?.value)||orig.stat_structure,
-    stat_checkins:parseInt(document.getElementById('e-sc')?.value)||orig.stat_checkins,
-    stat_energy:parseInt(document.getElementById('e-se')?.value)||orig.stat_energy,
-    stat_diet:parseInt(document.getElementById('e-sd')?.value)||orig.stat_diet,
-    interests:document.getElementById('e-int')?.value.split(',').map(s=>s.trim()).filter(Boolean)||orig.interests,
-    bio:document.getElementById('e-bio')?.value.trim()||orig.bio,
-    story:document.getElementById('e-story')?.value.trim()||orig.story,
-  };
-}
-function updateEditPreview(){
-  const t=buildEditTrainerObj();
-  if(!t) return;
-  document.getElementById('edit-preview-card').innerHTML=buildCard(t,0,false);
-}
-async function saveEditTrainer(){
-  const idx=parseInt(document.getElementById('edit-select').value);
-  if(isNaN(idx)) return;
-  const t=buildEditTrainerObj();
-  if(!t) return;
-  TRAINERS[idx]=t;
-  const ok=await writeJson('trainers.json',TRAINERS);
-  if(ok){showStatus(`${t.name} saved`);renderPreviewGrid();populateEditSelect();}
-}
-async function deleteTrainer(){
-  const idx=parseInt(document.getElementById('edit-select').value);
-  if(isNaN(idx)) return;
-  const name=TRAINERS[idx].name;
-  if(!confirm(`Delete ${name}? This cannot be undone.`)) return;
-  TRAINERS.splice(idx,1);
-  const ok=await writeJson('trainers.json',TRAINERS);
-  if(ok){showStatus(`${name} deleted`);document.getElementById('edit-form-wrap').style.display='none';document.getElementById('edit-select').value='';populateEditSelect();renderPreviewGrid();}
+// ─────────────────────────────────────────────
+// EDIT TRAINER
+// ─────────────────────────────────────────────
+function populateEditSelect() {
+  var sel = document.getElementById('edit-select');
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">— choose a trainer —</option>'
+    + TRAINERS.map(function(t, i){ return '<option value="'+i+'"'+(cur==i?' selected':'')+'>'+t.name+'</option>'; }).join('');
 }
 
-// ── TESTIMONIALS ──────────────────────────────────
-let testiDragIdx=-1;
-function addTestimonial(){
-  const name=document.getElementById('t-name').value.trim();
-  const initials=document.getElementById('t-initials').value.trim();
-  const role=document.getElementById('t-role').value.trim();
-  const result=document.getElementById('t-result').value.trim();
-  const quote=document.getElementById('t-quote').value.trim();
-  if(!name||!quote){showStatus('Name and quote are required','error');return;}
-  testimonials.push({name,initials:initials||name.split(' ').map(w=>w[0]).join('').toUpperCase(),role,result,quote});
-  ['t-name','t-initials','t-role','t-result','t-quote'].forEach(id=>document.getElementById(id).value='');
+function loadEditForm() {
+  var idx = parseInt(document.getElementById('edit-select').value);
+  var body = document.getElementById('edit-body');
+  if (isNaN(idx)) { body.style.display = 'none'; return; }
+  EDIT_STAGING_IDX = -1;
+  loadEditFormFromObj(TRAINERS[idx], false);
+}
+
+function loadEditFormFromObj(t, isStaging) {
+  var body = document.getElementById('edit-body');
+  body.style.display = 'block';
+  nicheState['e-nr'] = t.niches ? t.niches.slice() : [];
+
+  // Build form HTML
+  var html = buildEditFormHTML(t);
+  document.getElementById('edit-fields').innerHTML = html;
+
+  // Restore pill states after DOM is ready
+  setTimeout(function(){
+    restoreEditPills(t);
+    renderNicheRank('e-nr');
+    refreshEditPreview();
+  }, 30);
+}
+
+function buildEditFormHTML(t) {
+  var sliderDefs = [
+    ['Intensity','e-si',t.stat_intensity||2,'Easy','Max effort',SL.intensity,'e-svi'],
+    ['Structure','e-ss',t.stat_structure||2,'Flexible','Rigid',SL.structure,'e-svs'],
+    ['Check-ins','e-sc',t.stat_checkins||2,'As needed','Daily',SL.checkins,'e-svc'],
+    ['Energy',   'e-se',t.stat_energy||2,'Calm','Hype',SL.energy,'e-sve'],
+    ['Diet strictness','e-sd',t.stat_diet||2,'Flexible','Strict',SL.diet,'e-svd'],
+  ];
+
+  var h = '<div class="card"><div class="card-title"><div class="dot"></div>Basic info</div>'
+    +'<div class="g3"><div class="field"><label>Name</label><input type="text" id="e-name" value="'+esc(t.name||'')+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Age</label><input type="number" id="e-age" value="'+(t.age||'')+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Location</label><input type="text" id="e-loc" value="'+esc(t.location||'')+'" oninput="refreshEditPreview()"></div></div>'
+    +'<div class="g3"><div class="field"><label>Experience</label><input type="text" id="e-exp" value="'+esc(t.experience||'')+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Certifications</label><input type="text" id="e-certs" value="'+esc(t.certs||'')+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Price ($)</label><input type="number" id="e-price" value="'+(t.price||'')+'" oninput="refreshEditPreview()"></div></div>'
+    +'<div class="g3"><div class="field"><label>Rating</label><select id="e-rating" onchange="refreshEditPreview()">'
+    +[5.0,4.9,4.8,4.7,4.6,4.5,4.0,3.5].map(function(v){ return '<option value="'+v+'"'+(t.rating==v?' selected':'')+'>'+v+'</option>'; }).join('')
+    +'</select></div>'
+    +'<div class="field"><label>Reviews</label><input type="number" id="e-reviews" value="'+(t.reviews||0)+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Founding?</label><div class="pill-group" id="e-founding"><button class="pill" onclick="soloBtn(this,\'e-founding\');refreshEditPreview()">Yes</button><button class="pill" onclick="soloBtn(this,\'e-founding\');refreshEditPreview()">No</button></div></div>'
+    +'</div></div>'
+
+    +'<div class="card"><div class="card-title"><div class="dot"></div>Photos</div><div class="g3">'
+    +'<div class="field"><label>Profile 1:1</label><input type="text" id="e-p1" value="'+esc((t.photo_main||'').replace('images/',''))+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Physique 4:3</label><input type="text" id="e-p2" value="'+esc((t.photo_physique||'').replace('images/',''))+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Lifestyle 4:3</label><input type="text" id="e-p3" value="'+esc((t.photo_lifestyle||'').replace('images/',''))+'" oninput="refreshEditPreview()"></div>'
+    +'</div></div>'
+
+    +'<div class="card"><div class="card-title"><div class="dot"></div>Specialties</div>'
+    +'<div class="pill-group" id="e-specs">'
+    +['Hypertrophy','Strength & powerlifting','Calisthenics','CrossFit','Weight loss','Cardio & endurance','Functional fitness','Flexibility & mobility','Sport-specific','Body recomposition'].map(function(s){
+      return '<button class="pill" onclick="toggleBtn(this);refreshEditPreview()">'+s+'</button>';
+    }).join('')+'</div></div>'
+
+    +'<div class="card"><div class="card-title"><div class="dot"></div>Niches <span style="font-family:var(--font-body);font-size:12px;color:var(--gray-text);letter-spacing:0;font-weight:400;text-transform:none;">up to 3 · drag to reorder</span></div>'
+    +'<div class="pill-group" id="e-niches">'
+    +['Seniors / 60+','Postpartum women','Teens / youth','Competitive athletes','Complete beginners','Post-injury / rehab','Women only','Men only','Plus-size / body positive','Weight loss focused','Muscle building focused','General population'].map(function(n){
+      return '<button class="pill" onclick="nicheToggle(this,\'e-nr\')">'+n+'</button>';
+    }).join('')
+    +'</div><div class="niche-rank" id="e-nr"><div style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);margin-bottom:6px;">Priority order</div><div id="e-nr-items"></div></div></div>'
+
+    +'<div class="card"><div class="card-title"><div class="dot"></div>Diet</div>'
+    +'<div class="pill-group" id="e-diet">'
+    +['Flexible / IIFYM','High protein','Carnivore','Keto','Plant-based','Vegan','Whole foods','Intermittent fasting','Whatever works for client'].map(function(d){
+      return '<button class="pill" onclick="toggleBtn(this);refreshEditPreview()">'+d+'</button>';
+    }).join('')+'</div></div>'
+
+    +'<div class="card"><div class="card-title"><div class="dot"></div>Stats</div>'
+    + sliderDefs.map(function(def){
+        return '<div class="field"><label>'+def[0]+'</label><div class="slider-row"><input type="range" min="0" max="4" value="'+def[2]+'" id="'+def[1]+'" oninput="sv(\''+def[1]+'\',\''+def[6]+'\',SL.'+def[0].split(' ')[0].toLowerCase().replace('-ins','checkins')+');refreshEditPreview()"><span class="slider-val" id="'+def[6]+'">'+def[5][def[2]]+'</span></div><div class="slider-ends"><span>'+def[3]+'</span><span>'+def[4]+'</span></div></div>';
+      }).join('')
+    +'</div>'
+
+    +'<div class="card"><div class="card-title"><div class="dot"></div>Profile copy</div>'
+    +'<div class="field"><label>Interests</label><input type="text" id="e-int" value="'+esc((t.interests||[]).join(', '))+'" oninput="refreshEditPreview()"></div>'
+    +'<div class="field"><label>Short bio</label><textarea id="e-bio" rows="3" oninput="refreshEditPreview()">'+esc(t.bio||'')+'</textarea></div>'
+    +'<div class="field"><label>Full story</label><textarea id="e-story" rows="5" oninput="refreshEditPreview()">'+esc(t.story||'')+'</textarea></div>'
+    +'</div>';
+
+  return h;
+}
+
+function restoreEditPills(t) {
+  var specs = t.specialties || [];
+  document.querySelectorAll('#e-specs .pill').forEach(function(p){
+    if (specs.indexOf(p.textContent.trim()) > -1) p.classList.add('on');
+  });
+  var diets = (t.diet||'').split(',').map(function(s){ return s.trim(); });
+  document.querySelectorAll('#e-diet .pill').forEach(function(p){
+    if (diets.indexOf(p.textContent.trim()) > -1) p.classList.add('on');
+  });
+  document.querySelectorAll('#e-founding .pill').forEach(function(p){
+    p.classList.toggle('on', p.textContent.trim() === (t.founding ? 'Yes' : 'No'));
+  });
+  var niches = t.niches || [];
+  document.querySelectorAll('#e-niches .pill').forEach(function(p){
+    if (niches.indexOf(p.textContent.trim()) > -1) p.classList.add('on');
+  });
+}
+
+function buildEditObj() {
+  var idx = parseInt(document.getElementById('edit-select').value);
+  var orig = (EDIT_STAGING_IDX >= 0) ? STAGING[EDIT_STAGING_IDX] : (isNaN(idx) ? {} : TRAINERS[idx]);
+  var sliderSL = {si:SL.intensity,ss:SL.structure,sc:SL.checkins,se:SL.energy,sd:SL.diet};
+  function gv(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+  return Object.assign({}, orig, {
+    name:      gv('e-name').trim() || orig.name,
+    age:       parseInt(gv('e-age')) || orig.age,
+    location:  gv('e-loc').trim() || orig.location,
+    experience:gv('e-exp').trim() || orig.experience,
+    certs:     gv('e-certs').trim() || orig.certs,
+    price:     parseInt(gv('e-price')) || orig.price,
+    rating:    parseFloat(gv('e-rating')) || orig.rating,
+    reviews:   parseInt(gv('e-reviews')) || orig.reviews,
+    founding:  getSelected('e-founding')[0] === 'Yes',
+    photo_main:      'images/' + (gv('e-p1').trim() || ''),
+    photo_physique:  'images/' + (gv('e-p2').trim() || ''),
+    photo_lifestyle: 'images/' + (gv('e-p3').trim() || ''),
+    specialties: getSelected('e-specs'),
+    niches:      nicheState['e-nr'] ? nicheState['e-nr'].slice() : [],
+    diet:        getSelected('e-diet').join(', '),
+    stat_intensity: parseInt(gv('e-si')) || 2,
+    stat_structure: parseInt(gv('e-ss')) || 2,
+    stat_checkins:  parseInt(gv('e-sc')) || 2,
+    stat_energy:    parseInt(gv('e-se')) || 2,
+    stat_diet:      parseInt(gv('e-sd')) || 2,
+    interests: gv('e-int').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    bio:    gv('e-bio').trim(),
+    story:  gv('e-story').trim()
+  });
+}
+
+function refreshEditPreview() {
+  EDIT_CACHE = buildEditObj();
+  var el = document.getElementById('edit-preview');
+  if (!el) return;
+  el.innerHTML = buildCard(EDIT_CACHE, null);
+}
+
+async function saveEditTrainer() {
+  var t = buildEditObj();
+  if (!t.name) return;
+
+  if (EDIT_STAGING_IDX >= 0) {
+    // save edits back to staging
+    STAGING[EDIT_STAGING_IDX] = t;
+    var ok = await writeBoth('trainerspreview.json', STAGING);
+    if (ok) { toast('Staging trainer updated'); }
+  } else {
+    var idx = parseInt(document.getElementById('edit-select').value);
+    if (isNaN(idx)) return;
+    TRAINERS[idx] = t;
+    var ok = await writeBoth('trainers.json', TRAINERS);
+    if (ok) { toast(t.name + ' saved'); renderPreviewGrid(); populateEditSelect(); }
+  }
+}
+
+async function deleteTrainer() {
+  var idx = parseInt(document.getElementById('edit-select').value);
+  if (isNaN(idx)) return;
+  var name = TRAINERS[idx].name;
+  if (!confirm('Delete ' + name + '? Cannot be undone.')) return;
+  TRAINERS.splice(idx, 1);
+  var ok = await writeBoth('trainers.json', TRAINERS);
+  if (ok) {
+    toast(name + ' deleted');
+    document.getElementById('edit-body').style.display = 'none';
+    document.getElementById('edit-select').value = '';
+    populateEditSelect();
+    renderPreviewGrid();
+  }
+}
+
+// ─────────────────────────────────────────────
+// TESTIMONIALS
+// ─────────────────────────────────────────────
+function addTesti() {
+  var name  = document.getElementById('t-name').value.trim();
+  var init  = document.getElementById('t-init').value.trim();
+  var role  = document.getElementById('t-role').value.trim();
+  var result= document.getElementById('t-result').value.trim();
+  var quote = document.getElementById('t-quote').value.trim();
+  if (!name || !quote) { toast('Name and quote required', 'err'); return; }
+  TESTIS.push({ name:name, initials: init || name.split(' ').map(function(w){ return w[0]; }).join('').toUpperCase(), role:role, result:result, quote:quote });
+  ['t-name','t-init','t-role','t-result','t-quote'].forEach(function(id){ document.getElementById(id).value = ''; });
   renderTestiList();
 }
-function renderTestiList(){
-  const el=document.getElementById('testi-list');
-  const empty=document.getElementById('testi-empty');
-  if(!testimonials.length){el.innerHTML='';empty.style.display='block';updateTestiJson();return;}
-  empty.style.display='none';
-  el.innerHTML=testimonials.map((t,i)=>`
-    <div class="testi-item" draggable="true" data-idx="${i}"
-      ondragstart="testiDragStart(${i})"
-      ondragover="testiDragOver(event,this)"
-      ondrop="testiDrop(event,${i})"
-      ondragleave="this.classList.remove('drag-over')">
-      <div class="testi-item-header">
-        <span class="testi-item-name">${t.name} <span style="font-size:11px;color:var(--gray-text);font-weight:400;">${t.role||''}</span></span>
-        <button class="btn btn-red" style="font-size:11px;padding:4px 10px;" onclick="removeTestimonial(${i})">Remove</button>
-      </div>
-      <div class="testi-item-quote">"${t.quote}"</div>
-      ${t.result?`<div style="font-size:11px;color:#7cba4a;margin-top:4px;">${t.result}</div>`:''}
-    </div>`).join('');
-  updateTestiJson();
+
+function renderTestiList() {
+  var el    = document.getElementById('testi-list');
+  var empty = document.getElementById('testi-empty');
+  if (!TESTIS.length) { el.innerHTML = ''; empty.style.display = 'block'; updateTestiJSON(); return; }
+  empty.style.display = 'none';
+  el.innerHTML = TESTIS.map(function(t, i){
+    return '<div class="testi-item" draggable="true" ondragstart="testiDragStart('+i+')" ondragover="testiDragOver(event,this)" ondrop="testiDrop(event,'+i+')" ondragleave="this.classList.remove(\'drag-over\')">'
+      +'<div class="testi-item-header"><span class="testi-item-name">'+t.name+' <span style="font-size:11px;color:var(--gray-text);font-weight:400;">'+( t.role||'')+'</span></span>'
+      +'<button class="btn btn-danger btn-sm" onclick="removeTesti('+i+')">Remove</button></div>'
+      +'<div class="testi-item-q">"'+t.quote+'"</div>'
+      +(t.result?'<div class="testi-item-result">'+t.result+'</div>':'')
+      +'</div>';
+  }).join('');
+  updateTestiJSON();
 }
-function testiDragStart(idx){testiDragIdx=idx;}
-function testiDragOver(e,el){e.preventDefault();el.classList.add('drag-over');}
-function testiDrop(e,toIdx){
+
+function removeTesti(i) { TESTIS.splice(i,1); renderTestiList(); }
+
+function testiDragStart(i) { testiDragIdx = i; }
+function testiDragOver(e, el) { e.preventDefault(); el.classList.add('drag-over'); }
+function testiDrop(e, to) {
   e.preventDefault();
-  document.querySelectorAll('.testi-item').forEach(r=>r.classList.remove('drag-over'));
-  if(testiDragIdx===toIdx||testiDragIdx<0) return;
-  const moved=testimonials.splice(testiDragIdx,1)[0];
-  testimonials.splice(toIdx,0,moved);
+  document.querySelectorAll('.testi-item').forEach(function(r){ r.classList.remove('drag-over'); });
+  if (testiDragIdx === to || testiDragIdx < 0) return;
+  var moved = TESTIS.splice(testiDragIdx, 1)[0];
+  TESTIS.splice(to, 0, moved);
   renderTestiList();
 }
-function removeTestimonial(i){testimonials.splice(i,1);renderTestiList();}
-function updateTestiJson(){document.getElementById('t-json-preview').value=JSON.stringify(testimonials,null,2);}
-async function loadTestimonials(){
-  try{const r=await fetch('testimonials.json?t='+Date.now());testimonials=await r.json();renderTestiList();showStatus('Loaded testimonials.json');}
-  catch(e){showStatus('Could not load testimonials.json','error');}
-}
-async function saveTestimonials(){
-  const ok=await writeJson('testimonials.json',testimonials);
-  if(ok) showStatus('Saved testimonials.json');
+
+function updateTestiJSON() {
+  var el = document.getElementById('t-json');
+  if (el) el.value = JSON.stringify(TESTIS, null, 2);
 }
 
-// ── GITHUB WRITE ──────────────────────────────────
-async function writeJson(filename, data){
-  const cfg=getConfig();
-  if(!cfg.user||!cfg.token){showStatus('Set up GitHub config first (Config tab)','error');return false;}
-  const repo=cfg.repo||'Iron-House';
-  const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
-  try{
-    // get current sha
-    const headRes=await fetch(`https://api.github.com/repos/${cfg.user}/${repo}/contents/${filename}`,{headers:{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json'}});
-    let sha='';
-    if(headRes.ok){const hd=await headRes.json();sha=hd.sha;}
-    const body={message:`Update ${filename}`,content,branch:'main'};
-    if(sha) body.sha=sha;
-    const putRes=await fetch(`https://api.github.com/repos/${cfg.user}/${repo}/contents/${filename}`,{method:'PUT',headers:{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(!putRes.ok){const err=await putRes.json();showStatus('GitHub error: '+(err.message||putRes.status),'error');return false;}
-    return true;
-  }catch(e){showStatus('Network error: '+e.message,'error');return false;}
+async function saveTestimonials() {
+  var ok = await writeBoth('testimonials.json', TESTIS);
+  if (ok) toast('testimonials.json saved');
 }
 
-// ── INIT ──────────────────────────────────────────
-window.addEventListener('load',()=>{
-  const cfg=getConfig();
-  if(cfg.user) document.getElementById('cfg-user').value=cfg.user;
-  if(cfg.repo) document.getElementById('cfg-repo').value=cfg.repo;
-  if(cfg.token) document.getElementById('cfg-token').value=cfg.token;
-  if(cfg.user&&cfg.token) document.getElementById('cfg-saved').style.display='flex';
-  loadTrainers();
+// ─────────────────────────────────────────────
+// UTIL
+// ─────────────────────────────────────────────
+function esc(str) {
+  return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+window.addEventListener('load', function() {
+  var cfg = getCfg();
+  if (cfg.user)  document.getElementById('cfg-user').value  = cfg.user;
+  if (cfg.repo)  document.getElementById('cfg-repo').value  = cfg.repo;
+  if (cfg.dev)   document.getElementById('cfg-dev').value   = cfg.dev;
+  if (cfg.token) document.getElementById('cfg-token').value = cfg.token;
+  if (cfg.user && cfg.token) document.getElementById('cfg-ok').style.display = 'flex';
+  updateCfgDot();
+  loadAll();
+  refreshAddPreview();
   renderTestiList();
-  updateAddPreview();
 });
 </script>
 </body>
