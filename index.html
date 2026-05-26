@@ -3,670 +3,1116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trainer Generator — Iron House</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Iron House — Dev Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --black: #0a0a0a; --white: #f5f2ed; --orange: #e8500a; --orange-dark: #b83d06;
-    --gray: #1a1a1a; --gray-mid: #242424; --gray-light: #2e2e2e; --gray-text: #777;
-    --border: rgba(255,255,255,0.08); --green: #4ade80;
-    --font-display: 'Bebas Neue', sans-serif; --font-body: 'Barlow', sans-serif;
-  }
-  body { background: var(--black); color: var(--white); font-family: var(--font-body); min-height: 100vh; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --black:#0a0a0a;--white:#f5f2ed;--orange:#e8500a;--orange-dark:#b83d06;
+  --gray:#1a1a1a;--gray-mid:#242424;--gray-light:#2e2e2e;--gray-text:#777;
+  --border:rgba(255,255,255,0.08);--green:#4ade80;--red:#f87171;
+  --font-display:'Bebas Neue',sans-serif;--font-body:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
 
-  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 2rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(12px); }
-  .nav-logo { font-family: var(--font-display); font-size: 22px; letter-spacing: 2px; color: var(--white); }
-  .nav-logo span { color: var(--orange); }
-  .nav-tag { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-text); padding: 4px 10px; border: 1px solid var(--border); border-radius: 99px; }
+/* NAV */
+.topnav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.9rem 2rem;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.topnav-logo{font-family:var(--font-display);font-size:22px;letter-spacing:2px;color:var(--white);}
+.topnav-logo span{color:var(--orange);}
+.topnav-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-text);padding:3px 10px;border:1px solid var(--border);border-radius:99px;}
 
-  /* SPLIT LAYOUT */
-  .split-layout { display: grid; grid-template-columns: 1fr 400px; gap: 0; min-height: calc(100vh - 57px); align-items: start; }
-  .form-col { padding: 2.5rem 2rem 5rem; border-right: 1px solid var(--border); overflow-y: auto; }
-  .preview-col { position: sticky; top: 57px; height: calc(100vh - 57px); overflow-y: auto; padding: 2rem 1.5rem; background: #111; display: flex; flex-direction: column; }
-  .preview-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-text); margin-bottom: 1rem; }
-  .preview-hint { font-size: 12px; color: var(--gray-text); margin-top: 1rem; line-height: 1.5; text-align: center; opacity: 0.6; }
+/* TABS */
+.tabs-bar{display:flex;border-bottom:1px solid var(--border);background:#111;padding:0 2rem;}
+.tab-btn{padding:1rem 1.5rem;font-family:var(--font-body);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--gray-text);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+.tab-btn:hover{color:var(--white);}
+.tab-btn.active{color:var(--orange);border-bottom-color:var(--orange);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
 
-  .page-title { font-family: var(--font-display); font-size: 42px; letter-spacing: 1px; line-height: 1; margin-bottom: 0.4rem; }
-  .page-title span { color: var(--orange); }
-  .page-sub { font-size: 13px; color: var(--gray-text); margin-bottom: 2rem; line-height: 1.6; }
+/* SHARED */
+.section-card{background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;}
+.section-title{font-family:var(--font-display);font-size:18px;letter-spacing:1px;margin-bottom:1.1rem;display:flex;align-items:center;gap:8px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;}
+label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);}
+input[type=text],input[type=number],input[type=email],textarea,select{width:100%;background:var(--gray-mid);border:1px solid var(--border);border-radius:7px;color:var(--white);font-family:var(--font-body);font-size:13px;padding:9px 12px;outline:none;transition:border-color 0.15s;}
+input[type=text]:focus,input[type=number]:focus,input[type=email]:focus,textarea:focus,select:focus{border-color:rgba(232,80,10,0.5);}
+textarea{resize:vertical;line-height:1.6;}
+select option{background:#1a1a1a;}
+input[type=range]{width:100%;height:4px;-webkit-appearance:none;appearance:none;background:var(--gray-light);border-radius:99px;outline:none;cursor:pointer;margin:6px 0;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--orange);border:2px solid #111;cursor:grab;}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.field:last-child{margin-bottom:0;}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.hint{font-size:11px;color:var(--gray-text);line-height:1.5;}
+.pill-group{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+.pill{padding:5px 13px;border-radius:99px;border:1px solid var(--border);background:var(--gray-mid);color:var(--gray-text);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all 0.15s;}
+.pill:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+.pill.on{background:rgba(232,80,10,0.15);border-color:rgba(232,80,10,0.4);color:var(--orange);}
+.btn{padding:10px 22px;border-radius:7px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border:none;transition:all 0.15s;}
+.btn-orange{background:var(--orange);color:var(--white);}
+.btn-orange:hover{background:var(--orange-dark);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border);}
+.btn-outline:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);}
+.btn-red{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
+.btn-red:hover{background:rgba(248,113,113,0.2);}
+.slider-row{display:flex;align-items:center;gap:10px;}
+.slider-val{font-family:var(--font-display);font-size:15px;letter-spacing:0.5px;color:var(--orange);min-width:120px;text-align:right;}
+.slider-ends{display:flex;justify-content:space-between;margin-top:2px;}
+.slider-ends span{font-size:10px;color:var(--gray-text);}
+.status-bar{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--white);display:none;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.status-bar.show{display:flex;}
+.status-bar.success{border-color:rgba(74,222,128,0.3);background:rgba(74,222,128,0.08);}
+.status-bar.error{border-color:rgba(248,113,113,0.3);background:rgba(248,113,113,0.08);}
 
-  .config-banner { background: rgba(232,80,10,0.08); border: 1px solid rgba(232,80,10,0.25); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
-  .config-banner h3 { font-family: var(--font-display); font-size: 18px; letter-spacing: 1px; color: var(--orange); margin-bottom: 0.75rem; }
-  .config-banner p { font-size: 13px; color: var(--gray-text); line-height: 1.6; margin-bottom: 1rem; }
-  .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .config-saved { display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--green); margin-top: 10px; }
-  .config-saved.show { display: flex; }
+/* NICHE RANK */
+.niche-rank-wrap{margin-top:10px;display:none;}
+.niche-rank-item{display:flex;align-items:center;gap:8px;background:var(--gray-mid);border:1px solid var(--border);border-radius:7px;padding:8px 12px;margin-bottom:5px;cursor:grab;user-select:none;}
+.niche-rank-item.drag-over{border-color:var(--orange);}
+.niche-rank-num{font-family:var(--font-display);font-size:15px;color:var(--orange);width:16px;flex-shrink:0;}
+.niche-rank-label{font-size:13px;flex:1;}
+.niche-rank-badge{font-size:9px;color:var(--gray-text);background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:99px;}
+.niche-rank-remove{background:none;border:none;color:var(--gray-text);cursor:pointer;font-size:15px;padding:0;line-height:1;}
+.niche-rank-remove:hover{color:var(--red);}
 
-  .section { background: var(--gray); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
-  .section-title { font-family: var(--font-display); font-size: 18px; letter-spacing: 1px; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
-  .section-title .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+/* TAB 1 — PREVIEW */
+.preview-pane{padding:2rem;}
+.preview-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.preview-toolbar h2{font-family:var(--font-display);font-size:28px;letter-spacing:1px;}
+.preview-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;max-width:1200px;}
 
-  .row { display: grid; gap: 12px; margin-bottom: 12px; }
-  .row.two { grid-template-columns: 1fr 1fr; }
-  .row.three { grid-template-columns: 1fr 1fr 1fr; }
-  .row:last-child { margin-bottom: 0; }
+/* CARD (identical to trainers.html) */
+.trainer-card{background:var(--gray);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s;display:flex;flex-direction:column;animation:fadeUp 0.4s ease both;}
+.trainer-card:hover{border-color:rgba(232,80,10,0.4);transform:translateY(-3px);}
+.card-header{padding:1.1rem 1.25rem 0.75rem;display:flex;justify-content:space-between;align-items:flex-start;}
+.trainer-name{font-family:var(--font-display);font-size:22px;letter-spacing:0.5px;line-height:1;}
+.trainer-meta{font-size:12px;color:var(--gray-text);margin-top:3px;}
+.card-header-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.stars{display:flex;align-items:center;gap:4px;}
+.star-icons{display:flex;gap:1px;}
+.star{width:11px;height:11px;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);background:#c07a18;}
+.star.empty{background:var(--gray-light);}
+.review-count{font-size:11px;color:var(--gray-text);}
+.founding-badge{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:rgba(232,80,10,0.12);border:1px solid rgba(232,80,10,0.3);color:var(--orange);}
+.card-images{display:flex;gap:8px;padding:0 1.25rem 1rem;height:210px;}
+.img-main{flex:1.5;border-radius:10px;background:var(--gray-mid);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:48px;}
+.img-side{flex:1;display:flex;flex-direction:column;gap:8px;}
+.img-secondary{flex:1;border-radius:10px;background:var(--gray-mid);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;}
+.card-images img{width:100%;height:100%;object-fit:cover;display:block;}
+.card-stats{display:flex;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.card-stat{flex:1;padding:0.7rem 0;text-align:center;border-right:1px solid var(--border);}
+.card-stat:last-child{border-right:none;}
+.card-stat-val{font-family:var(--font-display);font-size:17px;letter-spacing:0.5px;}
+.card-stat-label{font-size:10px;color:var(--gray-text);text-transform:uppercase;letter-spacing:0.5px;margin-top:1px;}
+.card-middle{display:flex;border-bottom:1px solid var(--border);}
+.card-tags-col{flex:0 0 38%;padding:0.875rem 1rem 0.875rem 1.25rem;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:5px;justify-content:center;}
+.tag{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--border);color:var(--gray-text);white-space:nowrap;display:inline-block;}
+.tag.style{background:rgba(50,120,20,0.1);color:#7cba4a;border-color:rgba(80,160,30,0.2);}
+.tag.diet{background:rgba(200,120,20,0.08);color:#e0a84a;border-color:rgba(200,140,30,0.2);}
+.tag.niche{background:rgba(100,80,200,0.1);color:#a89aea;border-color:rgba(120,100,220,0.2);}
+.card-statbars-col{flex:1;padding:0.875rem 1.25rem;display:flex;flex-direction:column;gap:6px;justify-content:center;}
+.stat-bar-row{display:flex;align-items:center;gap:7px;}
+.stat-bar-icon{flex-shrink:0;width:14px;height:14px;display:flex;align-items:center;justify-content:center;}
+.stat-bar-track{flex:1;height:4px;background:var(--gray-light);border-radius:99px;overflow:hidden;}
+.stat-bar-fill{height:100%;border-radius:99px;background:var(--orange);transition:width 0.4s ease;}
+.card-interests{padding:0.75rem 1.25rem 0;}
+.interests-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-text);margin-bottom:5px;}
+.interests-row{display:flex;flex-wrap:wrap;gap:5px;}
+.interest-chip{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--gray-mid);border:1px solid var(--border);color:rgba(245,242,237,0.6);}
+.card-bio{padding:0.75rem 1.25rem 1rem;font-size:13px;color:var(--gray-text);line-height:1.65;border-top:1px solid var(--border);margin-top:0.75rem;}
+.card-footer{padding:0.875rem 1.25rem;display:flex;justify-content:space-between;align-items:center;margin-top:auto;border-top:1px solid var(--border);}
+.card-price{font-size:13px;color:var(--gray-text);}
+.card-price strong{font-family:var(--font-display);font-size:22px;color:var(--white);letter-spacing:0.5px;}
+.btn-view{font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;padding:8px 18px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--white);cursor:pointer;font-family:var(--font-body);transition:all 0.15s;}
+.btn-view:hover{background:var(--orange);border-color:var(--orange);}
 
-  .field { display: flex; flex-direction: column; gap: 5px; }
-  .field label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-text); }
-  .field input, .field select, .field textarea { background: var(--gray-mid); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; color: var(--white); font-family: var(--font-body); font-size: 14px; outline: none; transition: border-color 0.2s; width: 100%; }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--orange); }
-  .field input::placeholder, .field textarea::placeholder { color: var(--gray-text); }
-  .field select option { background: var(--gray-mid); }
-  .field textarea { resize: vertical; min-height: 80px; line-height: 1.55; }
-  .field .hint { font-size: 11px; color: var(--gray-text); line-height: 1.4; }
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+.modal-overlay.open{display:flex;animation:fadeIn 0.2s ease;}
+.modal{background:var(--gray);border:1px solid rgba(255,255,255,0.1);border-radius:16px;width:100%;max-width:680px;overflow:hidden;margin:auto;position:relative;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,0.5);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;}
+.modal-close:hover{background:var(--orange);}
+.modal-photo-carousel{position:relative;background:var(--gray-mid);overflow:hidden;}
+.modal-photo-track{display:flex;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
+.modal-photo-slide{min-width:100%;display:flex;align-items:center;justify-content:center;font-size:64px;background:var(--gray-mid);}
+.modal-photo-slide img{width:100%;height:auto;display:block;max-height:70vh;object-fit:contain;}
+.modal-photo-prev,.modal-photo-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.55);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:background 0.15s;}
+.modal-photo-prev{left:10px;}
+.modal-photo-next{right:10px;}
+.modal-photo-prev:hover,.modal-photo-next:hover{background:var(--orange);}
+.modal-photo-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
+.modal-photo-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;cursor:pointer;padding:0;transition:background 0.2s,transform 0.2s;}
+.modal-photo-dot.active{background:var(--white);transform:scale(1.3);}
+.modal-body{padding:1.5rem;}
+.modal-top-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;}
+.modal-name{font-family:var(--font-display);font-size:32px;letter-spacing:1px;}
+.modal-meta{font-size:13px;color:var(--gray-text);margin-top:3px;}
+.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:1.25rem;}
+.modal-stat{background:var(--gray-mid);padding:0.875rem;text-align:center;}
+.modal-stat-val{font-family:var(--font-display);font-size:20px;}
+.modal-stat-label{font-size:10px;color:var(--gray-text);text-transform:uppercase;letter-spacing:0.5px;}
+.modal-section-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:0.75rem;margin-top:1.25rem;}
+.modal-statbars{display:flex;flex-direction:column;gap:8px;}
+.modal-bar-row{display:flex;align-items:center;gap:8px;}
+.modal-bar-icon{flex-shrink:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;}
+.modal-bar-label{font-size:12px;color:var(--gray-text);width:70px;flex-shrink:0;}
+.modal-bar-track{flex:1;height:6px;background:var(--gray-light);border-radius:99px;overflow:hidden;}
+.modal-bar-fill{height:100%;border-radius:99px;background:var(--orange);}
+.modal-bar-ends{display:flex;justify-content:space-between;margin-top:2px;}
+.modal-bar-end{font-size:10px;color:rgba(255,255,255,0.25);}
+.modal-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.modal-story{font-size:14px;color:rgba(245,242,237,0.75);line-height:1.75;}
+.testimonials-wrap{display:flex;flex-direction:column;gap:12px;}
+.testi-text{background:var(--gray-mid);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;}
+.testi-quote{font-size:14px;color:rgba(245,242,237,0.75);line-height:1.7;font-style:italic;position:relative;padding-left:1.25rem;}
+.testi-quote::before{content:'\201C';font-family:var(--font-display);font-size:40px;color:var(--orange);position:absolute;left:-4px;top:-8px;line-height:1;}
+.testi-author{margin-top:0.75rem;display:flex;align-items:center;gap:8px;}
+.testi-avatar{width:28px;height:28px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--font-display);color:var(--white);flex-shrink:0;}
+.testi-name{font-size:13px;font-weight:600;}
+.testi-result{font-size:11px;color:#7cba4a;margin-top:1px;}
+.modal-cta{width:100%;padding:14px;background:var(--orange);color:var(--white);border:none;border-radius:8px;font-family:var(--font-display);font-size:22px;letter-spacing:2px;cursor:pointer;margin-top:1.5rem;}
+.modal-cta:hover{background:var(--orange-dark);}
 
-  .pill-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-  .pill { padding: 6px 14px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--gray-text); font-family: var(--font-body); font-size: 13px; cursor: pointer; transition: all 0.15s; }
-  .pill:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
-  .pill.on { background: var(--orange); border-color: var(--orange); color: var(--white); }
+/* TAB 2 — ADD TRAINER */
+.add-pane{display:grid;grid-template-columns:1fr 380px;gap:0;min-height:calc(100vh - 110px);}
+.add-form-col{padding:2rem 2rem 5rem;border-right:1px solid var(--border);overflow-y:auto;}
+.add-preview-col{position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto;padding:1.5rem;background:#111;display:flex;flex-direction:column;gap:0.75rem;width:380px;min-width:380px;}
+.preview-col-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray-text);margin-bottom:0.5rem;}
 
-  .stat-slider-block { margin-bottom: 1rem; }
-  .stat-slider-block:last-child { margin-bottom: 0; }
-  .stat-slider-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .stat-slider-label span { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--gray-text); }
-  .stat-slider-label .stat-val { font-family: var(--font-display); font-size: 16px; color: var(--orange); letter-spacing: 1px; }
-  .stat-ends { display: flex; justify-content: space-between; margin-top: 3px; }
-  .stat-ends span { font-size: 10px; color: rgba(255,255,255,0.3); }
-  input[type=range] { width: 100%; height: 4px; -webkit-appearance: none; appearance: none; background: var(--gray-light); border-radius: 99px; outline: none; cursor: pointer; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); border: 3px solid var(--black); box-shadow: 0 0 0 1px var(--orange); cursor: grab; }
-  input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--orange); border: 3px solid var(--black); cursor: grab; }
+/* TAB 3 — MANAGE */
+.manage-pane{padding:2rem;}
+.trainer-row{display:flex;align-items:center;gap:1rem;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:8px;cursor:grab;transition:border-color 0.15s;}
+.trainer-row:active{cursor:grabbing;}
+.trainer-row.drag-over{border-color:var(--orange);background:rgba(232,80,10,0.05);}
+.trainer-row-handle{color:var(--gray-text);font-size:18px;cursor:grab;flex-shrink:0;}
+.trainer-row-img{width:44px;height:44px;border-radius:8px;background:var(--gray-mid);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.trainer-row-img img{width:100%;height:100%;object-fit:cover;}
+.trainer-row-info{flex:1;min-width:0;}
+.trainer-row-name{font-family:var(--font-display);font-size:18px;letter-spacing:0.5px;}
+.trainer-row-meta{font-size:12px;color:var(--gray-text);}
+.trainer-row-actions{display:flex;gap:8px;flex-shrink:0;}
 
-  .testi-block { background: var(--gray-mid); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 10px; }
-  .testi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .testi-num { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--gray-text); }
-  .remove-btn { font-size: 12px; color: #f87171; background: none; border: none; cursor: pointer; font-family: var(--font-body); }
-  .add-testi-btn { width: 100%; padding: 10px; background: transparent; border: 1px dashed rgba(255,255,255,0.12); border-radius: 8px; color: var(--gray-text); font-family: var(--font-body); font-size: 13px; cursor: pointer; margin-top: 4px; transition: all 0.15s; }
-  .add-testi-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+/* TAB 4 — EDIT TRAINER */
+.edit-pane{padding:2rem;}
+.edit-select-bar{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;}
+.edit-select-bar select{flex:1;}
+.edit-form-grid{display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:start;}
+.edit-form-col{display:flex;flex-direction:column;gap:0;}
 
-  .submit-btn { width: 100%; padding: 16px; background: var(--orange); color: var(--white); border: none; border-radius: 8px; font-family: var(--font-display); font-size: 24px; letter-spacing: 2px; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
-  .submit-btn:hover { background: var(--orange-dark); }
-  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+/* TAB 5 — TESTIMONIALS */
+.testi-pane{padding:2rem;}
+.testi-builder{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+.testi-list{display:flex;flex-direction:column;gap:10px;}
+.testi-item{background:var(--gray);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;}
+.testi-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+.testi-item-name{font-weight:600;font-size:14px;}
+.testi-item-quote{font-size:13px;color:var(--gray-text);line-height:1.6;font-style:italic;}
 
-  .status-box { display: none; border-radius: 10px; padding: 1.25rem 1.5rem; margin-top: 1rem; font-size: 14px; line-height: 1.6; }
-  .status-box.success { display: block; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.25); color: var(--green); }
-  .status-box.error { display: block; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #f87171; }
-  .status-box h4 { font-family: var(--font-display); font-size: 20px; letter-spacing: 1px; margin-bottom: 0.4rem; }
-  .divider { height: 1px; background: var(--border); margin: 1rem 0; }
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 
-  /* ── LIVE CARD PREVIEW ── */
-  .trainer-card { background: var(--gray); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
-  .card-header { padding: 1rem 1.1rem 0.6rem; display: flex; justify-content: space-between; align-items: flex-start; }
-  .trainer-name { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.5px; line-height: 1; }
-  .trainer-meta { font-size: 11px; color: var(--gray-text); margin-top: 2px; }
-  .card-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .star-icons { display: flex; gap: 1px; }
-  .star { width: 10px; height: 10px; clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); background: #c07a18; }
-  .review-count { font-size: 10px; color: var(--gray-text); }
-  .founding-badge { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 99px; background: rgba(232,80,10,0.12); border: 1px solid rgba(232,80,10,0.3); color: var(--orange); }
-
-  .card-images { display: flex; gap: 6px; padding: 0 1.1rem 0.875rem; height: 180px; }
-  .img-main { flex: 1.5; border-radius: 8px; background: var(--gray-mid); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-  .img-side { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-  .img-secondary { flex: 1; border-radius: 8px; background: var(--gray-mid); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-  .card-images img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  .card-stats { display: flex; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .card-stat { flex: 1; padding: 0.6rem 0; text-align: center; border-right: 1px solid var(--border); }
-  .card-stat:last-child { border-right: none; }
-  .card-stat-val { font-family: var(--font-display); font-size: 15px; letter-spacing: 0.5px; }
-  .card-stat-label { font-size: 9px; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 1px; }
-
-  .card-middle { display: flex; border-bottom: 1px solid var(--border); }
-  .card-tags-col { flex: 0 0 38%; padding: 0.75rem 0.875rem 0.75rem 1.1rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; justify-content: center; }
-  .tag { font-size: 10px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--border); color: var(--gray-text); white-space: nowrap; display: inline-block; }
-  .tag.style { background: rgba(50,120,20,0.1); color: #7cba4a; border-color: rgba(80,160,30,0.2); }
-  .tag.diet { background: rgba(200,120,20,0.08); color: #e0a84a; border-color: rgba(200,140,30,0.2); }
-  .tag.niche { background: rgba(100,80,200,0.1); color: #a89aea; border-color: rgba(120,100,220,0.2); }
-
-  .card-statbars-col { flex: 1; padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
-  .stat-bar-row { display: flex; align-items: center; gap: 6px; }
-  .stat-bar-label { font-size: 8px; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; width: 52px; flex-shrink: 0; }
-  .stat-bar-track { flex: 1; height: 3px; background: var(--gray-light); border-radius: 99px; overflow: hidden; }
-  .stat-bar-fill { height: 100%; border-radius: 99px; background: var(--orange); transition: width 0.3s ease; }
-
-  .card-interests { padding: 0.6rem 1.1rem 0; }
-  .interests-label { font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-text); margin-bottom: 4px; }
-  .interests-row { display: flex; flex-wrap: wrap; gap: 4px; }
-  .interest-chip { font-size: 10px; padding: 2px 8px; border-radius: 99px; background: var(--gray-mid); border: 1px solid var(--border); color: rgba(245,242,237,0.6); }
-
-  .card-bio { padding: 0.6rem 1.1rem 0.875rem; font-size: 12px; color: var(--gray-text); line-height: 1.6; border-top: 1px solid var(--border); margin-top: 0.6rem; }
-  .card-footer { padding: 0.75rem 1.1rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
-  .card-price { font-size: 12px; color: var(--gray-text); }
-  .card-price strong { font-family: var(--font-display); font-size: 20px; color: var(--white); }
-  .btn-view { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; padding: 6px 14px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: var(--white); font-family: var(--font-body); }
-
-  @media (max-width: 1100px) {
-    .split-layout { grid-template-columns: 1fr; }
-    .preview-col { position: relative; top: 0; height: auto; border-right: none; border-top: 1px solid var(--border); }
-  }
-  @media (max-width: 600px) {
-    .form-col { padding: 1.5rem 1.25rem 4rem; }
-    .row.two, .row.three, .config-row { grid-template-columns: 1fr; }
-  }
+@media(max-width:1100px){
+  .add-pane{grid-template-columns:1fr;}
+  .add-preview-col{position:relative;top:0;height:auto;}
+  .edit-form-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .preview-cards-grid{grid-template-columns:1fr;}
+  .testi-builder{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <span class="nav-logo">IRON<span>HOUSE</span></span>
-  <span class="nav-tag">Trainer Generator</span>
-</nav>
+<div class="topnav">
+  <div class="topnav-logo">IRON<span>HOUSE</span></div>
+  <span class="topnav-tag">Dev Dashboard</span>
+</div>
 
-<div class="split-layout">
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('preview',this)">👁 Preview</button>
+  <button class="tab-btn" onclick="switchTab('add',this)">➕ Add Trainer</button>
+  <button class="tab-btn" onclick="switchTab('manage',this)">⠿ Manage Order</button>
+  <button class="tab-btn" onclick="switchTab('edit',this)">✏️ Edit Trainer</button>
+  <button class="tab-btn" onclick="switchTab('testimonials',this)">💬 Testimonials</button>
+  <button class="tab-btn" onclick="switchTab('config',this)">⚙️ Config</button>
+</div>
 
-  <!-- ── LEFT: FORM ── -->
-  <div class="form-col">
-    <h1 class="page-title">Add a<br><span>trainer.</span></h1>
-    <p class="page-sub">Fill out the form and click Submit. The trainer will appear on the website within 60 seconds. The card preview updates live as you type.</p>
-
-    <!-- CONFIG -->
-    <div class="config-banner">
-      <h3>One-time setup</h3>
-      <p>Enter your GitHub details once. They'll be saved in your browser so you never have to enter them again.</p>
-      <div class="config-row">
-        <div class="field"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="CaydenHrl"></div>
-        <div class="field"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="Iron-House"></div>
-      </div>
-      <div class="field" style="margin-top:10px;">
-        <label>GitHub Personal Access Token</label>
-        <input type="password" id="cfg-token" placeholder="ghp_••••••••••••••••••••••••••••••••••••">
-        <span class="hint">Stored only in your browser. Never shared elsewhere.</span>
-      </div>
-      <button onclick="saveConfig()" style="margin-top:10px;padding:8px 20px;background:var(--orange);color:var(--white);border:none;border-radius:6px;font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;">Save settings</button>
-      <div class="config-saved" id="config-saved">✓ Settings saved</div>
-    </div>
-
-    <!-- BASIC INFO -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Basic info</div>
-      <div class="row two">
-        <div class="field"><label>First & last name</label><input type="text" id="g-name" placeholder="Sarah Johnson" oninput="updatePreview()"></div>
-        <div class="field"><label>Age</label><input type="number" id="g-age" placeholder="31" min="18" max="80" oninput="updatePreview()"></div>
-      </div>
-      <div class="row two">
-        <div class="field"><label>City & State</label><input type="text" id="g-location" placeholder="Austin, TX" oninput="updatePreview()"></div>
-        <div class="field"><label>Email (your records only)</label><input type="email" id="g-email" placeholder="sarah@email.com"></div>
+<!-- ══════════════════════════════════════════════
+     TAB 1 — PREVIEW
+══════════════════════════════════════════════ -->
+<div class="tab-pane active" id="tab-preview">
+  <div class="preview-pane">
+    <div class="preview-toolbar">
+      <h2>Live Trainer Preview</h2>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-outline" onclick="loadTrainers()">↺ Reload</button>
       </div>
     </div>
-
-    <!-- CREDENTIALS -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Credentials</div>
-      <div class="row three">
-        <div class="field"><label>Monthly price ($)</label><input type="number" id="g-price" placeholder="149" oninput="updatePreview()"></div>
-        <div class="field"><label>Experience</label><input type="text" id="g-exp" placeholder="4 yrs" oninput="updatePreview()"></div>
-        <div class="field"><label>Certifications</label><input type="text" id="g-certs" placeholder="NASM" oninput="updatePreview()"></div>
-      </div>
-      <div class="row two">
-        <div class="field">
-          <label>Star rating</label>
-          <select id="g-rating" onchange="updatePreview()">
-            <option value="5.0">5.0 ★★★★★ — New</option>
-            <option value="4.9">4.9 ★★★★★</option>
-            <option value="4.8">4.8 ★★★★★</option>
-            <option value="4.7">4.7 ★★★★½</option>
-            <option value="4.6">4.6 ★★★★½</option>
-            <option value="4.5">4.5 ★★★★½</option>
-            <option value="4.4">4.4 ★★★★</option>
-            <option value="4.3">4.3 ★★★★</option>
-            <option value="4.0">4.0 ★★★★</option>
-          </select>
-        </div>
-        <div class="field"><label>Number of reviews</label><input type="number" id="g-reviews" placeholder="0" value="0" oninput="updatePreview()"></div>
-      </div>
-      <div class="field" style="margin-top:6px;">
-        <label>Founding trainer?</label>
-        <div class="pill-group" id="g-founding">
-          <button class="pill on" onclick="solo(this,'g-founding');updatePreview()">Yes — founding trainer</button>
-          <button class="pill" onclick="solo(this,'g-founding');updatePreview()">No</button>
-        </div>
-      </div>
+    <div class="preview-cards-grid" id="preview-grid"></div>
+    <div id="preview-empty" style="display:none;padding:4rem;text-align:center;color:var(--gray-text);">
+      <p style="font-size:18px;margin-bottom:8px;">No trainers loaded</p>
+      <p style="font-size:13px;">Make sure trainers.json is in the same folder as this file.</p>
     </div>
-
-    <!-- PHOTOS -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Photos</div>
-      <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1rem;">Upload photos to the <strong style="color:var(--white);">images/</strong> folder in GitHub first, then type the filename here.</p>
-      <div class="row three">
-        <div class="field"><label>Main profile photo</label><input type="text" id="g-photo1" placeholder="sarah-main.jpg" oninput="updatePreview()"><span class="hint">Clear headshot</span></div>
-        <div class="field"><label>Physique / gym photo</label><input type="text" id="g-photo2" placeholder="sarah-gym.jpg" oninput="updatePreview()"></div>
-        <div class="field"><label>Lifestyle photo</label><input type="text" id="g-photo3" placeholder="sarah-life.jpg" oninput="updatePreview()"><span class="hint">Optional</span></div>
-      </div>
-    </div>
-
-    <!-- TRAINING STYLE -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Training style</div>
-      <div class="field" style="margin-bottom:1rem;">
-        <label>Specialties — tap all that apply</label>
-        <div class="pill-group" id="g-specialties">
-          <button class="pill" onclick="toggle(this);updatePreview()">Hypertrophy</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Strength</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Calisthenics</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">CrossFit</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Weight Loss</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Cardio & Endurance</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Functional Fitness</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Flexibility & Mobility</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Sport-Specific</button>
-          <button class="pill" onclick="toggle(this);updatePreview()">Body Recomposition</button>
-        </div>
-      </div>
-      <div class="row two">
-        <div class="field">
-          <label>Diet philosophy — pick one</label>
-          <div class="pill-group" id="g-diet">
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Carnivore</button>
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Plant-based</button>
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Keto</button>
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Whole foods</button>
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Flexible</button>
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">High protein</button>
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Vegan</button>
-            <button class="pill" onclick="solo(this,'g-diet');updatePreview()">Fasting</button>
-          </div>
-        </div>
-        <div class="field">
-          <label>Client niches — pick all that apply</label>
-          <div class="pill-group" id="g-niches">
-            <button class="pill" onclick="toggle(this);updatePreview()">Seniors / 60+</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Postpartum women</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Teens / youth</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Athletes</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Beginners</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Post-injury/rehab</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Women only</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Men only</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Plus-size</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Weight loss focused</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">Muscle building focused</button>
-            <button class="pill" onclick="toggle(this);updatePreview()">General population</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STAT BARS -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Coaching stats</div>
-      <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1.25rem;">These power the stat bars on the trainer card. Watch the preview update live.</p>
-
-      <div class="stat-slider-block">
-        <div class="stat-slider-label"><span>Intensity</span><span class="stat-val" id="sv-intensity">Balanced</span></div>
-        <input type="range" min="0" max="4" value="2" id="gs-intensity" oninput="updateStat('gs-intensity','sv-intensity',['Easy & light','Moderate','Balanced','Hard-working','Max effort']);updatePreview()">
-        <div class="stat-ends"><span>Easy</span><span>Max effort</span></div>
-      </div>
-      <div class="divider"></div>
-      <div class="stat-slider-block">
-        <div class="stat-slider-label"><span>Structure</span><span class="stat-val" id="sv-structure">Balanced</span></div>
-        <input type="range" min="0" max="4" value="2" id="gs-structure" oninput="updateStat('gs-structure','sv-structure',['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid']);updatePreview()">
-        <div class="stat-ends"><span>Flexible</span><span>Rigid</span></div>
-      </div>
-      <div class="divider"></div>
-      <div class="stat-slider-block">
-        <div class="stat-slider-label"><span>Check-ins</span><span class="stat-val" id="sv-checkins">Balanced</span></div>
-        <input type="range" min="0" max="4" value="2" id="gs-checkins" oninput="updateStat('gs-checkins','sv-checkins',['As needed','Weekly','Few times/week','Every other day','Daily']);updatePreview()">
-        <div class="stat-ends"><span>As needed</span><span>Daily</span></div>
-      </div>
-      <div class="divider"></div>
-      <div class="stat-slider-block">
-        <div class="stat-slider-label"><span>Energy</span><span class="stat-val" id="sv-energy">Balanced</span></div>
-        <input type="range" min="0" max="4" value="2" id="gs-energy" oninput="updateStat('gs-energy','sv-energy',['Very calm','Mostly relaxed','Balanced','Energetic','High energy']);updatePreview()">
-        <div class="stat-ends"><span>Calm</span><span>Hype</span></div>
-      </div>
-      <div class="divider"></div>
-      <div class="stat-slider-block">
-        <div class="stat-slider-label"><span>Diet strictness</span><span class="stat-val" id="sv-diet">Balanced</span></div>
-        <input type="range" min="0" max="4" value="2" id="gs-diet" oninput="updateStat('gs-diet','sv-diet',['Very flexible','Mostly flexible','Balanced','Pretty strict','Very strict']);updatePreview()">
-        <div class="stat-ends"><span>Flexible</span><span>Strict</span></div>
-      </div>
-    </div>
-
-    <!-- INTERESTS -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Personal interests</div>
-      <div class="field"><label>3 to 5 interests, separated by commas</label><input type="text" id="g-interests" placeholder="Hiking, cooking, dogs, fantasy football" oninput="updatePreview()"></div>
-    </div>
-
-    <!-- COPY -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Profile copy</div>
-      <div class="field" style="margin-bottom:12px;"><label>Short bio — shows on card</label><textarea id="g-bio" placeholder="Write their short bio here in first person." oninput="updatePreview()"></textarea></div>
-      <div class="field"><label>Full story — shows when someone opens their profile</label><textarea id="g-story" style="min-height:110px;" placeholder="Why they became a coach, what they believe in..."></textarea></div>
-    </div>
-
-    <!-- TESTIMONIALS -->
-    <div class="section">
-      <div class="section-title"><div class="dot"></div>Client testimonials</div>
-      <p style="font-size:13px;color:var(--gray-text);line-height:1.6;margin-bottom:1rem;">Leave empty if none yet.</p>
-      <div id="testi-list"></div>
-      <button class="add-testi-btn" onclick="addTesti()">+ Add a testimonial</button>
-    </div>
-
-    <button class="submit-btn" id="submit-btn" onclick="submitTrainer()">ADD TO WEBSITE</button>
-    <div class="status-box" id="status-box"></div>
   </div>
+</div>
 
-  <!-- ── RIGHT: LIVE PREVIEW ── -->
-  <div class="preview-col">
-    <div class="preview-label">Live card preview</div>
-    <div class="trainer-card" id="preview-card">
+<!-- ══════════════════════════════════════════════
+     TAB 2 — ADD TRAINER
+══════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-add">
+  <div class="add-pane">
+    <div class="add-form-col">
+      <div style="margin-bottom:2rem;">
+        <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:0.25rem;">Add New Trainer</div>
+        <div style="font-size:13px;color:var(--gray-text);">Fill out the form and click Save to Trainers.json</div>
+      </div>
 
-      <div class="card-header">
-        <div>
-          <div class="trainer-name" id="prev-name">Sarah Johnson</div>
-          <div class="trainer-meta" id="prev-meta">31 · Austin, TX</div>
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Basic info</div>
+        <div class="row-3">
+          <div class="field"><label>First name</label><input type="text" id="a-first" placeholder="Sarah" oninput="updateAddPreview()"></div>
+          <div class="field"><label>Last name</label><input type="text" id="a-last" placeholder="Johnson" oninput="updateAddPreview()"></div>
+          <div class="field"><label>Age</label><input type="number" id="a-age" placeholder="28" min="18" max="80" oninput="updateAddPreview()"></div>
         </div>
-        <div class="card-header-right">
-          <div style="display:flex;align-items:center;gap:4px;">
-            <div class="star-icons" id="prev-stars"></div>
-            <span class="review-count" id="prev-reviews">5.0 (0)</span>
+        <div class="row-2">
+          <div class="field"><label>City & State</label><input type="text" id="a-location" placeholder="Austin, TX" oninput="updateAddPreview()"></div>
+          <div class="field"><label>Email</label><input type="email" id="a-email" placeholder="sarah@email.com"></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Credentials</div>
+        <div class="row-3">
+          <div class="field"><label>Experience</label><input type="text" id="a-exp" placeholder="4 yrs" oninput="updateAddPreview()"></div>
+          <div class="field"><label>Certifications</label><input type="text" id="a-certs" placeholder="NASM-CPT" oninput="updateAddPreview()"></div>
+          <div class="field"><label>Monthly price ($)</label><input type="number" id="a-price" placeholder="149" oninput="updateAddPreview()"></div>
+        </div>
+        <div class="row-3">
+          <div class="field"><label>Rating (0–5)</label>
+            <select id="a-rating" onchange="updateAddPreview()">
+              <option value="5.0">5.0 ★★★★★</option><option value="4.9">4.9</option><option value="4.8">4.8</option><option value="4.7">4.7</option><option value="4.6">4.6</option><option value="4.5">4.5</option><option value="4.0">4.0</option><option value="3.5">3.5</option>
+            </select>
           </div>
-          <span class="founding-badge" id="prev-badge">✦ Founding</span>
+          <div class="field"><label>Reviews (#)</label><input type="number" id="a-reviews" placeholder="0" value="0" oninput="updateAddPreview()"></div>
+          <div class="field"><label>Founding trainer?</label>
+            <div class="pill-group" id="a-founding" style="margin-top:2px;">
+              <button class="pill on" onclick="solo(this,'a-founding');updateAddPreview()">Yes</button>
+              <button class="pill" onclick="solo(this,'a-founding');updateAddPreview()">No</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="card-images">
-        <div class="img-main" id="prev-img1">💪</div>
-        <div class="img-side">
-          <div class="img-secondary" id="prev-img2">🏋️</div>
-          <div class="img-secondary" id="prev-img3">🌄</div>
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Photos <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— filenames in the images/ folder</span></div>
+        <div class="row-3">
+          <div class="field"><label>Profile (1:1)</label><input type="text" id="a-p1" placeholder="sarah-main.jpg" oninput="updateAddPreview()"><span class="hint">Square headshot</span></div>
+          <div class="field"><label>Physique (4:3)</label><input type="text" id="a-p2" placeholder="sarah-gym.jpg" oninput="updateAddPreview()"></div>
+          <div class="field"><label>Lifestyle (4:3)</label><input type="text" id="a-p3" placeholder="sarah-life.jpg" oninput="updateAddPreview()"></div>
         </div>
       </div>
 
-      <div class="card-stats">
-        <div class="card-stat"><div class="card-stat-val" id="prev-exp">—</div><div class="card-stat-label">Experience</div></div>
-        <div class="card-stat"><div class="card-stat-val" id="prev-certs">—</div><div class="card-stat-label">Certified</div></div>
-        <div class="card-stat"><div class="card-stat-val" id="prev-price">$—</div><div class="card-stat-label">Per month</div></div>
-      </div>
-
-      <div class="card-middle">
-        <div class="card-tags-col" id="prev-tags">
-          <span class="tag style" style="opacity:0.3">Specialty</span>
-          <span class="tag diet" style="opacity:0.3">Diet</span>
-          <span class="tag niche" style="opacity:0.3">Niche</span>
-        </div>
-        <div class="card-statbars-col" id="prev-statbars"></div>
-      </div>
-
-      <div class="card-interests">
-        <div class="interests-label">Interests</div>
-        <div class="interests-row" id="prev-interests">
-          <span class="interest-chip" style="opacity:0.3">Interests</span>
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Training specialties <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— pick all that apply</span></div>
+        <div class="pill-group" id="a-specs">
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Hypertrophy</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Strength & powerlifting</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Calisthenics</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">CrossFit</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Weight loss</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Cardio & endurance</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Functional fitness</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Flexibility & mobility</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Sport-specific</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Body recomposition</button>
         </div>
       </div>
 
-      <div class="card-bio" id="prev-bio" style="opacity:0.3">Bio will appear here...</div>
-
-      <div class="card-footer">
-        <div class="card-price"><strong id="prev-price-footer">$—</strong><span> / mo</span></div>
-        <button class="btn-view">View profile</button>
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Niches <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— pick up to 3, drag to reorder (#1 shows on card)</span></div>
+        <div class="pill-group" id="a-niches">
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Seniors / 60+</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Postpartum women</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Teens / youth</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Competitive athletes</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Complete beginners</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Post-injury / rehab</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Women only</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Men only</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Plus-size / body positive</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Weight loss focused</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">Muscle building focused</button>
+          <button class="pill" onclick="toggleNiche(this,'a-niche-ranked')">General population</button>
+        </div>
+        <div class="niche-rank-wrap" id="a-niche-ranked">
+          <div style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);margin-bottom:6px;">Priority order — drag to reorder</div>
+          <div id="a-niche-ranked-items"></div>
+        </div>
       </div>
 
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Diet philosophies <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">— pick all that apply</span></div>
+        <div class="pill-group" id="a-diet">
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Flexible / IIFYM</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">High protein</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Carnivore</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Keto</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Plant-based</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Vegan</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Whole foods</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Intermittent fasting</button>
+          <button class="pill" onclick="toggle(this);updateAddPreview()">Whatever works for the client</button>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Coaching stats</div>
+        <div class="field"><label>Intensity</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-si" oninput="updateSv('a-si','a-sv-si',['Easy & light','Moderate','Balanced','Hard-working','Max effort always']);updateAddPreview()"><span class="slider-val" id="a-sv-si">Balanced</span></div><div class="slider-ends"><span>Easy</span><span>Max effort</span></div></div>
+        <div class="field"><label>Structure</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-ss" oninput="updateSv('a-ss','a-sv-ss',['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid']);updateAddPreview()"><span class="slider-val" id="a-sv-ss">Balanced</span></div><div class="slider-ends"><span>Flexible</span><span>Rigid</span></div></div>
+        <div class="field"><label>Check-ins</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-sc" oninput="updateSv('a-sc','a-sv-sc',['As needed','Weekly','Few times/week','Every other day','Daily']);updateAddPreview()"><span class="slider-val" id="a-sv-sc">Few times/week</span></div><div class="slider-ends"><span>As needed</span><span>Daily</span></div></div>
+        <div class="field"><label>Energy</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-se" oninput="updateSv('a-se','a-sv-se',['Very calm','Mostly relaxed','Balanced','Energetic','High energy always']);updateAddPreview()"><span class="slider-val" id="a-sv-se">Balanced</span></div><div class="slider-ends"><span>Calm</span><span>Hype</span></div></div>
+        <div class="field"><label>Diet strictness</label><div class="slider-row"><input type="range" min="0" max="4" value="2" id="a-sd" oninput="updateSv('a-sd','a-sv-sd',['Very flexible','Mostly flexible','Balanced','Pretty strict','Very regimented']);updateAddPreview()"><span class="slider-val" id="a-sv-sd">Balanced</span></div><div class="slider-ends"><span>Flexible</span><span>Strict</span></div></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title"><div class="dot"></div>Profile copy</div>
+        <div class="field"><label>Interests <span style="font-weight:400;text-transform:none;letter-spacing:0;">(comma separated)</span></label><input type="text" id="a-interests" placeholder="Hiking, cooking, chess" oninput="updateAddPreview()"></div>
+        <div class="field"><label>Short bio</label><textarea id="a-bio" rows="3" placeholder="One or two punchy sentences." oninput="updateAddPreview()"></textarea></div>
+        <div class="field"><label>Full story</label><textarea id="a-story" rows="5" placeholder="Their background and coaching philosophy..." oninput="updateAddPreview()"></textarea></div>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:1rem;">
+        <button class="btn btn-orange" onclick="saveNewTrainer()" style="flex:1;padding:14px;">Save to trainers.json</button>
+        <button class="btn btn-outline" onclick="resetAddForm()">Clear</button>
+      </div>
     </div>
-    <p class="preview-hint">Updates automatically as you fill out the form</p>
-  </div>
 
+    <div class="add-preview-col">
+      <div class="preview-col-label">Live card preview</div>
+      <div id="add-preview-card" style="width:340px;margin:0 auto;"></div>
+      <button class="btn btn-outline" style="margin-top:0.5rem;font-size:12px;" onclick="openPreviewModal(buildAddTrainerObj())">View full profile modal →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 3 — MANAGE ORDER
+══════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-manage">
+  <div class="manage-pane">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;">Trainer Order</div>
+        <div style="font-size:13px;color:var(--gray-text);">Drag rows to reorder. The order here is the order on the live site.</div>
+      </div>
+      <button class="btn btn-orange" onclick="saveOrder()">Save order to trainers.json</button>
+    </div>
+    <div id="manage-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 4 — EDIT TRAINER
+══════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-edit">
+  <div class="edit-pane">
+    <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:1.5rem;">Edit Trainer</div>
+    <div class="edit-select-bar">
+      <label style="white-space:nowrap;">Select trainer</label>
+      <select id="edit-select" onchange="loadEditTrainer()"><option value="">— choose —</option></select>
+      <button class="btn btn-red" onclick="deleteTrainer()">Delete</button>
+    </div>
+    <div class="edit-form-grid" id="edit-form-wrap" style="display:none;">
+      <div class="edit-form-col" id="edit-form-fields"></div>
+      <div>
+        <div class="preview-col-label" style="margin-bottom:0.75rem;">Preview</div>
+        <div id="edit-preview-card" style="width:340px;margin:0 auto;"></div>
+        <button class="btn btn-outline" style="margin-top:0.75rem;font-size:12px;width:100%;" onclick="openPreviewModal(buildEditTrainerObj())">View full profile modal →</button>
+        <button class="btn btn-orange" style="margin-top:0.75rem;font-size:12px;width:100%;padding:12px;" onclick="saveEditTrainer()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 5 — TESTIMONIALS
+══════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-testimonials">
+  <div class="testi-pane">
+    <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:0.25rem;">Testimonials</div>
+    <div style="font-size:13px;color:var(--gray-text);margin-bottom:2rem;">Build testimonials.json — these appear in the "Built for both sides" carousel on the landing page.</div>
+    <div class="testi-builder">
+      <div>
+        <div class="section-card">
+          <div class="section-title"><div class="dot"></div>Add testimonial</div>
+          <div class="row-2">
+            <div class="field"><label>Name</label><input type="text" id="t-name" placeholder="Jamie T."></div>
+            <div class="field"><label>Initials</label><input type="text" id="t-initials" placeholder="JT" maxlength="2"></div>
+          </div>
+          <div class="row-2">
+            <div class="field"><label>Role</label><input type="text" id="t-role" placeholder="Client · Tampa, FL"></div>
+            <div class="field"><label>Result (green text)</label><input type="text" id="t-result" placeholder="Lost 22 lbs in 14 weeks"></div>
+          </div>
+          <div class="field"><label>Quote</label><textarea id="t-quote" rows="4" placeholder="What they said..."></textarea></div>
+          <button class="btn btn-orange" onclick="addTestimonial()" style="margin-top:1rem;width:100%;">Add to list</button>
+        </div>
+        <div class="section-card" style="margin-top:0;">
+          <div class="section-title"><div class="dot"></div>Actions</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="loadTestimonials()">↺ Load testimonials.json</button>
+            <button class="btn btn-orange" onclick="saveTestimonials()">Save testimonials.json</button>
+          </div>
+          <div style="margin-top:1rem;">
+            <label style="display:block;margin-bottom:6px;">Preview JSON</label>
+            <textarea id="t-json-preview" rows="8" style="font-family:monospace;font-size:11px;color:var(--gray-text);" readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="preview-col-label" style="margin-bottom:0.75rem;">Current list (drag to reorder)</div>
+        <div id="testi-list"></div>
+        <div id="testi-empty" style="color:var(--gray-text);font-size:13px;padding:2rem;text-align:center;display:none;">No testimonials yet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 6 — CONFIG
+══════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-config">
+  <div style="padding:2rem;max-width:600px;">
+    <div style="font-family:var(--font-display);font-size:32px;letter-spacing:1px;margin-bottom:0.25rem;">GitHub Config</div>
+    <div style="font-size:13px;color:var(--gray-text);margin-bottom:2rem;">Required to save changes directly to your repo.</div>
+    <div class="section-card">
+      <div class="field"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="CaydenHrl"></div>
+      <div class="field"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="Iron-House"></div>
+      <div class="field"><label>Personal access token</label><input type="text" id="cfg-token" placeholder="ghp_..." autocomplete="off"></div>
+      <button class="btn btn-orange" onclick="saveConfig()" style="margin-top:0.5rem;">Save config</button>
+      <div class="config-saved" id="cfg-saved" style="margin-top:10px;">✓ Config saved to localStorage</div>
+    </div>
+    <div class="section-card" style="margin-top:1.25rem;">
+      <div class="section-title"><div class="dot"></div>How to get a token</div>
+      <p style="font-size:13px;color:var(--gray-text);line-height:1.7;">Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token. Give it <strong style="color:var(--white);">repo</strong> scope. Paste it above. It's stored only in your browser's localStorage.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-photo-carousel" id="modal-carousel">
+      <div class="modal-photo-track" id="modal-track"></div>
+      <button class="modal-photo-prev" id="modal-prev" onclick="photoNav(-1)">‹</button>
+      <button class="modal-photo-next" id="modal-next" onclick="photoNav(1)">›</button>
+      <div class="modal-photo-dots" id="modal-dots"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-top-row">
+        <div><div class="modal-name" id="modal-name"></div><div class="modal-meta" id="modal-meta"></div></div>
+        <span class="founding-badge" id="modal-badge" style="display:none;">✦ Founding</span>
+      </div>
+      <div class="modal-stats">
+        <div class="modal-stat"><div class="modal-stat-val" id="modal-exp"></div><div class="modal-stat-label">Experience</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="modal-certs"></div><div class="modal-stat-label">Certified</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="modal-price"></div><div class="modal-stat-label">Per month</div></div>
+      </div>
+      <div class="modal-section-title">Coaching style</div>
+      <div class="modal-statbars" id="modal-bars"></div>
+      <div class="modal-section-title">Specialties & focus</div>
+      <div class="modal-tags" id="modal-tags"></div>
+      <div class="modal-section-title">About</div>
+      <div class="modal-story" id="modal-story"></div>
+      <div class="modal-section-title">Personal interests</div>
+      <div class="modal-tags" id="modal-interests"></div>
+      <div id="modal-testis"></div>
+      <button class="modal-cta">GET MATCHED WITH THIS COACH</button>
+    </div>
+  </div>
+</div>
+
+<div class="status-bar" id="status-bar">
+  <span id="status-msg"></span>
+  <button onclick="document.getElementById('status-bar').classList.remove('show','success','error')" style="background:none;border:none;color:var(--gray-text);cursor:pointer;font-size:18px;padding:0;margin-left:8px;">×</button>
 </div>
 
 <script>
-  let testiCount = 0;
+let TRAINERS = [];
+let testimonials = [];
+let modalPhotoIdx = 0;
+let modalSlides = [];
 
-  const STAT_DEFS = [
-    { key: 'gs-intensity',  label: 'Intensity' },
-    { key: 'gs-structure',  label: 'Structure'  },
-    { key: 'gs-checkins',   label: 'Check-ins'  },
-    { key: 'gs-energy',     label: 'Energy'     },
-    { key: 'gs-diet',       label: 'Diet'       },
-  ];
+const ICONS = {
+  intensity:`<svg width="14" height="14" viewBox="0 0 15 21" fill="none"><path d="M8 0 C6 4 4 7 3 10 C1.5 8.5 1.5 6 2.5 4.5 C0.5 7 0 10 0 12 C0 17 3 21 7.5 21 C12 21 15 17 15 12 C15 7 12 3.5 8 0z" fill="#e8500a"/><path d="M7.5 21 C5 19.5 3.5 17 3.5 14 C3.5 11 5 8.5 6.5 7 C6 9.5 6.5 12 7.5 13.5 C6.5 11 7 8 7.5 6.5 C8 8 8.5 11 7.5 13.5 C8.5 12 9 9.5 8.5 7 C10 8.5 11.5 11 11.5 14 C11.5 17 10 19.5 7.5 21z" fill="#b83d06"/></svg>`,
+  structure:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="#e8500a"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="#e8500a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  checkins:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" fill="#e8500a"/><circle cx="16" cy="8" r="3" fill="#e8500a" opacity="0.6"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#e8500a" stroke-width="2" stroke-linecap="round"/><path d="M16 14c1.7.8 3 2.7 3 5" stroke="#e8500a" stroke-width="2" stroke-linecap="round" opacity="0.6"/></svg>`,
+  energy:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="#e8500a"/></svg>`,
+  diet:`<svg width="14" height="14" viewBox="0 0 16 30" fill="none"><path d="M8 7 C12 7 15 11 15 16 C15 22 12 28 8 30 C4 28 1 22 1 16 C1 11 4 7 8 7z" fill="#e8500a"/><line x1="3" y1="14" x2="13" y2="14" stroke="#b83d06" stroke-width="0.8" opacity="0.5"/><path d="M5 6 C3 4 2 1 3 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/><path d="M8 6 C8 4 8 1 8 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/><path d="M11 6 C13 4 14 1 13 -1" stroke="#e8500a" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>`
+};
+const STAT_DEFS=[
+  {key:'stat_intensity',icon:'intensity',label:'Intensity',lo:'Easy',hi:'Max effort'},
+  {key:'stat_structure',icon:'structure',label:'Structure',lo:'Flexible',hi:'Rigid'},
+  {key:'stat_checkins', icon:'checkins', label:'Check-ins',lo:'As needed',hi:'Daily'},
+  {key:'stat_energy',   icon:'energy',   label:'Energy',   lo:'Calm',   hi:'Hype'},
+  {key:'stat_diet',     icon:'diet',     label:'Diet',     lo:'Flexible',hi:'Strict'},
+];
 
-  window.addEventListener('load', () => {
-    const saved = JSON.parse(localStorage.getItem('ih-config') || '{}');
-    if (saved.user) document.getElementById('cfg-user').value = saved.user;
-    if (saved.repo) document.getElementById('cfg-repo').value = saved.repo;
-    if (saved.token) document.getElementById('cfg-token').value = saved.token;
-    if (saved.user && saved.token) document.getElementById('config-saved').classList.add('show');
-    updatePreview();
-  });
+// ── TABS ──────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='manage') renderManageList();
+  if(id==='edit') populateEditSelect();
+}
 
-  function saveConfig() {
-    const config = {
-      user: document.getElementById('cfg-user').value.trim(),
-      repo: document.getElementById('cfg-repo').value.trim(),
-      token: document.getElementById('cfg-token').value.trim()
-    };
-    localStorage.setItem('ih-config', JSON.stringify(config));
-    document.getElementById('config-saved').classList.add('show');
+// ── HELPERS ───────────────────────────────────────
+function toggle(btn){btn.classList.toggle('on');}
+function solo(btn,groupId){
+  document.querySelectorAll('#'+groupId+' .pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function getSelected(groupId){
+  return [...document.querySelectorAll('#'+groupId+' .pill.on')].map(b=>b.textContent.trim());
+}
+function updateSv(sliderId,displayId,labels){
+  document.getElementById(displayId).textContent=labels[document.getElementById(sliderId).value];
+}
+function renderStars(rating){
+  let h='<div class="star-icons">';
+  for(let i=1;i<=5;i++){
+    if(rating>=i) h+='<div class="star"></div>';
+    else if(rating>=i-0.5) h+='<div class="star" style="background:linear-gradient(90deg,#c07a18 50%,var(--gray-light) 50%)"></div>';
+    else h+='<div class="star empty"></div>';
   }
-  function getConfig() { return JSON.parse(localStorage.getItem('ih-config') || '{}'); }
+  return h+'</div>';
+}
+function showStatus(msg,type='success'){
+  const bar=document.getElementById('status-bar');
+  document.getElementById('status-msg').textContent=msg;
+  bar.className='status-bar show '+type;
+  setTimeout(()=>bar.classList.remove('show',type),4000);
+}
+function getConfig(){return JSON.parse(localStorage.getItem('ih-cfg')||'{}');}
+function saveConfig(){
+  const cfg={user:document.getElementById('cfg-user').value.trim(),repo:document.getElementById('cfg-repo').value.trim(),token:document.getElementById('cfg-token').value.trim()};
+  localStorage.setItem('ih-cfg',JSON.stringify(cfg));
+  document.getElementById('cfg-saved').style.display='flex';
+  showStatus('Config saved');
+}
 
-  function toggle(btn) { btn.classList.toggle('on'); }
-  function solo(btn, groupId) {
-    document.querySelectorAll('#' + groupId + ' .pill').forEach(b => b.classList.remove('on'));
+// ── NICHE RANK SYSTEM ─────────────────────────────
+const nicheRankState={}; // keyed by list id
+
+function toggleNiche(btn, listId){
+  const name=btn.textContent.trim();
+  if(!nicheRankState[listId]) nicheRankState[listId]=[];
+  const arr=nicheRankState[listId];
+  if(btn.classList.contains('on')){
+    btn.classList.remove('on');
+    const idx=arr.indexOf(name);
+    if(idx>-1) arr.splice(idx,1);
+  } else {
+    if(arr.length>=3){showStatus('Max 3 niches','error');return;}
     btn.classList.add('on');
+    arr.push(name);
   }
-  function getSelected(groupId) {
-    return [...document.querySelectorAll('#' + groupId + ' .pill.on')].map(b => b.textContent.trim());
-  }
-  function updateStat(id, displayId, labels) {
-    document.getElementById(displayId).textContent = labels[document.getElementById(id).value];
-  }
+  renderNicheRank(listId);
+  updateAddPreview();
+}
 
-  function renderStars(rating) {
-    let html = '';
-    for (let i = 1; i <= 5; i++) {
-      const pct = Math.round(rating);
-      if (rating >= i) html += '<div class="star"></div>';
-      else if (rating >= i - 0.5) html += '<div class="star" style="background:linear-gradient(90deg,#c07a18 50%,var(--gray-mid) 50%)"></div>';
-      else html += '<div class="star" style="background:var(--gray-light)"></div>';
-    }
-    return html;
-  }
+function removeNiche(name, listId){
+  if(!nicheRankState[listId]) return;
+  nicheRankState[listId]=nicheRankState[listId].filter(n=>n!==name);
+  const pillGroup=document.getElementById('a-niches')||document.getElementById('e-niches');
+  if(pillGroup) pillGroup.querySelectorAll('.pill').forEach(p=>{if(p.textContent.trim()===name) p.classList.remove('on');});
+  renderNicheRank(listId);
+  updateAddPreview();
+}
 
-  function updatePreview() {
-    const name    = document.getElementById('g-name').value.trim() || 'Trainer Name';
-    const age     = document.getElementById('g-age').value || '—';
-    const loc     = document.getElementById('g-location').value.trim() || 'City, ST';
-    const price   = document.getElementById('g-price').value || '—';
-    const exp     = document.getElementById('g-exp').value.trim() || '—';
-    const certs   = document.getElementById('g-certs').value.trim() || '—';
-    const rating  = parseFloat(document.getElementById('g-rating').value) || 5.0;
-    const reviews = document.getElementById('g-reviews').value || '0';
-    const founding = getSelected('g-founding')[0]?.includes('Yes') ?? true;
-    const p1 = document.getElementById('g-photo1').value.trim();
-    const p2 = document.getElementById('g-photo2').value.trim();
-    const p3 = document.getElementById('g-photo3').value.trim();
-    const bio = document.getElementById('g-bio').value.trim() || 'Bio will appear here...';
-    const specialties = getSelected('g-specialties');
-    const diet = getSelected('g-diet')[0] || '';
-    const niches = getSelected('g-niches');
-    const interests = document.getElementById('g-interests').value
-      .split(',').map(s => s.trim()).filter(Boolean);
+function renderNicheRank(listId){
+  const arr=nicheRankState[listId]||[];
+  const wrap=document.getElementById(listId);
+  if(!wrap) return;
+  wrap.style.display=arr.length?'block':'none';
+  const itemsEl=wrap.querySelector('[id$="-items"]')||wrap;
+  itemsEl.innerHTML=arr.map((n,i)=>`
+    <div class="niche-rank-item" draggable="true" data-name="${n}" data-list="${listId}" ondragstart="onNicheDragStart(event)" ondragover="onNicheDragOver(event)" ondrop="onNicheDrop(event)">
+      <span class="niche-rank-num">${i+1}</span>
+      <span class="niche-rank-label">${n}</span>
+      ${i===0?'<span class="niche-rank-badge">Shows on card</span>':''}
+      <button class="niche-rank-remove" onclick="removeNiche('${n}','${listId}')">×</button>
+    </div>`).join('');
+}
 
-    document.getElementById('prev-name').textContent = name;
-    document.getElementById('prev-meta').textContent = age + ' · ' + loc;
-    document.getElementById('prev-stars').innerHTML = renderStars(rating);
-    document.getElementById('prev-reviews').textContent = rating + ' (' + reviews + ')';
-    document.getElementById('prev-badge').style.display = founding ? '' : 'none';
-    document.getElementById('prev-exp').textContent = exp;
-    document.getElementById('prev-certs').textContent = certs;
-    document.getElementById('prev-price').textContent = price ? '$' + price : '$—';
-    document.getElementById('prev-price-footer').textContent = price ? '$' + price : '$—';
-    document.getElementById('prev-bio').textContent = bio;
-    document.getElementById('prev-bio').style.opacity = document.getElementById('g-bio').value.trim() ? '1' : '0.3';
+let nicheDragName='',nicheDragList='';
+function onNicheDragStart(e){nicheDragName=e.currentTarget.dataset.name;nicheDragList=e.currentTarget.dataset.list;}
+function onNicheDragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function onNicheDrop(e){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const targetName=e.currentTarget.dataset.name;
+  const arr=nicheRankState[nicheDragList];
+  if(!arr||nicheDragName===targetName) return;
+  const from=arr.indexOf(nicheDragName),to=arr.indexOf(targetName);
+  if(from>-1&&to>-1){arr.splice(from,1);arr.splice(to,0,nicheDragName);}
+  renderNicheRank(nicheDragList);
+  updateAddPreview();
+}
 
-    // Images
-    const img1 = document.getElementById('prev-img1');
-    img1.innerHTML = p1 ? `<img src="images/${p1}" alt="" onerror="this.parentElement.innerHTML='💪'">` : '💪';
-    const img2 = document.getElementById('prev-img2');
-    img2.innerHTML = p2 ? `<img src="images/${p2}" alt="" onerror="this.parentElement.innerHTML='🏋️'">` : '🏋️';
-    const img3 = document.getElementById('prev-img3');
-    img3.innerHTML = p3 ? `<img src="images/${p3}" alt="" onerror="this.parentElement.innerHTML='🌄'">` : '🌄';
-
-    // Tags
-    let tagsHTML = specialties.map(s => `<span class="tag style">${s}</span>`).join('');
-    if (diet) tagsHTML += `<span class="tag diet">${diet}</span>`;
-    if (niches.length) tagsHTML += `<span class="tag niche">${niches[0]}</span>`;
-    document.getElementById('prev-tags').innerHTML = tagsHTML ||
-      `<span class="tag style" style="opacity:0.3">Specialty</span>
-       <span class="tag diet" style="opacity:0.3">Diet</span>
-       <span class="tag niche" style="opacity:0.3">Niche</span>`;
-
-    // Stat bars
-    document.getElementById('prev-statbars').innerHTML = STAT_DEFS.map(d => {
-      const val = parseInt(document.getElementById(d.key).value) || 2;
-      const pct = Math.round((val / 4) * 100);
-      return `<div class="stat-bar-row">
-        <span class="stat-bar-label">${d.label}</span>
-        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%"></div></div>
-      </div>`;
-    }).join('');
-
-    // Interests
-    document.getElementById('prev-interests').innerHTML = interests.length
-      ? interests.map(i => `<span class="interest-chip">${i}</span>`).join('')
-      : `<span class="interest-chip" style="opacity:0.3">Interests</span>`;
-  }
-
-  function addTesti() {
-    const id = ++testiCount;
-    const div = document.createElement('div');
-    div.className = 'testi-block'; div.id = 'testi-' + id;
-    div.innerHTML = `
-      <div class="testi-header">
-        <span class="testi-num">Testimonial ${id}</span>
-        <button class="remove-btn" onclick="document.getElementById('testi-${id}').remove()">Remove</button>
+// ── CARD BUILDER ──────────────────────────────────
+function buildCard(t, idx, clickable=true){
+  const mainImg=t.photo_main?`<img src="${t.photo_main}" alt="${t.name}" onerror="this.parentElement.innerHTML='💪'">` :'💪';
+  const img2=t.photo_physique?`<img src="${t.photo_physique}" alt="" onerror="this.parentElement.innerHTML='🏋️'">` :'🏋️';
+  const img3=t.photo_lifestyle?`<img src="${t.photo_lifestyle}" alt="" onerror="this.parentElement.innerHTML='🌄'">` :'🌄';
+  const specs=(t.specialties||[]).map(s=>`<span class="tag style">${s}</span>`).join('');
+  const dietTag=t.diet?`<span class="tag diet">${t.diet}</span>`:'';
+  const nicheTag=t.niches&&t.niches.length?`<span class="tag niche">${t.niches[0]}</span>`:'';
+  const bars=STAT_DEFS.map(d=>{const pct=Math.round(((t[d.key]??2)/4)*100);return`<div class="stat-bar-row"><div class="stat-bar-icon">${ICONS[d.icon]}</div><div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%"></div></div></div>`;}).join('');
+  const chips=(t.interests||[]).map(i=>`<span class="interest-chip">${i}</span>`).join('');
+  return`<div class="trainer-card" ${clickable?`onclick="openPreviewModal(TRAINERS[${idx}])"`:''} style="animation-delay:${(idx%9)*0.05}s">
+    <div class="card-header">
+      <div><div class="trainer-name">${t.name}</div><div class="trainer-meta">${t.age} · ${t.location}</div></div>
+      <div class="card-header-right">
+        <div class="stars">${renderStars(t.rating)}<span class="review-count">${t.rating} (${t.reviews})</span></div>
+        ${t.founding?'<span class="founding-badge">✦ Founding</span>':''}
       </div>
-      <div class="row two" style="margin-bottom:10px;">
-        <div class="field"><label>Client name</label><input type="text" id="t${id}-name" placeholder="Jamie T."></div>
-        <div class="field"><label>Initials</label><input type="text" id="t${id}-init" placeholder="JT" maxlength="2"></div>
+    </div>
+    <div class="card-images"><div class="img-main">${mainImg}</div><div class="img-side"><div class="img-secondary">${img2}</div><div class="img-secondary">${img3}</div></div></div>
+    <div class="card-stats">
+      <div class="card-stat"><div class="card-stat-val">${t.experience||'—'}</div><div class="card-stat-label">Experience</div></div>
+      <div class="card-stat"><div class="card-stat-val">${t.certs||'—'}</div><div class="card-stat-label">Certified</div></div>
+      <div class="card-stat"><div class="card-stat-val">$${t.price||'—'}</div><div class="card-stat-label">Per month</div></div>
+    </div>
+    <div class="card-middle"><div class="card-tags-col">${specs}${dietTag}${nicheTag}</div><div class="card-statbars-col">${bars}</div></div>
+    <div class="card-interests"><div class="interests-label">Interests</div><div class="interests-row">${chips}</div></div>
+    <div class="card-bio">${t.bio||''}</div>
+    <div class="card-footer"><div class="card-price"><strong>$${t.price||'—'}</strong><span> / mo</span></div><button class="btn-view" onclick="event.stopPropagation();openPreviewModal(${clickable?'TRAINERS['+idx+']':JSON.stringify(t).replace(/"/g,'&quot;')})">View profile</button></div>
+  </div>`;
+}
+
+// ── MODAL ─────────────────────────────────────────
+function openPreviewModal(t){
+  if(!t) return;
+  document.getElementById('modal-name').textContent=t.name||'—';
+  document.getElementById('modal-meta').textContent=`${t.age||'—'} · ${t.location||'—'}`;
+  document.getElementById('modal-exp').textContent=t.experience||'—';
+  document.getElementById('modal-certs').textContent=t.certs||'—';
+  document.getElementById('modal-price').textContent=`$${t.price||'—'}`;
+  document.getElementById('modal-story').textContent=t.story||t.bio||'No story provided.';
+  const badge=document.getElementById('modal-badge');
+  badge.style.display=t.founding?'':'none';
+
+  // photos
+  const photos=[t.photo_main,t.photo_physique,t.photo_lifestyle].filter(Boolean);
+  const fallbacks=['💪','🏋️','🌄'];
+  modalSlides=photos.length?photos.map((p,i)=>`<div class="modal-photo-slide"><img src="${p}" alt="" onerror="this.parentElement.innerHTML='${fallbacks[i]||'📷'}'"></div>`):['<div class="modal-photo-slide" style="height:180px;">💪</div>'];
+  modalPhotoIdx=0;
+  const track=document.getElementById('modal-track');
+  track.innerHTML=modalSlides.join('');
+  track.style.transform='translateX(0)';
+  document.getElementById('modal-prev').style.display=modalSlides.length>1?'':'none';
+  document.getElementById('modal-next').style.display=modalSlides.length>1?'':'none';
+  renderPhotoDots();
+
+  // carousel touch
+  const car=document.getElementById('modal-carousel');
+  let tx=0;
+  car.ontouchstart=e=>{tx=e.touches[0].clientX;};
+  car.ontouchend=e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>40)photoNav(d>0?1:-1);};
+
+  // stat bars
+  document.getElementById('modal-bars').innerHTML=STAT_DEFS.map(d=>{
+    const pct=Math.round(((t[d.key]??2)/4)*100);
+    return`<div class="modal-bar-row">
+      <div class="modal-bar-icon">${ICONS[d.icon]}</div>
+      <span class="modal-bar-label">${d.label}</span>
+      <div style="flex:1;"><div class="modal-bar-track"><div class="modal-bar-fill" style="width:${pct}%"></div></div>
+      <div class="modal-bar-ends"><span class="modal-bar-end">${d.lo}</span><span class="modal-bar-end">${d.hi}</span></div></div>
+    </div>`;
+  }).join('');
+
+  // tags
+  document.getElementById('modal-tags').innerHTML=
+    (t.specialties||[]).map(s=>`<span class="tag style">${s}</span>`).join('')+
+    (t.diet?`<span class="tag diet">${t.diet}</span>`:'')+
+    (t.niches||[]).map(n=>`<span class="tag niche">${n}</span>`).join('');
+
+  // interests
+  document.getElementById('modal-interests').innerHTML=(t.interests||[]).map(i=>`<span class="interest-chip">${i}</span>`).join('');
+
+  // testimonials
+  const ts=document.getElementById('modal-testis');
+  if(t.testimonials&&t.testimonials.length){
+    ts.innerHTML=`<div class="modal-section-title">Client results</div><div class="testimonials-wrap">${t.testimonials.map(q=>`<div class="testi-text"><div class="testi-quote">${q.quote}</div><div class="testi-author"><div class="testi-avatar">${q.initials}</div><div><div class="testi-name">${q.name}</div><div class="testi-result">${q.result}</div></div></div></div>`).join('')}</div>`;
+  } else { ts.innerHTML=''; }
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');document.body.style.overflow='';}
+function renderPhotoDots(){
+  document.getElementById('modal-dots').innerHTML=modalSlides.map((_,i)=>`<button class="modal-photo-dot${i===modalPhotoIdx?' active':''}" onclick="setModalPhoto(${i})"></button>`).join('');
+}
+function setModalPhoto(n){
+  modalPhotoIdx=(n+modalSlides.length)%modalSlides.length;
+  document.getElementById('modal-track').style.transform=`translateX(-${modalPhotoIdx*100}%)`;
+  renderPhotoDots();
+}
+function photoNav(dir){setModalPhoto(modalPhotoIdx+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ── LOAD TRAINERS ─────────────────────────────────
+async function loadTrainers(){
+  try{
+    const r=await fetch('trainers.json?t='+Date.now());
+    TRAINERS=await r.json();
+    renderPreviewGrid();
+    renderManageList();
+    populateEditSelect();
+    return true;
+  }catch(e){
+    document.getElementById('preview-empty').style.display='block';
+    document.getElementById('preview-grid').innerHTML='';
+    return false;
+  }
+}
+function renderPreviewGrid(){
+  const g=document.getElementById('preview-grid');
+  const empty=document.getElementById('preview-empty');
+  if(!TRAINERS.length){empty.style.display='block';g.innerHTML='';return;}
+  empty.style.display='none';
+  g.innerHTML=TRAINERS.map((t,i)=>buildCard(t,i,true)).join('');
+}
+
+// ── ADD TRAINER ───────────────────────────────────
+function buildAddTrainerObj(){
+  const niches=nicheRankState['a-niche-ranked']||[];
+  return{
+    name:(document.getElementById('a-first').value.trim()+' '+document.getElementById('a-last').value.trim()).trim()||'New Trainer',
+    age:parseInt(document.getElementById('a-age').value)||30,
+    location:document.getElementById('a-location').value.trim()||'City, ST',
+    email:document.getElementById('a-email').value.trim(),
+    experience:document.getElementById('a-exp').value.trim()||'—',
+    certs:document.getElementById('a-certs').value.trim()||'—',
+    price:parseInt(document.getElementById('a-price').value)||149,
+    rating:parseFloat(document.getElementById('a-rating').value)||5.0,
+    reviews:parseInt(document.getElementById('a-reviews').value)||0,
+    founding:getSelected('a-founding')[0]==='Yes',
+    photo_main:'images/'+(document.getElementById('a-p1').value.trim()||''),
+    photo_physique:'images/'+(document.getElementById('a-p2').value.trim()||''),
+    photo_lifestyle:'images/'+(document.getElementById('a-p3').value.trim()||''),
+    specialties:getSelected('a-specs'),
+    niches:niches,
+    diet:getSelected('a-diet').join(', '),
+    stat_intensity:parseInt(document.getElementById('a-si').value),
+    stat_structure:parseInt(document.getElementById('a-ss').value),
+    stat_checkins:parseInt(document.getElementById('a-sc').value),
+    stat_energy:parseInt(document.getElementById('a-se').value),
+    stat_diet:parseInt(document.getElementById('a-sd').value),
+    interests:document.getElementById('a-interests').value.split(',').map(s=>s.trim()).filter(Boolean),
+    bio:document.getElementById('a-bio').value.trim(),
+    story:document.getElementById('a-story').value.trim(),
+    testimonials:[]
+  };
+}
+function updateAddPreview(){
+  const t=buildAddTrainerObj();
+  document.getElementById('add-preview-card').innerHTML=buildCard(t,0,false);
+}
+function resetAddForm(){
+  document.querySelectorAll('#tab-add input,#tab-add textarea').forEach(el=>el.value='');
+  document.querySelectorAll('#tab-add .pill.on').forEach(p=>p.classList.remove('on'));
+  document.getElementById('tab-add .pill').classList?.add('on');
+  nicheRankState['a-niche-ranked']=[];
+  renderNicheRank('a-niche-ranked');
+  updateAddPreview();
+}
+async function saveNewTrainer(){
+  const t=buildAddTrainerObj();
+  if(!t.name||t.name==='New Trainer'){showStatus('Enter a name first','error');return;}
+  const ok=await writeJson('trainers.json',[...TRAINERS,t]);
+  if(ok){TRAINERS.push(t);showStatus(`${t.name} added to trainers.json`);}
+}
+
+// ── MANAGE ORDER ──────────────────────────────────
+let manageDragIdx=-1;
+function renderManageList(){
+  const el=document.getElementById('manage-list');
+  if(!TRAINERS.length){el.innerHTML='<div style="color:var(--gray-text);padding:2rem;text-align:center;">No trainers loaded. Check that trainers.json is in the same folder.</div>';return;}
+  el.innerHTML=TRAINERS.map((t,i)=>`
+    <div class="trainer-row" draggable="true" data-idx="${i}"
+      ondragstart="manageDragStart(${i})"
+      ondragover="manageDragOver(event,this)"
+      ondrop="manageDrop(event,${i})"
+      ondragleave="this.classList.remove('drag-over')">
+      <span class="trainer-row-handle">⠿</span>
+      <div class="trainer-row-img">${t.photo_main?`<img src="${t.photo_main}" alt="" onerror="this.parentElement.innerHTML='💪'">` :'💪'}</div>
+      <div class="trainer-row-info">
+        <div class="trainer-row-name">${t.name}</div>
+        <div class="trainer-row-meta">${t.location} · $${t.price}/mo · ${t.experience}</div>
       </div>
-      <div class="field" style="margin-bottom:10px;"><label>Result</label><input type="text" id="t${id}-result" placeholder="Lost 22 lbs in 14 weeks"></div>
-      <div class="field" style="margin-bottom:10px;"><label>Their quote</label><textarea id="t${id}-quote" placeholder="Write what the client said..."></textarea></div>
-      <div class="row two">
-        <div class="field"><label>Before photo (optional)</label><input type="text" id="t${id}-before" placeholder="jamie-before.jpg"></div>
-        <div class="field"><label>After photo (optional)</label><input type="text" id="t${id}-after" placeholder="jamie-after.jpg"></div>
-      </div>`;
-    document.getElementById('testi-list').appendChild(div);
-  }
+      <div class="trainer-row-actions">
+        <button class="btn btn-outline" style="font-size:11px;padding:6px 12px;" onclick="openPreviewModal(TRAINERS[${i}])">Preview</button>
+      </div>
+    </div>`).join('');
+}
+function manageDragStart(idx){manageDragIdx=idx;}
+function manageDragOver(e,el){e.preventDefault();el.classList.add('drag-over');}
+function manageDrop(e,toIdx){
+  e.preventDefault();
+  document.querySelectorAll('.trainer-row').forEach(r=>r.classList.remove('drag-over'));
+  if(manageDragIdx===toIdx||manageDragIdx<0) return;
+  const moved=TRAINERS.splice(manageDragIdx,1)[0];
+  TRAINERS.splice(toIdx,0,moved);
+  renderManageList();
+}
+async function saveOrder(){
+  const ok=await writeJson('trainers.json',TRAINERS);
+  if(ok) showStatus('Order saved to trainers.json');
+}
 
-  function getTestimonials() {
-    return [...document.querySelectorAll('.testi-block')].map(b => {
-      const id = b.id.replace('testi-', '');
-      const before = document.getElementById('t'+id+'-before')?.value.trim() || '';
-      const after  = document.getElementById('t'+id+'-after')?.value.trim()  || '';
-      return {
-        name:     document.getElementById('t'+id+'-name')?.value.trim()   || '',
-        initials: document.getElementById('t'+id+'-init')?.value.trim()   || '',
-        result:   document.getElementById('t'+id+'-result')?.value.trim() || '',
-        quote:    document.getElementById('t'+id+'-quote')?.value.trim()  || '',
-        before:   before ? 'images/' + before : '',
-        after:    after  ? 'images/' + after  : ''
-      };
-    }).filter(t => t.name || t.quote);
-  }
+// ── EDIT TRAINER ──────────────────────────────────
+function populateEditSelect(){
+  const sel=document.getElementById('edit-select');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— choose —</option>'+TRAINERS.map((t,i)=>`<option value="${i}" ${cur==i?'selected':''}>${t.name}</option>`).join('');
+}
+function loadEditTrainer(){
+  const idx=parseInt(document.getElementById('edit-select').value);
+  const wrap=document.getElementById('edit-form-wrap');
+  if(isNaN(idx)){wrap.style.display='none';return;}
+  wrap.style.display='grid';
+  const t=TRAINERS[idx];
+  // set niche state for edit
+  nicheRankState['e-niche-ranked']=t.niches?[...t.niches]:[];
 
-  function buildTrainerObject() {
-    const p1 = document.getElementById('g-photo1').value.trim();
-    const p2 = document.getElementById('g-photo2').value.trim();
-    const p3 = document.getElementById('g-photo3').value.trim();
-    return {
-      name:        document.getElementById('g-name').value.trim(),
-      age:         parseInt(document.getElementById('g-age').value) || 0,
-      location:    document.getElementById('g-location').value.trim(),
-      email:       document.getElementById('g-email').value.trim(),
-      price:       parseInt(document.getElementById('g-price').value) || 0,
-      experience:  document.getElementById('g-exp').value.trim(),
-      certs:       document.getElementById('g-certs').value.trim(),
-      rating:      parseFloat(document.getElementById('g-rating').value),
-      reviews:     parseInt(document.getElementById('g-reviews').value) || 0,
-      founding:    getSelected('g-founding')[0]?.includes('Yes') ?? true,
-      photo_main:      p1 ? 'images/' + p1 : '',
-      photo_physique:  p2 ? 'images/' + p2 : '',
-      photo_lifestyle: p3 ? 'images/' + p3 : '',
-      specialties: getSelected('g-specialties'),
-      diet:        getSelected('g-diet')[0] || '',
-      niches:      getSelected('g-niches'),
-      interests:   document.getElementById('g-interests').value.split(',').map(s => s.trim()).filter(Boolean),
-      stat_intensity: parseInt(document.getElementById('gs-intensity').value),
-      stat_structure: parseInt(document.getElementById('gs-structure').value),
-      stat_checkins:  parseInt(document.getElementById('gs-checkins').value),
-      stat_energy:    parseInt(document.getElementById('gs-energy').value),
-      stat_diet:      parseInt(document.getElementById('gs-diet').value),
-      bio:         document.getElementById('g-bio').value.trim(),
-      story:       document.getElementById('g-story').value.trim(),
-      testimonials: getTestimonials()
-    };
-  }
+  document.getElementById('edit-form-fields').innerHTML=buildEditFields(t);
+  // restore pill states
+  setTimeout(()=>{
+    const specs=t.specialties||[];
+    document.querySelectorAll('#e-specs .pill').forEach(p=>{if(specs.includes(p.textContent.trim()))p.classList.add('on');});
+    const diets=(t.diet||'').split(',').map(s=>s.trim());
+    document.querySelectorAll('#e-diet .pill').forEach(p=>{if(diets.includes(p.textContent.trim()))p.classList.add('on');});
+    document.querySelectorAll('#e-founding .pill').forEach(p=>{p.classList.toggle('on',p.textContent.trim()===(t.founding?'Yes':'No'));});
+    const niches=t.niches||[];
+    document.querySelectorAll('#e-niches .pill').forEach(p=>{if(niches.includes(p.textContent.trim()))p.classList.add('on');});
+    renderNicheRank('e-niche-ranked');
+    updateEditPreview();
+  },50);
+}
+function buildEditFields(t){
+  return`<div class="section-card">
+    <div class="section-title"><div class="dot"></div>Basic info</div>
+    <div class="row-3">
+      <div class="field"><label>Name</label><input type="text" id="e-name" value="${t.name||''}" oninput="updateEditPreview()"></div>
+      <div class="field"><label>Age</label><input type="number" id="e-age" value="${t.age||''}" oninput="updateEditPreview()"></div>
+      <div class="field"><label>Location</label><input type="text" id="e-loc" value="${t.location||''}" oninput="updateEditPreview()"></div>
+    </div>
+    <div class="row-3">
+      <div class="field"><label>Experience</label><input type="text" id="e-exp" value="${t.experience||''}" oninput="updateEditPreview()"></div>
+      <div class="field"><label>Certifications</label><input type="text" id="e-certs" value="${t.certs||''}" oninput="updateEditPreview()"></div>
+      <div class="field"><label>Price ($)</label><input type="number" id="e-price" value="${t.price||''}" oninput="updateEditPreview()"></div>
+    </div>
+    <div class="row-3">
+      <div class="field"><label>Rating</label><select id="e-rating" onchange="updateEditPreview()">
+        ${[5.0,4.9,4.8,4.7,4.6,4.5,4.0,3.5].map(v=>`<option value="${v}"${t.rating==v?' selected':''}>${v}</option>`).join('')}
+      </select></div>
+      <div class="field"><label>Reviews</label><input type="number" id="e-reviews" value="${t.reviews||0}" oninput="updateEditPreview()"></div>
+      <div class="field"><label>Founding?</label><div class="pill-group" id="e-founding">
+        <button class="pill" onclick="solo(this,'e-founding');updateEditPreview()">Yes</button>
+        <button class="pill" onclick="solo(this,'e-founding');updateEditPreview()">No</button>
+      </div></div>
+    </div>
+  </div>
+  <div class="section-card">
+    <div class="section-title"><div class="dot"></div>Photos</div>
+    <div class="row-3">
+      <div class="field"><label>Profile</label><input type="text" id="e-p1" value="${(t.photo_main||'').replace('images/','')}" oninput="updateEditPreview()"></div>
+      <div class="field"><label>Physique</label><input type="text" id="e-p2" value="${(t.photo_physique||'').replace('images/','')}" oninput="updateEditPreview()"></div>
+      <div class="field"><label>Lifestyle</label><input type="text" id="e-p3" value="${(t.photo_lifestyle||'').replace('images/','')}" oninput="updateEditPreview()"></div>
+    </div>
+  </div>
+  <div class="section-card">
+    <div class="section-title"><div class="dot"></div>Specialties</div>
+    <div class="pill-group" id="e-specs">
+      ${['Hypertrophy','Strength & powerlifting','Calisthenics','CrossFit','Weight loss','Cardio & endurance','Functional fitness','Flexibility & mobility','Sport-specific','Body recomposition'].map(s=>`<button class="pill" onclick="toggle(this);updateEditPreview()">${s}</button>`).join('')}
+    </div>
+  </div>
+  <div class="section-card">
+    <div class="section-title"><div class="dot"></div>Niches <span style="font-size:12px;color:var(--gray-text);font-family:var(--font-body);font-weight:400;letter-spacing:0;margin-left:4px;">(up to 3, drag to reorder)</span></div>
+    <div class="pill-group" id="e-niches">
+      ${['Seniors / 60+','Postpartum women','Teens / youth','Competitive athletes','Complete beginners','Post-injury / rehab','Women only','Men only','Plus-size / body positive','Weight loss focused','Muscle building focused','General population'].map(n=>`<button class="pill" onclick="toggleNiche(this,'e-niche-ranked')">${n}</button>`).join('')}
+    </div>
+    <div class="niche-rank-wrap" id="e-niche-ranked"><div style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray-text);margin-bottom:6px;">Priority order</div><div id="e-niche-ranked-items"></div></div>
+  </div>
+  <div class="section-card">
+    <div class="section-title"><div class="dot"></div>Diet</div>
+    <div class="pill-group" id="e-diet">
+      ${['Flexible / IIFYM','High protein','Carnivore','Keto','Plant-based','Vegan','Whole foods','Intermittent fasting','Whatever works for the client'].map(d=>`<button class="pill" onclick="toggle(this);updateEditPreview()">${d}</button>`).join('')}
+    </div>
+  </div>
+  <div class="section-card">
+    <div class="section-title"><div class="dot"></div>Coaching stats</div>
+    ${[
+      ['Intensity','e-si',t.stat_intensity||2,'Easy','Max effort',['Easy & light','Moderate','Balanced','Hard-working','Max effort always']],
+      ['Structure','e-ss',t.stat_structure||2,'Flexible','Rigid',['Very flexible','Mostly flexible','Balanced','Pretty structured','Fully rigid']],
+      ['Check-ins','e-sc',t.stat_checkins||2,'As needed','Daily',['As needed','Weekly','Few times/week','Every other day','Daily']],
+      ['Energy','e-se',t.stat_energy||2,'Calm','Hype',['Very calm','Mostly relaxed','Balanced','Energetic','High energy always']],
+      ['Diet strictness','e-sd',t.stat_diet||2,'Flexible','Strict',['Very flexible','Mostly flexible','Balanced','Pretty strict','Very regimented']],
+    ].map(([lbl,id,val,lo,hi,labs])=>`<div class="field"><label>${lbl}</label><div class="slider-row"><input type="range" min="0" max="4" value="${val}" id="${id}" oninput="updateSv('${id}','${id}-sv',${JSON.stringify(labs)});updateEditPreview()"><span class="slider-val" id="${id}-sv">${labs[val]}</span></div><div class="slider-ends"><span>${lo}</span><span>${hi}</span></div></div>`).join('')}
+  </div>
+  <div class="section-card">
+    <div class="section-title"><div class="dot"></div>Profile copy</div>
+    <div class="field"><label>Interests</label><input type="text" id="e-int" value="${(t.interests||[]).join(', ')}" oninput="updateEditPreview()"></div>
+    <div class="field"><label>Short bio</label><textarea id="e-bio" rows="3" oninput="updateEditPreview()">${t.bio||''}</textarea></div>
+    <div class="field"><label>Full story</label><textarea id="e-story" rows="5" oninput="updateEditPreview()">${t.story||''}</textarea></div>
+  </div>`;
+}
+function buildEditTrainerObj(){
+  const idx=parseInt(document.getElementById('edit-select').value);
+  if(isNaN(idx)) return null;
+  const orig=TRAINERS[idx];
+  const niches=nicheRankState['e-niche-ranked']||[];
+  return{
+    ...orig,
+    name:document.getElementById('e-name')?.value.trim()||orig.name,
+    age:parseInt(document.getElementById('e-age')?.value)||orig.age,
+    location:document.getElementById('e-loc')?.value.trim()||orig.location,
+    experience:document.getElementById('e-exp')?.value.trim()||orig.experience,
+    certs:document.getElementById('e-certs')?.value.trim()||orig.certs,
+    price:parseInt(document.getElementById('e-price')?.value)||orig.price,
+    rating:parseFloat(document.getElementById('e-rating')?.value)||orig.rating,
+    reviews:parseInt(document.getElementById('e-reviews')?.value)||orig.reviews,
+    founding:getSelected('e-founding')[0]==='Yes',
+    photo_main:'images/'+(document.getElementById('e-p1')?.value.trim()||''),
+    photo_physique:'images/'+(document.getElementById('e-p2')?.value.trim()||''),
+    photo_lifestyle:'images/'+(document.getElementById('e-p3')?.value.trim()||''),
+    specialties:getSelected('e-specs'),
+    niches:niches,
+    diet:getSelected('e-diet').join(', '),
+    stat_intensity:parseInt(document.getElementById('e-si')?.value)||orig.stat_intensity,
+    stat_structure:parseInt(document.getElementById('e-ss')?.value)||orig.stat_structure,
+    stat_checkins:parseInt(document.getElementById('e-sc')?.value)||orig.stat_checkins,
+    stat_energy:parseInt(document.getElementById('e-se')?.value)||orig.stat_energy,
+    stat_diet:parseInt(document.getElementById('e-sd')?.value)||orig.stat_diet,
+    interests:document.getElementById('e-int')?.value.split(',').map(s=>s.trim()).filter(Boolean)||orig.interests,
+    bio:document.getElementById('e-bio')?.value.trim()||orig.bio,
+    story:document.getElementById('e-story')?.value.trim()||orig.story,
+  };
+}
+function updateEditPreview(){
+  const t=buildEditTrainerObj();
+  if(!t) return;
+  document.getElementById('edit-preview-card').innerHTML=buildCard(t,0,false);
+}
+async function saveEditTrainer(){
+  const idx=parseInt(document.getElementById('edit-select').value);
+  if(isNaN(idx)) return;
+  const t=buildEditTrainerObj();
+  if(!t) return;
+  TRAINERS[idx]=t;
+  const ok=await writeJson('trainers.json',TRAINERS);
+  if(ok){showStatus(`${t.name} saved`);renderPreviewGrid();populateEditSelect();}
+}
+async function deleteTrainer(){
+  const idx=parseInt(document.getElementById('edit-select').value);
+  if(isNaN(idx)) return;
+  const name=TRAINERS[idx].name;
+  if(!confirm(`Delete ${name}? This cannot be undone.`)) return;
+  TRAINERS.splice(idx,1);
+  const ok=await writeJson('trainers.json',TRAINERS);
+  if(ok){showStatus(`${name} deleted`);document.getElementById('edit-form-wrap').style.display='none';document.getElementById('edit-select').value='';populateEditSelect();renderPreviewGrid();}
+}
 
-  function showStatus(type, title, msg) {
-    const box = document.getElementById('status-box');
-    box.className = 'status-box ' + type;
-    box.innerHTML = `<h4>${title}</h4>${msg}`;
-    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
+// ── TESTIMONIALS ──────────────────────────────────
+let testiDragIdx=-1;
+function addTestimonial(){
+  const name=document.getElementById('t-name').value.trim();
+  const initials=document.getElementById('t-initials').value.trim();
+  const role=document.getElementById('t-role').value.trim();
+  const result=document.getElementById('t-result').value.trim();
+  const quote=document.getElementById('t-quote').value.trim();
+  if(!name||!quote){showStatus('Name and quote are required','error');return;}
+  testimonials.push({name,initials:initials||name.split(' ').map(w=>w[0]).join('').toUpperCase(),role,result,quote});
+  ['t-name','t-initials','t-role','t-result','t-quote'].forEach(id=>document.getElementById(id).value='');
+  renderTestiList();
+}
+function renderTestiList(){
+  const el=document.getElementById('testi-list');
+  const empty=document.getElementById('testi-empty');
+  if(!testimonials.length){el.innerHTML='';empty.style.display='block';updateTestiJson();return;}
+  empty.style.display='none';
+  el.innerHTML=testimonials.map((t,i)=>`
+    <div class="testi-item" draggable="true" data-idx="${i}"
+      ondragstart="testiDragStart(${i})"
+      ondragover="testiDragOver(event,this)"
+      ondrop="testiDrop(event,${i})"
+      ondragleave="this.classList.remove('drag-over')">
+      <div class="testi-item-header">
+        <span class="testi-item-name">${t.name} <span style="font-size:11px;color:var(--gray-text);font-weight:400;">${t.role||''}</span></span>
+        <button class="btn btn-red" style="font-size:11px;padding:4px 10px;" onclick="removeTestimonial(${i})">Remove</button>
+      </div>
+      <div class="testi-item-quote">"${t.quote}"</div>
+      ${t.result?`<div style="font-size:11px;color:#7cba4a;margin-top:4px;">${t.result}</div>`:''}
+    </div>`).join('');
+  updateTestiJson();
+}
+function testiDragStart(idx){testiDragIdx=idx;}
+function testiDragOver(e,el){e.preventDefault();el.classList.add('drag-over');}
+function testiDrop(e,toIdx){
+  e.preventDefault();
+  document.querySelectorAll('.testi-item').forEach(r=>r.classList.remove('drag-over'));
+  if(testiDragIdx===toIdx||testiDragIdx<0) return;
+  const moved=testimonials.splice(testiDragIdx,1)[0];
+  testimonials.splice(toIdx,0,moved);
+  renderTestiList();
+}
+function removeTestimonial(i){testimonials.splice(i,1);renderTestiList();}
+function updateTestiJson(){document.getElementById('t-json-preview').value=JSON.stringify(testimonials,null,2);}
+async function loadTestimonials(){
+  try{const r=await fetch('testimonials.json?t='+Date.now());testimonials=await r.json();renderTestiList();showStatus('Loaded testimonials.json');}
+  catch(e){showStatus('Could not load testimonials.json','error');}
+}
+async function saveTestimonials(){
+  const ok=await writeJson('testimonials.json',testimonials);
+  if(ok) showStatus('Saved testimonials.json');
+}
 
-  async function submitTrainer() {
-    const cfg = getConfig();
-    if (!cfg.token || !cfg.user || !cfg.repo) {
-      showStatus('error', 'Setup needed', 'Please fill in and save your GitHub username, repo name, and token at the top of the page first.');
-      return;
-    }
-    const trainer = buildTrainerObject();
-    if (!trainer.name) {
-      showStatus('error', 'Missing name', 'Please enter the trainer\'s name before submitting.');
-      return;
-    }
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true; btn.textContent = 'ADDING TO WEBSITE...';
-    document.getElementById('status-box').className = 'status-box';
+// ── GITHUB WRITE ──────────────────────────────────
+async function writeJson(filename, data){
+  const cfg=getConfig();
+  if(!cfg.user||!cfg.token){showStatus('Set up GitHub config first (Config tab)','error');return false;}
+  const repo=cfg.repo||'Iron-House';
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
+  try{
+    // get current sha
+    const headRes=await fetch(`https://api.github.com/repos/${cfg.user}/${repo}/contents/${filename}`,{headers:{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json'}});
+    let sha='';
+    if(headRes.ok){const hd=await headRes.json();sha=hd.sha;}
+    const body={message:`Update ${filename}`,content,branch:'main'};
+    if(sha) body.sha=sha;
+    const putRes=await fetch(`https://api.github.com/repos/${cfg.user}/${repo}/contents/${filename}`,{method:'PUT',headers:{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!putRes.ok){const err=await putRes.json();showStatus('GitHub error: '+(err.message||putRes.status),'error');return false;}
+    return true;
+  }catch(e){showStatus('Network error: '+e.message,'error');return false;}
+}
 
-    const apiBase = `https://api.github.com/repos/${cfg.user}/${cfg.repo}`;
-    const headers = { 'Authorization': 'token ' + cfg.token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
-
-    try {
-      const fileRes = await fetch(`${apiBase}/contents/trainers.json`, { headers });
-      if (!fileRes.ok) { const e = await fileRes.json(); throw new Error('Could not read trainers.json: ' + (e.message || fileRes.status)); }
-      const fileData = await fileRes.json();
-      const currentTrainers = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
-      currentTrainers.push(trainer);
-      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(currentTrainers, null, 2))));
-      const updateRes = await fetch(`${apiBase}/contents/trainers.json`, {
-        method: 'PUT', headers,
-        body: JSON.stringify({ message: `Add trainer: ${trainer.name}`, content: encoded, sha: fileData.sha })
-      });
-      if (!updateRes.ok) { const e = await updateRes.json(); throw new Error('GitHub write failed: ' + (e.message || updateRes.status)); }
-      btn.textContent = 'ADD TO WEBSITE'; btn.disabled = false;
-      showStatus('success', `${trainer.name} added!`,
-        `Their profile is live. It may take up to 60 seconds for GitHub Pages to update.<br><br>
-        <strong>Don't forget:</strong> If you listed photo filenames, make sure those photos are uploaded to the <strong>images/</strong> folder in GitHub.`);
-      resetForm();
-    } catch(err) {
-      btn.textContent = 'ADD TO WEBSITE'; btn.disabled = false;
-      showStatus('error', 'Something went wrong', err.message + '<br><br>Check that your token is valid and has repo access, and that trainers.json exists in your repository.');
-    }
-  }
-
-  function resetForm() {
-    ['g-name','g-age','g-location','g-email','g-price','g-exp','g-certs',
-     'g-reviews','g-photo1','g-photo2','g-photo3','g-interests','g-bio','g-story']
-      .forEach(id => { const el = document.getElementById(id); if (el) el.value = el.type === 'number' ? '0' : ''; });
-    document.getElementById('g-rating').value = '5.0';
-    document.querySelectorAll('.pill.on').forEach(p => p.classList.remove('on'));
-    document.querySelector('#g-founding .pill').classList.add('on');
-    ['gs-intensity','gs-structure','gs-checkins','gs-energy','gs-diet'].forEach(id => {
-      document.getElementById(id).value = 2;
-    });
-    document.getElementById('sv-intensity').textContent = 'Balanced';
-    document.getElementById('sv-structure').textContent = 'Balanced';
-    document.getElementById('sv-checkins').textContent = 'Balanced';
-    document.getElementById('sv-energy').textContent = 'Balanced';
-    document.getElementById('sv-diet').textContent = 'Balanced';
-    document.getElementById('testi-list').innerHTML = '';
-    testiCount = 0;
-    updatePreview();
-  }
+// ── INIT ──────────────────────────────────────────
+window.addEventListener('load',()=>{
+  const cfg=getConfig();
+  if(cfg.user) document.getElementById('cfg-user').value=cfg.user;
+  if(cfg.repo) document.getElementById('cfg-repo').value=cfg.repo;
+  if(cfg.token) document.getElementById('cfg-token').value=cfg.token;
+  if(cfg.user&&cfg.token) document.getElementById('cfg-saved').style.display='flex';
+  loadTrainers();
+  renderTestiList();
+  updateAddPreview();
+});
 </script>
 </body>
 </html>
