@@ -762,9 +762,24 @@ async function loadAll() {
     TRAINERS = await r.json();
   } catch(e) { TRAINERS = []; }
 
+  // Load staging directly from main repo via GitHub API so it's always current
   try {
-    var r2 = await fetch('trainerspreview.json?t=' + Date.now());
-    STAGING = await r2.json();
+    var cfg = getCfg();
+    if (cfg.user && cfg.token && cfg.repo) {
+      var stagingRes = await fetch('https://api.github.com/repos/' + cfg.user + '/' + cfg.repo + '/contents/trainerspreview.json', {
+        headers: { 'Authorization': 'token ' + cfg.token, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (stagingRes.ok) {
+        var stagingData = await stagingRes.json();
+        var b64 = stagingData.content.replace(/[^A-Za-z0-9+/=]/g, '');
+        var decoded = atob(b64).trim();
+        STAGING = decoded ? JSON.parse(decoded) : [];
+      } else { STAGING = []; }
+    } else {
+      // fallback to local file if not configured
+      var r2 = await fetch('trainerspreview.json?t=' + Date.now());
+      STAGING = await r2.json();
+    }
   } catch(e) { STAGING = []; }
 
   try {
