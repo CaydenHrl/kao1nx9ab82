@@ -1026,9 +1026,10 @@ function openModalFor(t) {
   }).join('');
 
   // tags
+  // modal shows FULL selections, not card-limited versions
   document.getElementById('m-tags').innerHTML =
-    (function(){ var cs=(t.card_specialties&&t.card_specialties.length)?t.card_specialties.slice(0,3):(t.specialties||[]).slice(0,3); return cs.map(function(s){ return '<span class="tag style">'+s+'</span>'; }).join(''); })()
-    + (function(){ var cd=t.card_diet||(t.diet?t.diet.split(',')[0].trim():''); return cd?'<span class="tag diet">'+cd+'</span>':''; })()
+    (t.specialties||[]).map(function(s){ return '<span class="tag style">'+s+'</span>'; }).join('')
+    + (t.diet ? t.diet.split(',').map(function(d){ return '<span class="tag diet">'+d.trim()+'</span>'; }).join('') : '')
     + (t.niches||[]).map(function(n){ return '<span class="tag niche">'+n+'</span>'; }).join('');
 
   // interests
