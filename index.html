@@ -65,6 +65,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .pill:hover{color:var(--white);}
 .pill.on{background:rgba(232,80,10,0.15);border-color:rgba(232,80,10,0.4);color:var(--orange);}
 
+/* CUSTOM PILL INPUT */
+.custom-add-wrap{display:inline-flex;align-items:center;}
+.custom-pill-input-wrap{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;}
+.custom-pill-input{background:var(--gray-mid);border:1px solid rgba(232,80,10,0.5);border-radius:99px;color:var(--white);font-family:var(--font-body);font-size:12px;padding:4px 12px;outline:none;width:140px;transition:border-color 0.15s;}
+.custom-pill-input:focus{border-color:var(--orange);}
+.custom-pill-confirm{padding:4px 10px;border-radius:99px;background:var(--orange);border:none;color:var(--white);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-body);}
+.custom-pill-confirm:hover{background:var(--orange-dark);}
+.custom-pill-cancel{padding:4px 8px;border-radius:99px;background:transparent;border:1px solid var(--border);color:var(--gray-text);font-size:11px;cursor:pointer;font-family:var(--font-body);}
+.custom-pill-cancel:hover{color:var(--white);}
+
 /* NICHE RANK */
 .niche-rank{margin-top:10px;display:none;}
 .niche-rank-item{display:flex;align-items:center;gap:8px;background:var(--gray-mid);border:1px solid var(--border);border-radius:7px;padding:8px 12px;margin-bottom:5px;cursor:grab;user-select:none;}
@@ -821,7 +831,6 @@ async function syncDevRepo() {
     log.textContent = 'Reading ' + f + ' from main repo...';
     var src = await ghGet(cfg.repo, f);
     if (!src) { log.textContent += '\n  (skipped — not found)'; continue; }
-    // decode and re-encode to write to dev
     var decoded = JSON.parse(decodeURIComponent(escape(atob(src.content.replace(/\n/g, '')))));
     log.textContent += '\n  Writing to dev repo...';
     var devHead = await ghGet(cfg.dev, f);
@@ -849,7 +858,6 @@ async function loadAll() {
     TRAINERS = await r.json();
   } catch(e) { TRAINERS = []; }
 
-  // Load staging directly from main repo via GitHub API so it's always current
   try {
     var cfg = getCfg();
     if (cfg.user && cfg.token && cfg.repo) {
@@ -863,7 +871,6 @@ async function loadAll() {
         STAGING = decoded ? JSON.parse(decoded) : [];
       } else { STAGING = []; }
     } else {
-      // fallback to local file if not configured
       var r2 = await fetch('trainerspreview.json?t=' + Date.now());
       STAGING = await r2.json();
     }
@@ -952,7 +959,6 @@ function renderPreviewGrid() {
   if (!TRAINERS.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   grid.innerHTML = TRAINERS.map(function(t, i){
-    // rebuild with correct index reference
     var mainImg = t.photo_main     ? '<img src="' + t.photo_main     + '" alt="" onerror="this.parentElement.innerHTML=\'💪\'">' : '💪';
     var img2    = t.photo_physique ? '<img src="' + t.photo_physique + '" alt="" onerror="this.parentElement.innerHTML=\'🏋️\'">' : '🏋️';
     var img3    = t.photo_lifestyle? '<img src="' + t.photo_lifestyle+ '" alt="" onerror="this.parentElement.innerHTML=\'🌄\'">' : '🌄';
@@ -995,7 +1001,6 @@ function openModalFor(t) {
   var badge = document.getElementById('m-badge');
   badge.style.display = t.founding ? '' : 'none';
 
-  // photos
   var photos = [t.photo_main, t.photo_physique, t.photo_lifestyle].filter(Boolean);
   var fb = ['💪','🏋️','🌄'];
   mSlides = photos.length ? photos.map(function(p,i){
@@ -1011,13 +1016,11 @@ function openModalFor(t) {
   document.querySelector('.modal-arr.prev').style.display = showArr ? '' : 'none';
   document.querySelector('.modal-arr.next').style.display = showArr ? '' : 'none';
 
-  // touch swipe
   var car = document.getElementById('m-carousel');
   var tx = 0;
   car.ontouchstart = function(e){ tx = e.touches[0].clientX; };
   car.ontouchend   = function(e){ var d = tx - e.changedTouches[0].clientX; if(Math.abs(d)>40) mNav(d>0?1:-1); };
 
-  // bars
   document.getElementById('m-bars').innerHTML = STAT_DEFS.map(function(d){
     var pct = Math.round(((t[d.k]!=null?t[d.k]:2)/4)*100);
     return '<div class="mbar-row"><div class="mbar-icon">'+icon(d.icon)+'</div><span class="mbar-lbl">'+d.lbl+'</span>'
@@ -1025,17 +1028,13 @@ function openModalFor(t) {
       +'<div class="mbar-ends"><span class="mbar-end">'+d.lo+'</span><span class="mbar-end">'+d.hi+'</span></div></div></div>';
   }).join('');
 
-  // tags
-  // modal shows FULL selections, not card-limited versions
   document.getElementById('m-tags').innerHTML =
     (t.specialties||[]).map(function(s){ return '<span class="tag style">'+s+'</span>'; }).join('')
     + (t.diet ? t.diet.split(',').map(function(d){ return '<span class="tag diet">'+d.trim()+'</span>'; }).join('') : '')
     + (t.niches||[]).map(function(n){ return '<span class="tag niche">'+n+'</span>'; }).join('');
 
-  // interests
   document.getElementById('m-interests').innerHTML = (t.interests||[]).map(function(i){ return '<span class="interest-chip">'+i+'</span>'; }).join('');
 
-  // testimonials
   var ts = document.getElementById('m-testis');
   if (t.testimonials && t.testimonials.length) {
     ts.innerHTML = '<div class="modal-sec-title">Client results</div>'
@@ -1082,12 +1081,9 @@ function renderStagingList() {
 }
 
 function editStaging(i) {
-  // copy staging trainer into edit form and switch tab
   var t = STAGING[i];
   populateEditSelect();
-  // We'll load them into a temp edit — switch to edit tab and prefill
   showTab('edit', document.getElementById('tb-edit'));
-  // inject into edit as a temp trainer
   EDIT_STAGING_IDX = i;
   loadEditFormFromObj(t, true);
 }
@@ -1152,7 +1148,6 @@ function nicheToggle(btn, listId) {
 function nicheRemove(name, listId) {
   if (!nicheState[listId]) return;
   nicheState[listId] = nicheState[listId].filter(function(n){ return n !== name; });
-  // deselect pill
   var pillGroup = document.querySelector('[id$="-niches"]');
   if (pillGroup) pillGroup.querySelectorAll('.pill').forEach(function(p){ if(p.textContent.trim()===name) p.classList.remove('on'); });
   renderNicheRank(listId);
@@ -1192,6 +1187,137 @@ function nrDrop(e) {
   renderNicheRank(nrDragList);
   if (nrDragList === 'a-nr') refreshAddPreview();
   if (nrDragList === 'e-nr') refreshEditPreview();
+}
+
+// ─────────────────────────────────────────────
+// CUSTOM PILLS — persists to localStorage
+// ─────────────────────────────────────────────
+var CUSTOM_STORAGE_KEYS = {
+  'a-specs':  'ih-custom-specs',
+  'e-specs':  'ih-custom-specs',
+  'a-niches': 'ih-custom-niches',
+  'e-niches': 'ih-custom-niches',
+  'a-diet':   'ih-custom-diet',
+  'e-diet':   'ih-custom-diet'
+};
+var NICHE_PILL_GROUPS = { 'a-niches': 'a-nr', 'e-niches': 'e-nr' };
+
+function getCustomItems(storageKey) {
+  try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch(e) { return []; }
+}
+function saveCustomItem(storageKey, label) {
+  var items = getCustomItems(storageKey);
+  if (items.indexOf(label) === -1) { items.push(label); localStorage.setItem(storageKey, JSON.stringify(items)); }
+}
+
+function injectCustomPillsIntoGroup(groupId) {
+  var storageKey = CUSTOM_STORAGE_KEYS[groupId];
+  if (!storageKey) return;
+  var group = document.getElementById(groupId);
+  if (!group) return;
+  var items = getCustomItems(storageKey);
+  var isNiche = !!NICHE_PILL_GROUPS[groupId];
+  items.forEach(function(label) {
+    var exists = Array.from(group.querySelectorAll('.pill')).some(function(p){ return p.dataset.customLabel === label; });
+    if (exists) return;
+    var btn = document.createElement('button');
+    btn.className = 'pill';
+    btn.textContent = label;
+    btn.dataset.customLabel = label;
+    if (isNiche) {
+      var nrId = NICHE_PILL_GROUPS[groupId];
+      (function(b, id){ b.onclick = function(){ nicheToggle(b, id); }; })(btn, nrId);
+    } else {
+      var isEdit = groupId.startsWith('e-');
+      (function(b, edit){ b.onclick = function(){ toggleBtn(b); if (edit) { refreshEditPreview(); } else { refreshAddPreview(); } }; })(btn, isEdit);
+    }
+    var addWrap = group.querySelector('.custom-add-wrap');
+    if (addWrap) { group.insertBefore(btn, addWrap); }
+    else { group.appendChild(btn); }
+  });
+}
+
+function appendCustomAddPill(groupId) {
+  var group = document.getElementById(groupId);
+  if (!group) return;
+  if (group.querySelector('.custom-add-wrap')) return;
+  var storageKey = CUSTOM_STORAGE_KEYS[groupId];
+
+  var wrap = document.createElement('span');
+  wrap.className = 'custom-add-wrap';
+
+  var trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.className = 'pill';
+  trigger.style.borderStyle = 'dashed';
+  trigger.style.color = 'var(--orange)';
+  trigger.style.borderColor = 'rgba(232,80,10,0.35)';
+  trigger.textContent = '+ Custom';
+  trigger.onclick = function(e) {
+    e.stopPropagation();
+    showCustomInput(groupId, storageKey, wrap, trigger);
+  };
+  wrap.appendChild(trigger);
+  group.appendChild(wrap);
+}
+
+function showCustomInput(groupId, storageKey, wrap, trigger) {
+  trigger.style.display = 'none';
+
+  var inputWrap = document.createElement('span');
+  inputWrap.className = 'custom-pill-input-wrap';
+
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'custom-pill-input';
+  input.placeholder = 'Type & press Enter...';
+
+  var confirmBtn = document.createElement('button');
+  confirmBtn.type = 'button';
+  confirmBtn.className = 'custom-pill-confirm';
+  confirmBtn.textContent = '\u2713';
+
+  var cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'custom-pill-cancel';
+  cancelBtn.textContent = '\u00d7';
+
+  function commit() {
+    var label = input.value.trim();
+    if (!label) { cancel(); return; }
+    saveCustomItem(storageKey, label);
+    inputWrap.remove();
+    trigger.style.display = '';
+    injectCustomPillsIntoGroup(groupId);
+    var group = document.getElementById(groupId);
+    var newPill = Array.from(group.querySelectorAll('.pill')).find(function(p){ return p.dataset.customLabel === label; });
+    if (newPill) {
+      if (NICHE_PILL_GROUPS[groupId]) { nicheToggle(newPill, NICHE_PILL_GROUPS[groupId]); }
+      else { newPill.classList.add('on'); }
+    }
+    if (groupId.startsWith('e-')) { refreshEditPreview(); } else { refreshAddPreview(); }
+  }
+  function cancel() { inputWrap.remove(); trigger.style.display = ''; }
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); commit(); }
+    if (e.key === 'Escape') cancel();
+  });
+  confirmBtn.onclick = commit;
+  cancelBtn.onclick = cancel;
+
+  inputWrap.appendChild(input);
+  inputWrap.appendChild(confirmBtn);
+  inputWrap.appendChild(cancelBtn);
+  wrap.appendChild(inputWrap);
+  setTimeout(function(){ input.focus(); }, 10);
+}
+
+function initAllCustomPills() {
+  ['a-specs', 'a-niches', 'a-diet'].forEach(function(gid) {
+    appendCustomAddPill(gid);
+    injectCustomPillsIntoGroup(gid);
+  });
 }
 
 // ─────────────────────────────────────────────
@@ -1306,14 +1432,17 @@ function loadEditFormFromObj(t, isStaging) {
   body.style.display = 'block';
   nicheState['e-nr'] = t.niches ? t.niches.slice() : [];
 
-  // Build form HTML
   var html = buildEditFormHTML(t);
   document.getElementById('edit-fields').innerHTML = html;
 
-  // Restore pill states after DOM is ready
   setTimeout(function(){
     restoreEditPills(t);
     renderNicheRank('e-nr');
+    // inject custom pills into edit form groups
+    ['e-specs','e-niches','e-diet'].forEach(function(gid){
+      appendCustomAddPill(gid);
+      injectCustomPillsIntoGroup(gid);
+    });
     refreshEditPreview();
   }, 30);
 }
@@ -1392,7 +1521,6 @@ function buildEditFormHTML(t) {
 }
 
 function restoreEditPills(t) {
-  // Set text values via JS assignment — never innerHTML — to preserve unicode/smart quotes
   var intEl = document.getElementById('e-int');
   if (intEl) intEl.value = (t.interests || []).join(', ');
   var bioEl = document.getElementById('e-bio');
@@ -1400,7 +1528,6 @@ function restoreEditPills(t) {
   var storyEl = document.getElementById('e-story');
   if (storyEl) storyEl.value = t.story || '';
 
-  // Card tag picker
   initCardPicker(t);
   var specs = t.specialties || [];
   document.querySelectorAll('#e-specs .pill').forEach(function(p){
@@ -1422,7 +1549,6 @@ function restoreEditPills(t) {
 function buildEditObj() {
   var idx = parseInt(document.getElementById('edit-select').value);
   var orig = (EDIT_STAGING_IDX >= 0) ? STAGING[EDIT_STAGING_IDX] : (isNaN(idx) ? {} : TRAINERS[idx]);
-  var sliderSL = {si:SL.intensity,ss:SL.structure,sc:SL.checkins,se:SL.energy,sd:SL.diet};
   function gv(id) { var el = document.getElementById(id); return el ? el.value : ''; }
   return Object.assign({}, orig, {
     name:      gv('e-name').trim() || orig.name,
@@ -1465,7 +1591,6 @@ async function saveEditTrainer() {
   if (!t.name) return;
 
   if (EDIT_STAGING_IDX >= 0) {
-    // save edits back to staging
     STAGING[EDIT_STAGING_IDX] = t;
     var ok = await writeBoth('trainerspreview.json', STAGING);
     if (ok) { toast('Staging trainer updated'); }
@@ -1555,9 +1680,6 @@ function esc(str) {
   return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// ─────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────
 // ── FULLSCREEN PREVIEW ────────────────────────────────
 function openFullscreen() {
   var t = EDIT_CACHE || ADD_CACHE;
@@ -1573,8 +1695,8 @@ function closeFullscreen() {
 }
 
 // ── CARD TAG PICKER ───────────────────────────────────
-var cardSpecsState = [];   // ordered array of selected specs for card
-var cardDietState  = '';   // selected diet for card
+var cardSpecsState = [];
+var cardDietState  = '';
 var csrDragIdx = -1;
 
 function initCardPicker(t) {
@@ -1651,6 +1773,10 @@ function selectCardDiet(d) {
   renderCardDietPills(t && t.diet ? t.diet : '');
   refreshEditPreview();
 }
+
+// ─────────────────────────────────────────────
+// BLOG
+// ─────────────────────────────────────────────
 var blogSections = [];
 var blogFaqs = [];
 
@@ -1688,10 +1814,8 @@ function renderBlogSections() {
     } else if (s.type === 'div') {
       inputs = '<span style="font-size:12px;color:var(--gray-text);">— divider line —</span>';
     } else {
-      var tag = (s.type === 'p' || s.type === 'bq') ? 'textarea' : 'input type="text"';
-      var rows = (s.type === 'p') ? ' rows="3"' : '';
       if (s.type === 'p' || s.type === 'bq') {
-        inputs = '<textarea placeholder="'+label+'..."'+rows+' oninput="blogSections['+i+'].val=this.value" style="width:100%;">'+esc(s.val)+'</textarea>';
+        inputs = '<textarea placeholder="'+label+'..."'+(s.type==='p'?' rows="3"':'')+' oninput="blogSections['+i+'].val=this.value" style="width:100%;">'+esc(s.val)+'</textarea>';
       } else {
         inputs = '<input type="text" placeholder="'+label+'..." value="'+esc(s.val)+'" oninput="blogSections['+i+'].val=this.value" style="width:100%;">';
       }
@@ -1800,7 +1924,6 @@ function generateBlogPost() {
     + '<script>function toggleMenu(){var h=document.getElementById("hamburger");var m=document.getElementById("mobile-menu");h.classList.toggle("open");m.classList.toggle("open");document.body.style.overflow=m.classList.contains("open")?"hidden":"";}function closeMenu(){document.getElementById("hamburger").classList.remove("open");document.getElementById("mobile-menu").classList.remove("open");document.body.style.overflow="";}' + '<' + '/script>'
     + '<\/body><\/html>';
 
-  // Download
   var blob = new Blob([html], {type:'text/html'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1830,7 +1953,6 @@ function getArticleNav(ctaLink, ctaText) {
     + '<' + '/div>';
 }
 
-
 function clearBlogForm() {
   blogSections = []; blogFaqs = [];
   ['b-title','b-meta','b-slug','b-lede','b-cta-title','b-cta-sub','b-cta-btn'].forEach(function(id){
@@ -1839,6 +1961,9 @@ function clearBlogForm() {
   renderBlogSections(); renderFaqItems();
 }
 
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
 window.addEventListener('load', function() {
   var cfg = getCfg();
   if (cfg.user)  document.getElementById('cfg-user').value  = cfg.user;
@@ -1850,6 +1975,7 @@ window.addEventListener('load', function() {
   loadAll();
   refreshAddPreview();
   renderTestiList();
+  initAllCustomPills();
 });
 </script>
 </body>
